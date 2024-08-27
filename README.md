@@ -1,24 +1,31 @@
-# README
+## Requirements
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* ruby
+* bundler `(gem install bundler)`
+* docker
 
-Things you may want to cover:
+## Install gems
 
-* Ruby version
+```bash
+bundle install
+```
 
-* System dependencies
+## Start db with docker compose
 
-* Configuration
+```bash
+docker-compose up
+```
 
-* Database creation
+## Setup initial db
 
-* Database initialization
+```bash
+rails db:create
+rails db:migrate
+```
 
-* How to run the test suite
+## Start rails server
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```bash
+./bin/dev
+```
+Open http://localhost:3000 in your browser.
