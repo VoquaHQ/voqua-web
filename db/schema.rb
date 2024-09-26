@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_09_184022) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_26_110946) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ballots", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "deadline"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_ballots_on_user_id"
+  end
+
+  create_table "options", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "ballot_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ballot_id"], name: "index_options_on_ballot_id"
+  end
 
   create_table "profiles", force: :cascade do |t|
     t.string "handle", null: false
@@ -60,7 +79,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_09_184022) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "option_id", null: false
+    t.integer "credits"
+    t.boolean "in_favor"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["option_id"], name: "index_votes_on_option_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+  end
+
+  add_foreign_key "ballots", "users"
+  add_foreign_key "options", "ballots"
   add_foreign_key "user_profiles", "profiles"
   add_foreign_key "user_profiles", "users"
   add_foreign_key "users", "profiles", column: "main_profile_id"
+  add_foreign_key "votes", "options"
+  add_foreign_key "votes", "users"
 end

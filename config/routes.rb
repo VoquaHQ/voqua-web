@@ -1,17 +1,25 @@
 Rails.application.routes.draw do
+  get 'dashboard/index'
   devise_for :users, controllers: {
-    # sessions: 'users/sessions'
     registrations: 'users/registrations'
   }
 
-  # devise_for :users
-
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
   root "home#index"
+
+  # Dashboard
+  get 'dashboard', to: 'dashboard#index'
+
+  # Ballots
+  resources :ballots do
+    resources :options, only: [:new, :create, :edit, :update, :destroy]
+    member do
+      post 'vote'
+      get 'results'
+    end
+  end
+
+  # Catch-all route for ballot links
+  get 'b/:id', to: 'ballots#show', as: 'ballot_link'
 end

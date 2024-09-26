@@ -1,17 +1,50 @@
-<%= render "layouts/shared/header" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quadratic Voting MVP</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-<main class="container mx-auto pt-24">
-  <% if flash.any? %>
-    <% flash.each do |k, v| %>
-      <div class="alert alert-<%= k %>" role="alert" data-controller="alert">
-        <span class="block sm:inline"><%= v %></span>
-        <span class="close absolute top-0 bottom-0 right-0 px-4 py-3">
-          <svg class="fill-current h-6 w-6" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
-        </span>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body class="bg-gray-100">
+  <header class="bg-white shadow-md">
+    <nav class="container mx-auto px-4 py-4">
+      <%= link_to 'Quadratic Voting', root_path, class: 'text-2xl font-bold text-blue-600' %>
+      <% if user_signed_in? %>
+        <%= link_to 'Dashboard', dashboard_path, class: 'ml-4 text-gray-600 hover:text-gray-800' %>
+        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'ml-4 text-gray-600 hover:text-gray-800' %>
+      <% else %>
+        <%= link_to 'Sign In', new_user_session_path, class: 'ml-4 text-gray-600 hover:text-gray-800' %>
+        <%= link_to 'Sign Up', new_user_registration_path, class: 'ml-4 text-gray-600 hover:text-gray-800' %>
+      <% end %>
+    </nav>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <% if notice %>
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <%= notice %>
       </div>
     <% end %>
-  <% end %>
-  <%= yield %>
-</main>
+    <% if alert %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <%= alert %>
+      </div>
+    <% end %>
 
-<%= render "layouts/shared/footer" %>
+    <%= yield %>
+  </main>
+
+  <footer class="bg-white shadow-md mt-8">
+    <div class="container mx-auto px-4 py-4 text-center text-gray-600">
+      &copy; <%= Time.current.year %> Quadratic Voting MVP. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

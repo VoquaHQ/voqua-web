@@ -1,0 +1,94 @@
+<div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <h1 class="text-2xl font-bold mb-4"><%= @ballot.title %></h1>
+  
+  <p class="text-gray-600 mb-4"><%= @ballot.description %></p>
+  
+  <p class="text-sm text-gray-500 mb-4">Deadline: <%= @ballot.deadline.strftime("%B %d, %Y at %I:%M %p") %></p>
+
+  <h2 class="text-xl font-semibold mb-2">Options</h2>
+  
+  <div id="options" class="mb-4">
+    <%= form_with(url: vote_ballot_path(@ballot), method: :post, local: true, id: 'voting-form') do |form| %>
+      <div class="mb-4">
+        <p>Total Credits: <span id="total-credits">99</span></p>
+        <p>Remaining Credits: <span id="remaining-credits">99</span></p>
+      </div>
+      <% @ballot.options.each do |option| %>
+        <div class="bg-gray-100 p-4 rounded mb-2">
+          <h3 class="font-semibold"><%= option.title %></h3>
+          <p><%= option.description %></p>
+          
+          <div class="mt-2 flex items-center">
+            <%= form.label "credits_#{option.id}", "Credits:", class: "mr-2" %>
+            <%= form.number_field "votes[#{option.id}][credits]", value: @user_votes&.dig(option.id, :credits) || 0, min: 0, max: 99, class: "credit-input w-20 p-1 border rounded mr-4", data: { option_id: option.id } %>
+            
+            <div class="flex items-center">
+              <%= form.radio_button "votes[#{option.id}][in_favor]", true, checked: @user_votes&.dig(option.id, :in_favor) != false, class: "mr-1" %>
+              <%= form.label "votes[#{option.id}][in_favor]_true", "In Favor", class: "mr-4" %>
+              
+              <%= form.radio_button "votes[#{option.id}][in_favor]", false, checked: @user_votes&.dig(option.id, :in_favor) == false, class: "mr-1" %>
+              <%= form.label "votes[#{option.id}][in_favor]_false", "Against" %>
+            </div>
+          </div>
+          
+          <div class="mt-2">
+            <p>Current Votes: <%= option.total_votes.round(2) %></p>
+            <p>In Favor: <%= option.votes_in_favor.round(2) %></p>
+            <p>Against: <%= option.votes_against.round(2) %></p>
+          </div>
+        </div>
+      <% end %>
+      <%= form.submit "Submit Votes", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" %>
+    <% end %>
+  </div>
+
+  <% if @ballot.user == current_user %>
+    <%= link_to 'Add Option', new_ballot_option_path(@ballot), class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2' %>
+    <%= link_to 'Edit Ballot', edit_ballot_path(@ballot), class: 'bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2' %>
+  <% end %>
+
+  <%= link_to 'View Results', results_ballot_path(@ballot), class: 'bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mr-2' %>
+  <%= link_to 'Back to Dashboard', dashboard_path, class: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' %>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const totalCredits = 99;
+  const creditInputs = document.querySelectorAll('.credit-input');
+  const remainingCreditsSpan = document.getElementById('remaining-credits');
+  const votingForm = document.getElementById('voting-form');
+
+  function updateRemainingCredits() {
+    let usedCredits = 0;
+    creditInputs.forEach(input => {
+      usedCredits += parseInt(input.value) || 0;
+    });
+    const remainingCredits = totalCredits - usedCredits;
+    remainingCreditsSpan.textContent = remainingCredits;
+
+    if (remainingCredits < 0) {
+      remainingCreditsSpan.classList.add('text-red-500');
+    } else {
+      remainingCreditsSpan.classList.remove('text-red-500');
+    }
+  }
+
+  creditInputs.forEach(input => {
+    input.addEventListener('input', updateRemainingCredits);
+  });
+
+  votingForm.addEventListener('submit', function(event) {
+    let usedCredits = 0;
+    creditInputs.forEach(input => {
+      usedCredits += parseInt(input.value) || 0;
+    });
+
+    if (usedCredits > totalCredits) {
+      event.preventDefault();
+      alert('You have used more than the allowed 99 credits. Please adjust your votes.');
+    }
+  });
+
+  updateRemainingCredits();
+});
+</script>

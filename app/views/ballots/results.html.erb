@@ -1,0 +1,31 @@
+<div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <h1 class="text-2xl font-bold mb-4"><%= @ballot.title %> - Results</h1>
+  
+  <p class="text-gray-600 mb-4"><%= @ballot.description %></p>
+  
+  <p class="text-sm text-gray-500 mb-4">Deadline: <%= @ballot.deadline.strftime("%B %d, %Y at %I:%M %p") %></p>
+
+  <h2 class="text-xl font-semibold mb-2">Voting Results</h2>
+  
+  <div id="results" class="mb-4">
+    <% @options.each do |option| %>
+      <div class="bg-gray-100 p-4 rounded mb-2">
+        <h3 class="font-semibold"><%= option.title %></h3>
+        <p><%= option.description %></p>
+        
+        <div class="mt-2">
+          <p>Net Votes: <%= option.total_votes.round(2) %></p>
+          <p>Votes in Favor: <%= option.votes_in_favor.round(2) %></p>
+          <p>Votes Against: <%= option.votes_against.round(2) %></p>
+          <p>Vote Share: <%= option.vote_percentage %>%</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-2">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: <%= option.vote_percentage %>%"></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to 'Back to Ballot', @ballot, class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2' %>
+  <%= link_to 'Back to Dashboard', dashboard_path, class: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' %>
+</div>
