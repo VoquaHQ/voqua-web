@@ -10,9 +10,26 @@
   <div data-controller="voting">
     <ul>
       <% @ballot.questions.each do |question| %>
-        <li>
+        <li data-question-id="<%= question.id %>">
           <%= question.title %> -
           <%= question.description %>
+          <br />
+          <div class="flex">
+            <div data-vote-type="against" class="mx-4">
+              Against:
+              <a href="#" data-vote-button="dec">-</a>
+              <span data-votes-total="against">0</span>
+              <a href="#" data-vote-button="inc">+</a>
+            </div>
+            |
+            <div data-vote-type="for" class="mx-4">
+              For:
+              <a href="#" data-vote-button="dec">-</a>
+              <span data-votes-total="for">0</span>
+              <a href="#" data-vote-button="inc">+</a>
+            </div>
+          </div>
+          <hr />
         </li>
       <% end %>
     </ul>
