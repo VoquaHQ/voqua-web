@@ -1,0 +1,24 @@
+<h1>My Ballots</h1>
+
+<% if @ballots.empty? %>
+  <p>You have not created any ballots yet.</p>
+<% else %>
+  <div>
+    <% @ballots.each do |ballot| %>
+      <div>
+        <h2><%= ballot.name %></h2>
+        <p><%= ballot.description %></p>
+        <p>Deadline: <%= ballot.ends_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+        <div>
+          <%= link_to 'Edit', edit_my_ballot_path(ballot) %> |
+          <%= link_to 'Questions', my_ballot_path(ballot) %> |
+          <%= link_to 'Public Link', ballot_path(ballot), target: :_blank %> |
+          <%= link_to 'Delete', my_ballot_path(ballot), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+        </div>
+        <hr />
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= link_to 'Create New Ballot', new_my_ballot_path %>

@@ -1,0 +1,23 @@
+<% if question.errors.any? %>
+  <ul class="form-errors">
+    <% question.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<div>
+  <%= f.label :title %>
+  <br />
+  <%= f.text_field :title %>
+</div>
+
+<div>
+  <%= f.label :description %>
+  <br />
+  <%= f.text_area :description, rows: 10 %>
+</div>
+
+<div>
+  <%= f.submit "Add" %>
+</div>

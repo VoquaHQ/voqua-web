@@ -1,0 +1,29 @@
+<% if @ballot.errors.any? %>
+  <ul class="form-errors">
+    <% @ballot.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<div>
+  <%= f.label :name %>
+  <br />
+  <%= f.text_field :name %>
+</div>
+
+<div>
+  <%= f.label :description %>
+  <br />
+  <%= f.text_area :description, rows: 10 %>
+</div>
+
+<div>
+  <%= f.label :ends_at %>
+  <br />
+  <%= f.datetime_local_field :ends_at %>
+</div>
+
+<div>
+  <%= f.submit "Create" %>
+</div>

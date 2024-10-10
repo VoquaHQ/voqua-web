@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :user_profiles, dependent: :destroy
   has_many :profiles, through: :user_profiles
+  has_many :ballots, through: :profiles
   belongs_to :main_profile, class_name: 'Profile', dependent: :destroy
 
   validates :main_profile, presence: true

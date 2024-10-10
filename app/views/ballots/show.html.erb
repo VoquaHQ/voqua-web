@@ -1,0 +1,20 @@
+<h1><%= @ballot.name %></h1>
+<p><%= @ballot.description %></p>
+
+<hr />
+<h2>Questions</h2>
+
+<% if @ballot.questions.empty? %>
+  <p>There are no questions for this ballot.</p>
+<% else %>
+  <div data-controller="voting">
+    <ul>
+      <% @ballot.questions.each do |question| %>
+        <li>
+          <%= question.title %> -
+          <%= question.description %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

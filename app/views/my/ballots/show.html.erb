@@ -1,0 +1,30 @@
+<h1><%= @ballot.name %></h1>
+<p><%= @ballot.description %></p>
+<%= link_to 'Public Link', ballot_path(@ballot), target: :_blank %>
+
+<hr />
+<h2>Questions</h2>
+
+<% if @ballot.questions.empty? %>
+  <p>There are no questions for this ballot.</p>
+<% else %>
+  <ul>
+    <% @ballot.questions.each do |question| %>
+      <li>
+        <%= question.title %> -
+        <%= question.description %>
+        (
+          <%= link_to 'Delete', my_ballot_question_path(@ballot, question), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+        )
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<hr />
+
+<h1>Add Question</h1>
+
+<%= form_with model: @question, url: my_ballot_questions_path(@ballot), local: true, data: { turbo: false } do |f| %>
+  <%= render "my/questions/form", question: @question, f: f %>
+<% end %>

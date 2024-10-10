@@ -1,0 +1,5 @@
+<h1>Edit Ballot</h1>
+
+<%= form_with model: @ballot, url: my_ballot_path(@ballot), local: true, data: { turbo: false } do |f| %>
+  <%= render 'form', ballot: @ballot, f: f %>
+<% end %>

@@ -14,4 +14,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
+
+  namespace :my do
+    root "ballots#index"
+    resources :ballots do
+      resources :questions
+    end
+  end
+
+  resources :ballots, only: [:show]
 end
