@@ -8,6 +8,7 @@
   <p>There are no questions for this ballot.</p>
 <% else %>
   <div data-controller="voting">
+    Credits: <span data-credits="99">99</span>
     <ul>
       <% @ballot.questions.each do |question| %>
         <li data-question-id="<%= question.id %>">
