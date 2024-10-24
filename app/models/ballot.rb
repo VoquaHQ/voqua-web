@@ -3,6 +3,8 @@ class Ballot < ApplicationRecord
   has_many :questions, dependent: :destroy
   has_many :invitations, class_name: "BallotInvitation", dependent: :destroy
   has_many :members, through: :invitations, source: :accepted_by
+  has_many :votes
+
 
   validates :name, presence: true
   validates :description, presence: true

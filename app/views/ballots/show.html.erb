@@ -9,28 +9,32 @@
 <% else %>
   <div data-controller="voting">
     Credits: <span data-credits="99">99</span>
-    <ul>
-      <% @ballot.questions.each do |question| %>
-        <li data-question-id="<%= question.id %>">
-          <%= question.title %> -
-          <%= question.description %>
-          <br />
-          <div class="flex">
-            <div data-vote-type="against" class="mx-4">
-              Against:
-              <span data-votes-total="against">0</span>
-              <a href="#" data-vote-button="inc">+</a>
+    <%= form_tag ballot_submit_votes_path(@ballot), data: { turbo: false } do %>
+      <ul>
+        <% @ballot.questions.each do |question| %>
+          <li data-question-id="<%= question.id %>">
+            <%= question.title %> -
+            <%= question.description %>
+            <br />
+            <div class="flex">
+              <div data-vote-type="against" class="mx-4">
+                Against:
+                <%= votes_count_fields_for(@ballot, question.id, :against, @votes) %>
+                <a href="#" data-vote-button="inc">+</a>
+              </div>
+              |
+              <div data-vote-type="for" class="mx-4">
+                For:
+                <%= votes_count_fields_for(@ballot, question.id, :for, @votes) %>
+                <a href="#" data-vote-button="inc">+</a>
+              </div>
             </div>
-            |
-            <div data-vote-type="for" class="mx-4">
-              For:
-              <span data-votes-total="for">0</span>
-              <a href="#" data-vote-button="inc">+</a>
-            </div>
-          </div>
-          <hr />
-        </li>
-      <% end %>
-    </ul>
+            <hr />
+          </li>
+        <% end %>
+
+        <%= submit_tag "Submit"%>
+      </ul>
+    <% end %>
   </div>
 <% end %>

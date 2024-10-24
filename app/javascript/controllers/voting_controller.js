@@ -80,6 +80,20 @@ export default class extends Controller {
     this.creditsElement = this.element.querySelector("[data-credits]");
 
     this.ballot = new UserBallot(this.questions, 99);
+
+    this.questionsElements.forEach((questionElement) => {
+      const id = questionElement.dataset.questionId;
+      questionElement
+        .querySelectorAll("[data-votes-total-input]")
+        .forEach((votesInputElement) => {
+          const votesCount = parseInt(votesInputElement.value);
+          const type = votesInputElement.dataset.votesTotalInput;
+          this.ballot.castVotes(type, id, votesCount);
+        });
+    });
+
+    this.updateCreditsCounter();
+    console.log(this.ballot.dump());
   }
 
   disconnect() {
@@ -121,10 +135,16 @@ export default class extends Controller {
     const questionElement = this.element.querySelector(
       `[data-question-id="${questionId}"]`,
     );
-    const votesElement = questionElement.querySelector(
-      `[data-votes-total="${question.state}"]`,
+    const votesLabelElement = questionElement.querySelector(
+      `[data-votes-total-label="${question.state}"]`,
     );
 
-    votesElement.textContent = question.votes;
+    const votesInputElement = questionElement.querySelector(
+      `[data-votes-total-input="${question.state}"]`,
+    );
+
+    votesLabelElement.textContent = question.votes;
+    console.log(votesInputElement);
+    votesInputElement.value = question.votes;
   }
 }

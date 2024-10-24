@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_24_093911) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_24_103239) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -94,6 +94,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_093911) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.bigint "ballot_id", null: false
+    t.bigint "profile_id", null: false
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ballot_id"], name: "index_votes_on_ballot_id"
+    t.index ["profile_id"], name: "index_votes_on_profile_id"
+  end
+
   add_foreign_key "ballot_invitations", "ballots"
   add_foreign_key "ballot_invitations", "users", column: "accepted_by_id"
   add_foreign_key "ballots", "profiles"
@@ -101,4 +111,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_093911) do
   add_foreign_key "user_profiles", "profiles"
   add_foreign_key "user_profiles", "users"
   add_foreign_key "users", "profiles", column: "main_profile_id"
+  add_foreign_key "votes", "ballots"
+  add_foreign_key "votes", "profiles"
 end
