@@ -13,4 +13,8 @@ class User < ApplicationRecord
   validates_associated :main_profile
 
   accepts_nested_attributes_for :main_profile
+
+  def handle
+    main_profile.handle
+  end
 end

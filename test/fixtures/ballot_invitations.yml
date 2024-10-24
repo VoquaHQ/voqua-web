@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ballot: one
+  email: MyString
+  accepted_by: 1
+  accepted_at: 2024-10-24 10:19:59
+
+two:
+  ballot: two
+  email: MyString
+  accepted_by: 1
+  accepted_at: 2024-10-24 10:19:59

@@ -23,8 +23,36 @@
 
 <hr />
 
-<h1>Add Question</h1>
+<h2>Add Question</h2>
 
 <%= form_with model: @question, url: my_ballot_questions_path(@ballot), local: true, data: { turbo: false } do |f| %>
   <%= render "my/questions/form", question: @question, f: f %>
 <% end %>
+
+<% if @ballot.private? %>
+  <h2>Members</h2>
+
+  <% if @ballot.invitations.empty? %>
+    <p>There are no members for this ballot.</p>
+  <% else %>
+    <ul>
+      <% @ballot.invitations.each do |invitation| %>
+        <li>
+          <%= invitation.email %>
+          <%= invitation.accepted_by.try(:handle) %>
+          <%= invitation.accepted_at %>
+          (
+            <%= link_to 'Delete', my_ballot_ballot_invitation_path(@ballot, invitation), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+          )
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <h2>Invite Members</h2>
+  <%= form_tag bulk_create_my_ballot_ballot_invitations_path(@ballot), data: { turbo: false } do %>
+    <%= text_area_tag :emails, nil, placeholder: 'Emails (comma separated or new lines)', rows: 5 %>
+    <%= submit_tag 'Invite' %>
+  <% end %>
+<% end %>
+

@@ -19,8 +19,15 @@ Rails.application.routes.draw do
     root "ballots#index"
     resources :ballots do
       resources :questions
+      resources :ballot_invitations do
+        collection do
+          post :bulk_create
+        end
+      end
     end
   end
 
-  resources :ballots, only: [:show]
+  resources :ballots, only: [:show] do
+    get "/invite/:token", to: "ballot_invitations#accept", as: :accept_invitation
+  end
 end

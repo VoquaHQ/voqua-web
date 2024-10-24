@@ -18,7 +18,7 @@ class My::BallotsController < My::BaseController
   end
 
   def show
-    @ballot = current_user.ballots.find(params[:id])
+    @ballot = current_user.ballots.includes(invitations: :accepted_by).find(params[:id])
     @question = Question.new
   end
 
@@ -44,6 +44,6 @@ class My::BallotsController < My::BaseController
   private
 
   def ballot_params
-    params.require(:ballot).permit(:name, :description, :ends_at)
+    params.require(:ballot).permit(:name, :description, :ends_at, :private)
   end
 end
