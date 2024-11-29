@@ -45,7 +45,7 @@
                           <%= render partial: "votes_count_fields", locals: { 
                             question_id: question.id, 
                             type: :for, 
-                            votes_count: 0
+                            votes_count: (@votes&.data&.dig(question.id.to_s) || {})["for"].to_i
                           } %>
                         </div>
                       </div>
@@ -63,7 +63,7 @@
                           <%= render partial: "votes_count_fields", locals: { 
                             question_id: question.id, 
                             type: :against, 
-                            votes_count: 0
+                            votes_count: (@votes&.data&.dig(question.id.to_s) || {})["against"].to_i
                           } %>
                         </div>
                       </div>
