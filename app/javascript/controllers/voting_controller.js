@@ -160,23 +160,9 @@ class Animator {
     for (let i = start; i < end; i++) {
       const element = this.circles[i].element;
       element.classList[func].call(element.classList, "used");
-      // this.moveElementToX(element, 500);
     }
 
     this.blocks[questionId].animate(voteType, votesForQuestion);
-  }
-
-  moveElementToX(element, x) {
-    const delay = 1000;
-    element.style.transition = `transform ${delay}ms ease-out, opacity 1s ease-out`;
-    element.style.transform = `translate(${x}px, 100px)`;
-
-    // Remove the transition after completion to allow subsequent manual changes
-    setTimeout(() => {
-      element.style.transition = "";
-      console.log("done");
-      // element.classList["add"].call(element.classList, "used");
-    }, delay);
   }
 }
 
@@ -214,7 +200,11 @@ export default class extends Controller {
         .forEach((votesInputElement) => {
           const votesCount = parseInt(votesInputElement.value);
           const type = votesInputElement.dataset.votesTotalInput;
-          this.vote(id, type, votesCount);
+          try {
+            this.vote(id, type, votesCount);
+          } catch (error) {
+            // Ignore initial load errors
+          }
         });
     });
   }
@@ -223,6 +213,45 @@ export default class extends Controller {
     this.buttons.forEach((button) => {
       button.removeEventListener("click", this.onVote);
     });
+  }
+
+  showErrorToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg z-50 transform transition-all duration-300 ease-in-out';
+    toast.style.transform = 'translateX(100%)';
+    toast.style.opacity = '0';
+    toast.innerHTML = `
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm font-medium">${message}</p>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Animate in
+    requestAnimationFrame(() => {
+      toast.style.transform = 'translateX(0)';
+      toast.style.opacity = '1';
+    });
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      toast.style.transform = 'translateX(100%)';
+      toast.style.opacity = '0';
+      toast.style.visibility = 'hidden';
+      setTimeout(() => {
+        if (toast.parentNode) {
+          document.body.removeChild(toast);
+        }
+      }, 300);
+    }, 3000);
   }
 
   onVote(event) {
@@ -234,7 +263,18 @@ export default class extends Controller {
     const questionId = eQuestion.dataset.questionId;
     let voteType = eVoteType.dataset.voteType;
 
-    this.vote(questionId, voteType, 1);
+    try {
+      this.vote(questionId, voteType, 1);
+    } catch (error) {
+      if (error instanceof NotEnoughCreditsError) {
+        const currentVotes = this.ballot.votesForQuestion(questionId);
+        const nextCost = Math.pow(currentVotes + 1, 2) - Math.pow(currentVotes, 2);
+        const remainingCredits = this.ballot.availableCredits;
+        this.showErrorToast(
+          `Next vote on this option needs ${nextCost} credits - you have ${remainingCredits} left. Try voting on other options!`
+        );
+      }
+    }
   }
 
   vote(questionId, voteType, votesCount) {
@@ -290,7 +330,6 @@ export default class extends Controller {
     );
 
     votesLabelElement.textContent = question.votes;
-    console.log(votesInputElement);
     votesInputElement.value = question.votes;
   }
 }
