@@ -3,12 +3,16 @@
   display: none;
 }
 
-#voting [data-question-id][data-state="for"] .vote-type-label-against {
-  display: none;
+#voting [data-question-id] .vote-type-label-against,
+#voting [data-question-id] .vote-type-label-for {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
 }
 
+#voting [data-question-id][data-state="for"] .vote-type-label-against,
 #voting [data-question-id][data-state="against"] .vote-type-label-for {
-  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
 }
 
 #voting [data-question-id] .votes-count-label {
