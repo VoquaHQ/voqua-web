@@ -1,2 +1,3 @@
-<span data-votes-total-label="<%= type %>"><%= votes_count %></span>
-<input type="text" name="<%= "votes[#{question_id}][#{type}]" %>" value="<%= votes_count %>" data-votes-total-input="<%= type %>"/>
+&nbsp;
+<span class="votes-count-label votes-count-label-<%= type %>" data-votes-total-label="<%= type %>"><%= votes_count %></span>
+<input style="display: none;" type="text" name="<%= "votes[#{question_id}][#{type}]" %>" value="<%= votes_count %>" data-votes-total-input="<%= type %>"/>

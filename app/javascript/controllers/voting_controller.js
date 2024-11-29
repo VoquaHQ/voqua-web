@@ -22,8 +22,12 @@ class UserBallot {
     });
   }
 
-  swapVoteType(voteType) {
-    return voteType === "for" ? "against" : "for";
+  votesForQuestion(questionId) {
+    return this.questionsVotes[questionId].votes;
+  }
+
+  stateForQuestion(questionId) {
+    return this.questionsVotes[questionId].state;
   }
 
   castVotes(voteType, questionId, votes) {
@@ -61,6 +65,121 @@ class UserBallot {
 }
 // end compiled
 
+class QuestionBlock {
+  constructor(element) {
+    this.element = element;
+    this.circles = {
+      for: {},
+      against: {},
+    };
+    this.setupCircles("for");
+    this.setupCircles("against");
+  }
+
+  setupCircles(type) {
+    const elements = this.element.querySelectorAll(
+      `[data-credits-${type}] svg .credit.foreground`,
+    );
+
+    [...elements].reverse().forEach((element) => {
+      const level = element.dataset.level;
+      this.circles[type][level] ||= [];
+      this.circles[type][level].push({
+        element: element,
+      });
+    });
+  }
+
+  animate(voteType, votesForQuestion) {
+    const levels = this.circles[voteType];
+
+    for (const levelIndex in levels) {
+      const levelCircles = levels[levelIndex];
+      for (const circle of levelCircles) {
+        circle.element.classList.add("hidden");
+      }
+    }
+
+    for (let i = 1; i <= votesForQuestion; i++) {
+      const levelCircles = levels[i.toString()];
+      for (const circle of levelCircles) {
+        circle.element.classList.remove("hidden");
+      }
+    }
+  }
+}
+
+class Animator {
+  constructor(availableCredits, allCreditsContainer, questionsElements) {
+    this.availableCredits = availableCredits;
+    this.usedCredits = 0;
+    this.allCreditsContainer = allCreditsContainer;
+    this.blocks = this.setupBlocks(questionsElements);
+    this.circles = this.setupCircles();
+  }
+
+  setupBlocks(questionsElements) {
+    const blocks = {};
+    questionsElements.forEach((questionElement) => {
+      const questionId = questionElement.dataset.questionId;
+      blocks[questionId] = new QuestionBlock(questionElement);
+    });
+
+    return blocks;
+  }
+
+  setupCircles() {
+    const elements = this.allCreditsContainer.querySelectorAll(
+      "svg .credit.foreground",
+    );
+
+    const circles = {};
+
+    [...elements].reverse().forEach((element, index) => {
+      circles[index] = {};
+      circles[index].element = element;
+      circles[index].initialPosition = {
+        x: element.getAttribute("cx"),
+        y: element.getAttribute("cy"),
+      };
+    });
+
+    return circles;
+  }
+
+  animate(questionId, voteType, votesForQuestion, newAvailableCredits) {
+    let start = this.usedCredits;
+    let end = this.availableCredits - newAvailableCredits;
+    this.usedCredits = end;
+
+    const func = start < end ? "add" : "remove";
+    if (start > end) {
+      [start, end] = [end, start];
+    }
+
+    for (let i = start; i < end; i++) {
+      const element = this.circles[i].element;
+      element.classList[func].call(element.classList, "used");
+      // this.moveElementToX(element, 500);
+    }
+
+    this.blocks[questionId].animate(voteType, votesForQuestion);
+  }
+
+  moveElementToX(element, x) {
+    const delay = 1000;
+    element.style.transition = `transform ${delay}ms ease-out, opacity 1s ease-out`;
+    element.style.transform = `translate(${x}px, 100px)`;
+
+    // Remove the transition after completion to allow subsequent manual changes
+    setTimeout(() => {
+      element.style.transition = "";
+      console.log("done");
+      // element.classList["add"].call(element.classList, "used");
+    }, delay);
+  }
+}
+
 export default class extends Controller {
   connect() {
     this.onVote = this.onVote.bind(this);
@@ -81,6 +200,13 @@ export default class extends Controller {
 
     this.ballot = new UserBallot(this.questions, 99);
 
+    this.updateCreditsCounter(this.element.querySelector("[data-credits]"));
+    this.animator = new Animator(
+      this.ballot.availableCredits,
+      this.element.querySelector("[data-all-credits]"),
+      this.questionsElements,
+    );
+
     this.questionsElements.forEach((questionElement) => {
       const id = questionElement.dataset.questionId;
       questionElement
@@ -88,12 +214,9 @@ export default class extends Controller {
         .forEach((votesInputElement) => {
           const votesCount = parseInt(votesInputElement.value);
           const type = votesInputElement.dataset.votesTotalInput;
-          this.ballot.castVotes(type, id, votesCount);
+          this.vote(id, type, votesCount);
         });
     });
-
-    this.updateCreditsCounter();
-    console.log(this.ballot.dump());
   }
 
   disconnect() {
@@ -110,24 +233,47 @@ export default class extends Controller {
 
     const questionId = eQuestion.dataset.questionId;
     let voteType = eVoteType.dataset.voteType;
-    const voteDirection = eButton.dataset.voteButton;
 
-    if (voteDirection === "dec") {
-      voteType = this.ballot.swapVoteType(voteType);
-    }
+    this.vote(questionId, voteType, 1);
+  }
 
-    this.ballot.castVotes(voteType, questionId, 1);
+  vote(questionId, voteType, votesCount) {
+    this.ballot.castVotes(voteType, questionId, votesCount);
 
     this.updateCreditsCounter();
     this.updateVoteCounters(questionId);
+    this.updateQuestionState(questionId);
 
-    console.log(questionId, voteType, voteDirection);
+    this.animator.animate(
+      questionId,
+      this.ballot.stateForQuestion(questionId),
+      this.ballot.votesForQuestion(questionId),
+      this.ballot.availableCredits,
+    );
+
+    console.log(questionId, voteType);
     console.log(JSON.stringify(this.ballot));
   }
 
   updateCreditsCounter() {
     this.creditsElement.textContent = this.ballot.availableCredits;
     this.creditsElement.dataset.credits = this.ballot.availableCredits;
+  }
+
+  updateQuestionState(questionId) {
+    const state = this.ballot.stateForQuestion(questionId);
+    const votes = this.ballot.votesForQuestion(questionId);
+    let stateValue = "";
+
+    if (votes > 0) {
+      stateValue = state;
+    }
+
+    const questionElement = this.element.querySelector(
+      `[data-question-id="${questionId}"]`,
+    );
+
+    questionElement.dataset.state = stateValue;
   }
 
   updateVoteCounters(questionId) {

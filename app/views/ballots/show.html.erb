@@ -1,3 +1,5 @@
+
+
 <h1><%= @ballot.name %></h1>
 <p><%= @ballot.description %></p>
 
@@ -7,34 +9,78 @@
 <% if @ballot.questions.empty? %>
   <p>There are no questions for this ballot.</p>
 <% else %>
-  <div data-controller="voting">
-    Credits: <span data-credits="99">99</span>
-    <%= form_tag ballot_submit_votes_path(@ballot), data: { turbo: false } do %>
-      <ul>
-        <% @ballot.questions.each do |question| %>
-          <li data-question-id="<%= question.id %>">
-            <%= question.title %> -
-            <%= question.description %>
-            <br />
-            <div class="flex">
-              <div data-vote-type="against" class="mx-4">
-                Against:
-                <%= votes_count_fields_for(@ballot, question.id, :against, @votes) %>
-                <a href="#" data-vote-button="inc">+</a>
-              </div>
-              |
-              <div data-vote-type="for" class="mx-4">
-                For:
-                <%= votes_count_fields_for(@ballot, question.id, :for, @votes) %>
-                <a href="#" data-vote-button="inc">+</a>
-              </div>
-            </div>
-            <hr />
-          </li>
-        <% end %>
+  <div id="voting" data-controller="voting">
+    <div class="bg-yellow-100 flex max-w-7xl mx-auto">
+      <div class="bg-red-100 w-1/6 p-4 mr-4 sticky top-[100px] h-[400px]">
+        Credits: <span data-credits="99">99</span>
+        <div data-all-credits="0">
+          <%= render partial: "remaining_credits_svg" %>
+        </div>
+      </div>
 
-        <%= submit_tag "Submit"%>
-      </ul>
-    <% end %>
+      <div class="w-2/3">
+        <%= form_tag ballot_submit_votes_path(@ballot), data: { turbo: false } do %>
+          <div>
+            <% @ballot.questions.each.with_index do |question, i| %>
+              <div data-question-id="<%= question.id %>" data-state="">
+                <div class="text-red-600 font-bold mb-4 text-center">Question <%= i + 1 %> of <%= @ballot.questions.size %></div>
+                <div class="text-xl font-semibold text-center mb-2"><%= question.title %></div>
+                <div class="text-sm text-center text-gray-500"><%= question.description %></div>
+
+                <div class="flex">
+                  <div class="w-1/4 bg-yellow-200" data-credits-for>
+                    <%= render partial: "credits_svg", locals: { flipped: false } %>
+                  </div>
+                  <div class="w-2/4 bg-red-200">
+                    <div class="flex items-center justify-center space-x-8 pt-8">
+                      <div data-vote-type="for" class="text-right">
+                        <div class="pb-1">
+                          &nbsp;
+                          <span class="vote-type-label-for">In favour</span>
+                        </div>
+                        <button data-vote-button="inc" class="vote-button vote-button-for bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                          <span class="vote">Vote</span>
+                          <span class="more">More</span>
+                          <span class="fewer">Fewer</span>
+                        </button>
+                        <div>
+                          <%= votes_count_fields_for(@ballot, question.id, :for, @votes) %>
+                        </div>
+                      </div>
+                      <div data-vote-type="against" class="text-left">
+                        <div class="pb-1">
+                          <span class="vote-type-label-against">Against</span>
+                          &nbsp;
+                        </div>
+                        <button data-vote-button="inc" class="vote-button vote-button-against bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                          <span class="vote">Vote</span>
+                          <span class="more">More</span>
+                          <span class="fewer">Fewer</span>
+                        </button>
+                        <div>
+                          <%= votes_count_fields_for(@ballot, question.id, :against, @votes) %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-1/4 bg-yellow-200" data-credits-against>
+                    <%= render partial: "credits_svg", locals: { flipped: true } %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+            <div class="text-center py-8">
+              <%= submit_tag "Submit"%>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="bg-red-100 w-1/6 p-4 mr-4">
+        right sidebar
+      </div>
+
+    </div>
   </div>
 <% end %>
