@@ -4,7 +4,7 @@ class My::BallotsController < My::BaseController
   end
 
   def new
-    @ballot = current_user.main_profile.ballots.build
+    @ballot = current_user.main_profile.ballots.build(ends_at: 3.days.from_now)
   end
 
   def create
