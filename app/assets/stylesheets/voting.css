@@ -30,13 +30,13 @@ svg.credits.credits-for .credit.foreground {
 #voting [data-question-id] .vote-type-label-against,
 #voting [data-question-id] .vote-type-label-for {
   opacity: 1;
-  transition: opacity 0.5s ease-in;
+  transition: opacity 0.2s ease-in;
 }
 
 #voting [data-question-id][data-state="for"] .vote-type-label-against,
 #voting [data-question-id][data-state="against"] .vote-type-label-for {
   opacity: 0;
-  transition: opacity 0.5s ease-out;
+  transition: opacity 0.2s ease-out;
 }
 
 #voting [data-question-id] .votes-count-label {
