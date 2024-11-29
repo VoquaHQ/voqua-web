@@ -1,75 +1,29 @@
-#voting [data-question-id] .vote-button .more,
-#voting [data-question-id] .vote-button .fewer {
-  display: none;
+.vote-button .vote { display: inline; }
+.vote-button .more { display: none; }
+.vote-button .fewer { display: none; }
+
+.vote-button[data-state="has-votes"] .vote { display: none; }
+.vote-button[data-state="has-votes"] .more { display: inline; }
+.vote-button[data-state="max-votes"] .more { display: none; }
+.vote-button[data-state="max-votes"] .fewer { display: inline; }
+
+/* Credit visualization colors */
+.credit.bg {
+  fill: #E5E7EB;  /* gray-200 for unused spots */
 }
 
-#voting [data-question-id] .vote-type-label-against,
-#voting [data-question-id] .vote-type-label-for {
-  opacity: 1;
-  transition: opacity 0.5s ease-in;
+.credit.foreground {
+  fill: #000000;  /* black for remaining credits and in favor */
 }
 
-#voting [data-question-id][data-state="for"] .vote-type-label-against,
-#voting [data-question-id][data-state="against"] .vote-type-label-for {
-  opacity: 0;
-  transition: opacity 0.5s ease-out;
+[data-credits-against] .credit.foreground {
+  fill: #EF4444;  /* red-500 for opposed */
 }
 
-#voting [data-question-id] .votes-count-label {
-  display: none;
+[data-all-credits] .credit.foreground {
+  fill: #000000;  /* black for remaining credits */
 }
 
-#voting [data-question-id][data-state="for"] .votes-count-label-for {
-  display: inline;
-}
-
-#voting [data-question-id][data-state="against"] .votes-count-label-against {
-  display: inline;
-}
-
-#voting [data-question-id][data-state="for"] .vote-button-for .vote {
-  display: none;
-}
-
-#voting [data-question-id][data-state="for"] .vote-button-for .more {
-  display: inline;
-}
-
-#voting [data-question-id][data-state="for"] .vote-button-against .vote {
-  display: none;
-}
-
-#voting [data-question-id][data-state="for"] .vote-button-against .fewer {
-  display: inline;
-}
-
-#voting [data-question-id][data-state="against"] .vote-button-against .vote {
-  display: none;
-}
-
-#voting [data-question-id][data-state="against"] .vote-button-against .more {
-  display: inline;
-}
-
-#voting [data-question-id][data-state="against"] .vote-button-for .vote {
-  display: none;
-}
-
-#voting [data-question-id][data-state="against"] .vote-button-for .fewer {
-  display: inline;
-}
-
-
-svg.credits circle.credit.bg {
-  fill: #ccc;
-}
-
-svg.credits circle.credit.foreground {
-  fill: #000;
-}
-
-svg.credits circle.credit.foreground.used {
-  display: none;
-  /* opacity: 0; */
-  /* transition: opacity 5s ease-out; */
+[data-all-credits] .credit.foreground.used {
+  fill: #E5E7EB;  /* gray-200 for used credits in the pool */
 }
