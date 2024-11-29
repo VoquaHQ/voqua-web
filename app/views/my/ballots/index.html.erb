@@ -1,24 +1,61 @@
-<h1>My Ballots</h1>
-
-<% if @ballots.empty? %>
-  <p>You have not created any ballots yet.</p>
-<% else %>
-  <div>
-    <% @ballots.each do |ballot| %>
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
       <div>
-        <h2><%= ballot.name %></h2>
-        <p><%= ballot.description %></p>
-        <p>Deadline: <%= ballot.ends_at.strftime("%B %d, %Y at %I:%M %p") %></p>
-        <div>
-          <%= link_to 'Edit', edit_my_ballot_path(ballot) %> |
-          <%= link_to 'Questions', my_ballot_path(ballot) %> |
-          <%= link_to 'Public Link', ballot_path(ballot), target: :_blank %> |
-          <%= link_to 'Delete', my_ballot_path(ballot), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
-        </div>
-        <hr />
+        <h1 class="text-3xl font-bold text-gray-900">Welcome to Teamsight</h1>
+        <p class="text-gray-600 mt-2">Collect and analyze team feedback efficiently</p>
       </div>
-    <% end %>
-  </div>
-<% end %>
+      <%= link_to new_my_ballot_path, 
+          class: "inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-150" do %>
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        New Teamsight
+      <% end %>
+    </div>
 
-<%= link_to 'Create New Ballot', new_my_ballot_path %>
+    <div class="space-y-4">
+      <% if @ballots.empty? %>
+        <div class="text-center py-12 bg-gray-50 rounded-lg">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+          <h3 class="mt-4 text-lg font-medium text-gray-900">Get started with Teamsight</h3>
+          <p class="mt-2 text-gray-600 max-w-sm mx-auto">
+            Create your first feedback collection to gather insights from your team.
+          </p>
+          <%= link_to 'Create Your First Teamsight', 
+              new_my_ballot_path,
+              class: "mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+        </div>
+      <% else %>
+        <div class="bg-white shadow rounded-lg divide-y">
+          <% @ballots.each do |ballot| %>
+            <%= link_to my_ballot_path(ballot), class: "block hover:bg-gray-50 transition-colors duration-150" do %>
+              <div class="p-6 flex items-center justify-between">
+                <div class="min-w-0 flex-1">
+                  <h3 class="text-lg font-medium text-gray-900 truncate"><%= ballot.name %></h3>
+                  <div class="mt-1 flex items-center">
+                    <% if ballot.ends_at > Time.current %>
+                      <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-green-400 mr-2"></div>
+                    <% else %>
+                      <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-gray-400 mr-2"></div>
+                    <% end %>
+                    <p class="text-sm text-gray-600">
+                      <%= format_end_date(ballot.ends_at) %>
+                    </p>
+                  </div>
+                </div>
+                <div class="ml-6">
+                  <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
