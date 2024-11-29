@@ -109,7 +109,7 @@ class QuestionBlock {
   }
 }
 
-class Animator {
+class CreditsAnimator {
   constructor(availableCredits, allCreditsContainer, questionsElements) {
     this.availableCredits = availableCredits;
     this.usedCredits = 0;
@@ -180,6 +180,52 @@ class Animator {
   }
 }
 
+class CreditsLabelAnimator {
+  constructor(element, initialCredits) {
+    this.element = element;
+    this.credits = initialCredits;
+  }
+
+  animate(newCredits) {
+    if (newCredits === this.credits) {
+      return;
+    }
+
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
+    const diff = newCredits - this.credits;
+    const func = diff > 0 ? this.increment : this.decrement;
+    const ms = 200 / Math.abs(diff);
+
+    const loop = () => {
+      if (this.credits === newCredits) {
+        return;
+      }
+
+      func.call(this);
+      this.timeout = setTimeout(loop, ms);
+    };
+
+    loop();
+  }
+
+  increment() {
+    this.credits++;
+    this.updateText();
+  }
+
+  decrement() {
+    this.credits--;
+    this.updateText();
+  }
+
+  updateText() {
+    this.element.textContent = this.credits;
+  }
+}
+
 export default class extends Controller {
   connect() {
     this.onVote = this.onVote.bind(this);
@@ -200,13 +246,17 @@ export default class extends Controller {
 
     this.ballot = new UserBallot(this.questions, 99);
 
-    this.updateCreditsCounter(this.element.querySelector("[data-credits]"));
-    this.animator = new Animator(
+    this.creditsLabelAnimator = new CreditsLabelAnimator(
+      this.creditsElement,
+      99,
+    );
+    this.creditsAnimator = new CreditsAnimator(
       this.ballot.availableCredits,
       this.element.querySelector("[data-all-credits]"),
       this.questionsElements,
     );
 
+    this.updateCreditsCounter(this.element.querySelector("[data-credits]"));
     this.questionsElements.forEach((questionElement) => {
       const id = questionElement.dataset.questionId;
       questionElement
@@ -244,7 +294,7 @@ export default class extends Controller {
     this.updateVoteCounters(questionId);
     this.updateQuestionState(questionId);
 
-    this.animator.animate(
+    this.creditsAnimator.animate(
       questionId,
       this.ballot.stateForQuestion(questionId),
       this.ballot.votesForQuestion(questionId),
@@ -256,8 +306,8 @@ export default class extends Controller {
   }
 
   updateCreditsCounter() {
-    this.creditsElement.textContent = this.ballot.availableCredits;
     this.creditsElement.dataset.credits = this.ballot.availableCredits;
+    this.creditsLabelAnimator.animate(this.ballot.availableCredits);
   }
 
   updateQuestionState(questionId) {
