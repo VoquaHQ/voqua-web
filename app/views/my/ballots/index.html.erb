@@ -31,7 +31,7 @@
       <% else %>
         <%# Open Votes Section %>
         <div>
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Open Votes</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Open</h2>
           <div class="bg-white shadow rounded-lg divide-y">
             <% @ballots.select { |b| b.ends_at > Time.current }
                        .sort_by(&:ends_at)
@@ -66,7 +66,7 @@
 
         <%# Completed Votes Section %>
         <div>
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Completed Votes</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Completed</h2>
           <div class="bg-white shadow rounded-lg divide-y">
             <% @ballots.select { |b| b.ends_at <= Time.current }
                        .sort_by(&:ends_at)
