@@ -8,44 +8,68 @@
 
 <h2 class="text-2xl font-bold mb-6">Create Your QV</h2>
 
-<div class="space-y-6">
-  <div>
-    <%= f.label :ends_at, "End Date", class: "block font-medium mb-1" %>
-    <div class="text-sm text-gray-600 mb-2">Set when input collection closes.</div>
-    <div class="datetime-field" style="display: inline-block; position: relative;">
-      <input type="text" 
-             id="formatted_ends_at" 
-             style="width: 300px; cursor: pointer; padding: 1px 2px; border: 1px solid #ccc;" 
-             readonly
-             value="<%= (@ballot.ends_at || 3.days.from_now).strftime("%B %-d, %Y at %-I:%M %p") %>" />
-      <%= f.datetime_local_field :ends_at,
-          value: @ballot.ends_at&.strftime("%Y-%m-%dT%H:%M") || 3.days.from_now.strftime("%Y-%m-%dT%H:%M"),
-          style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none;" %>
+<%= form_with model: @ballot, url: my_ballots_path, local: true, data: { turbo: false } do |f| %>
+  <div class="space-y-6">
+    <div>
+      <%= f.label :ends_at, "End Date", class: "block font-medium mb-1" %>
+      <div class="text-sm text-gray-600 mb-2">Set when input collection closes.</div>
+      <div class="datetime-field" style="display: inline-block; position: relative;">
+        <input type="text" 
+               id="formatted_ends_at" 
+               style="width: 300px; cursor: pointer; padding: 1px 2px; border: 1px solid #ccc;" 
+               readonly
+               value="<%= (@ballot.ends_at || 3.days.from_now).strftime("%B %-d, %Y at %-I:%M %p") %>" />
+        <%= f.datetime_local_field :ends_at,
+            value: @ballot.ends_at&.strftime("%Y-%m-%dT%H:%M") || 3.days.from_now.strftime("%Y-%m-%dT%H:%M"),
+            style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none;" %>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :name, "Title", class: "block font-medium mb-1" %>
+      <div class="text-sm text-gray-600 mb-2">Give it a clear name.</div>
+      <%= f.text_field :name, class: "w-full" %>
+    </div>
+
+    <div>
+      <%= f.label :description, "Details", class: "block font-medium mb-1" %>
+      <div class="text-sm text-gray-600 mb-2">Provide a brief description.</div>
+      <%= f.text_area :description, rows: 5, class: "w-full" %>
+    </div>
+
+    <div class="space-y-4">
+      <label class="block font-medium mb-1">Access Control</label>
+      <div class="space-y-3">
+        <div class="flex items-start space-x-3">
+          <%= f.radio_button :private, "1", checked: "checked", class: "mt-1", id: "private_mode" %>
+          <label for="private_mode" class="cursor-pointer">
+            <div class="font-medium">Private - Invite only</div>
+            <div class="text-sm text-gray-600">Only invited people can participate</div>
+          </label>
+        </div>
+        
+        <div class="flex items-start space-x-3">
+          <%= f.radio_button :private, "0", class: "mt-1", id: "public_mode" %>
+          <label for="public_mode" class="cursor-pointer">
+            <div class="font-medium">Public - Anyone with the link</div>
+            <div class="text-sm text-gray-600">Anyone with the link can participate, and you can still invite people</div>
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <label class="block font-medium mb-1">Invite People</label>
+        <div class="text-sm text-gray-600 mb-2">Enter email addresses (comma separated). Invitations will be sent after you add the voting options.</div>
+        <%= text_area_tag :pending_emails, nil, rows: 3, class: "w-full", placeholder: "email1@example.com, email2@example.com" %>
+      </div>
+    </div>
+
+    <div class="flex space-x-4">
+      <%= f.submit "Create QV", class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+      <%= link_to "Cancel", my_ballots_path, class: "px-4 py-2 border border-gray-300 rounded hover:bg-gray-100" %>
     </div>
   </div>
-
-  <div>
-    <%= f.label :name, "Title", class: "block font-medium mb-1" %>
-    <div class="text-sm text-gray-600 mb-2">Give it a clear name.</div>
-    <%= f.text_field :name, class: "w-full" %>
-  </div>
-
-  <div>
-    <%= f.label :description, "Details", class: "block font-medium mb-1" %>
-    <div class="text-sm text-gray-600 mb-2">Provide a brief description.</div>
-    <%= f.text_area :description, rows: 5, class: "w-full" %>
-  </div>
-
-  <div>
-    <%= f.check_box :private %>
-    <%= f.label :private %>
-  </div>
-
-  <div class="flex space-x-4">
-    <%= f.submit "Create QV", class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
-    <%= link_to "Cancel", my_ballots_path, class: "px-4 py-2 border border-gray-300 rounded hover:bg-gray-100" %>
-  </div>
-</div>
+<% end %>
 
 <%= javascript_tag do %>
   document.addEventListener('DOMContentLoaded', function() {
