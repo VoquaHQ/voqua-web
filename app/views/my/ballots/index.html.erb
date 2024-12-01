@@ -14,7 +14,7 @@
       <% end %>
     </div>
 
-    <div class="space-y-4">
+    <div class="space-y-8">
       <% if @ballots.empty? %>
         <div class="text-center py-12 bg-gray-50 rounded-lg">
           <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,31 +29,75 @@
               class: "mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
         </div>
       <% else %>
-        <div class="bg-white shadow rounded-lg divide-y">
-          <% @ballots.each do |ballot| %>
-            <%= link_to my_ballot_path(ballot), class: "block hover:bg-gray-50 transition-colors duration-150" do %>
-              <div class="p-6 flex items-center justify-between">
-                <div class="min-w-0 flex-1">
-                  <h3 class="text-lg font-medium text-gray-900 truncate"><%= ballot.name %></h3>
-                  <div class="mt-1 flex items-center">
-                    <% if ballot.ends_at > Time.current %>
+        <%# Open Votes Section %>
+        <div>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Open Votes</h2>
+          <div class="bg-white shadow rounded-lg divide-y">
+            <% @ballots.select { |b| b.ends_at > Time.current }
+                       .sort_by(&:ends_at)
+                       .first(10)
+                       .each do |ballot| %>
+              <%= link_to my_ballot_path(ballot), class: "block hover:bg-gray-50 transition-colors duration-150" do %>
+                <div class="p-6 flex items-center justify-between">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-lg font-medium text-gray-900 truncate"><%= ballot.name %></h3>
+                    <div class="mt-1 flex items-center">
                       <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-green-400 mr-2"></div>
-                    <% else %>
-                      <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-gray-400 mr-2"></div>
-                    <% end %>
-                    <p class="text-sm text-gray-600">
-                      <%= format_end_date(ballot.ends_at) %>
-                    </p>
+                      <p class="text-sm text-gray-600">
+                        <%= format_end_date(ballot.ends_at) %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="ml-6">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
                   </div>
                 </div>
-                <div class="ml-6">
-                  <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                  </svg>
-                </div>
+              <% end %>
+            <% end %>
+            <% if @ballots.select { |b| b.ends_at > Time.current }.count > 10 %>
+              <div class="p-4 bg-gray-50 text-center">
+                <%= link_to "View More", "#", class: "text-blue-600 hover:text-blue-800" %>
               </div>
             <% end %>
-          <% end %>
+          </div>
+        </div>
+
+        <%# Completed Votes Section %>
+        <div>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Completed Votes</h2>
+          <div class="bg-white shadow rounded-lg divide-y">
+            <% @ballots.select { |b| b.ends_at <= Time.current }
+                       .sort_by(&:ends_at)
+                       .reverse
+                       .first(10)
+                       .each do |ballot| %>
+              <%= link_to my_ballot_path(ballot), class: "block hover:bg-gray-50 transition-colors duration-150" do %>
+                <div class="p-6 flex items-center justify-between">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="text-lg font-medium text-gray-900 truncate"><%= ballot.name %></h3>
+                    <div class="mt-1 flex items-center">
+                      <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-gray-400 mr-2"></div>
+                      <p class="text-sm text-gray-600">
+                        <%= format_end_date(ballot.ends_at) %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="ml-6">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+            <% if @ballots.select { |b| b.ends_at <= Time.current }.count > 10 %>
+              <div class="p-4 bg-gray-50 text-center">
+                <%= link_to "View More", "#", class: "text-blue-600 hover:text-blue-800" %>
+              </div>
+            <% end %>
+          </div>
         </div>
       <% end %>
     </div>
