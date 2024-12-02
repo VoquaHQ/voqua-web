@@ -5,6 +5,23 @@
       <p class="text-lg text-gray-600 leading-relaxed"><%= @ballot.description %></p>
     </div>
 
+    <!-- Welcome Banner -->
+    <div id="welcome-banner" class="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-8 relative">
+      <button onclick="dismissWelcome()" class="absolute top-4 right-4 text-blue-400 hover:text-blue-600">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      <h2 class="text-xl font-medium text-blue-900 mb-2">Welcome to Your Voice!</h2>
+      <p class="text-blue-800 mb-4">You have <span class="font-bold">99 voting points</span> to use on the options below. The more points you spend on an option, the stronger your support or opposition. Feel free to vote multiple times on the things you care about most!</p>
+      <div class="flex items-center gap-2 text-blue-700">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <p>Pro tip: Use all your points to make your voice heard!</p>
+      </div>
+    </div>
+
     <% if @ballot.questions.empty? %>
       <div class="bg-white rounded-lg shadow-sm p-8 text-center">
         <p class="text-gray-600">No options have been added to this feedback collection yet.</p>
@@ -12,17 +29,19 @@
     <% else %>
       <div id="voting" data-controller="voting">
         <div class="flex gap-8">
-          <div class="w-64 sticky top-8 h-fit">
+          <div class="w-56 sticky top-8 h-fit">
             <div class="bg-white rounded-lg shadow-sm p-6">
-              <h2 class="font-medium text-gray-900 mb-2">Available Credits</h2>
+              <h2 class="font-medium text-gray-900 mb-2">Your Voting Power</h2>
               <div class="flex items-baseline gap-2 mb-4">
                 <span class="text-3xl font-bold text-blue-600" data-credits="99">99</span>
-                <span class="text-sm text-gray-500">remaining</span>
+                <span class="text-sm text-gray-500">points left</span>
               </div>
               <div data-all-credits="0">
                 <%= render partial: "remaining_credits_svg" %>
               </div>
-              <p class="mt-4 text-sm text-gray-500">Use your credits to express the strength of your preferences.</p>
+              <div class="mt-4 p-3 bg-yellow-50 rounded-md">
+                <p class="text-sm text-yellow-800">Use your points wisely! Each extra vote on the same option costs more points.</p>
+              </div>
             </div>
           </div>
 
@@ -37,22 +56,22 @@
                       <p class="text-gray-600"><%= question.description %></p>
                     </div>
 
-                    <div class="flex p-6">
-                      <div class="w-1/4" data-credits-for>
+                    <div class="grid grid-cols-4 gap-4 p-6">
+                      <div class="col-span-1" data-credits-for>
                         <%= render partial: "credits_svg", locals: { flipped: false } %>
                       </div>
-                      <div class="w-2/4">
-                        <div class="flex items-center justify-center space-x-12 pt-4">
-                          <div data-vote-type="for" class="text-right flex flex-col items-end">
-                            <div class="mb-2">
-                              <span class="vote-type-label-for text-sm font-medium text-gray-900">In favour</span>
+                      <div class="col-span-2">
+                        <div class="flex items-center justify-between pt-4">
+                          <div data-vote-type="for" class="text-center">
+                            <div class="mb-3">
+                              <span class="vote-type-label-for text-sm font-medium text-gray-900">Support This</span>
                             </div>
-                            <button data-vote-button="inc" class="vote-button vote-button-for bg-white hover:bg-gray-900 text-gray-900 font-medium hover:text-white py-2 px-4 border border-gray-900 hover:border-transparent rounded-md transition-colors">
-                              <span class="vote">Vote</span>
-                              <span class="more">More</span>
-                              <span class="fewer">Fewer</span>
+                            <button data-vote-button="inc" class="vote-button vote-button-for bg-white hover:bg-gray-900 text-gray-900 font-medium hover:text-white py-2 px-6 border border-gray-900 hover:border-transparent rounded-md transition-colors min-w-[100px]">
+                              <span class="vote">VOTE</span>
+                              <span class="more">MORE</span>
+                              <span class="fewer">FEWER</span>
                             </button>
-                            <div class="mt-2 min-h-[1.5rem]">
+                            <div class="mt-3 min-h-[1.5rem]">
                               <%= render partial: "votes_count_fields", locals: { 
                                 question_id: question.id, 
                                 type: :for, 
@@ -60,16 +79,16 @@
                               } %>
                             </div>
                           </div>
-                          <div data-vote-type="against" class="text-left flex flex-col items-start">
-                            <div class="mb-2">
-                              <span class="vote-type-label-against text-sm font-medium text-red-700">Opposed</span>
+                          <div data-vote-type="against" class="text-center">
+                            <div class="mb-3">
+                              <span class="vote-type-label-against text-sm font-medium text-red-700">Oppose This</span>
                             </div>
-                            <button data-vote-button="inc" class="vote-button vote-button-against bg-white hover:bg-red-600 text-red-700 font-medium hover:text-white py-2 px-4 border border-red-600 hover:border-transparent rounded-md transition-colors">
-                              <span class="vote">Vote</span>
-                              <span class="more">More</span>
-                              <span class="fewer">Fewer</span>
+                            <button data-vote-button="inc" class="vote-button vote-button-against bg-white hover:bg-red-600 text-red-700 font-medium hover:text-white py-2 px-6 border border-red-600 hover:border-transparent rounded-md transition-colors min-w-[100px]">
+                              <span class="vote">VOTE</span>
+                              <span class="more">MORE</span>
+                              <span class="fewer">FEWER</span>
                             </button>
-                            <div class="mt-2 min-h-[1.5rem]">
+                            <div class="mt-3 min-h-[1.5rem]">
                               <%= render partial: "votes_count_fields", locals: { 
                                 question_id: question.id, 
                                 type: :against, 
@@ -79,7 +98,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="w-1/4" data-credits-against>
+                      <div class="col-span-1" data-credits-against>
                         <%= render partial: "credits_svg", locals: { flipped: true } %>
                       </div>
                     </div>
@@ -87,21 +106,40 @@
                 <% end %>
 
                 <div class="text-center">
-                  <%= submit_tag "Submit", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-md transition-colors" %>
+                  <%= submit_tag "Submit My Votes", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 text-lg rounded-md transition-colors" %>
                 </div>
               </div>
             <% end %>
           </div>
 
-          <div class="w-64 sticky top-8 h-fit">
-            <div class="bg-white rounded-lg shadow-sm p-6">
-              <h2 class="font-medium text-gray-900 mb-2">How It Works</h2>
-              <ul class="text-sm text-gray-600 space-y-3">
-                <li>• Use credits to express your preferences</li>
-                <li>• More credits = stronger preference</li>
-                <li>• Each additional vote costs more</li>
-                <li>• Allocate wisely across options</li>
-              </ul>
+          <div id="quick-guide" class="w-56 sticky top-8 h-fit">
+            <div class="bg-white rounded-lg shadow-sm p-6 relative">
+              <button onclick="dismissGuide()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+              <h2 class="font-medium text-gray-900 mb-4">Quick Guide</h2>
+              <div class="space-y-4">
+                <div class="flex items-start gap-3">
+                  <div class="mt-1 flex-shrink-0">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">1</div>
+                  </div>
+                  <p class="text-sm text-gray-600">You can vote multiple times on what matters most to you</p>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="mt-1 flex-shrink-0">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">2</div>
+                  </div>
+                  <p class="text-sm text-gray-600">Each extra vote costs more points - choose wisely!</p>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="mt-1 flex-shrink-0">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">3</div>
+                  </div>
+                  <p class="text-sm text-gray-600">Try to use all your points to make your voice count fully</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -109,3 +147,27 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  // Check if elements should be hidden based on local storage
+  document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('welcomeDismissed') === 'true') {
+      document.getElementById('welcome-banner').style.display = 'none';
+    }
+    if (localStorage.getItem('guideDismissed') === 'true') {
+      document.getElementById('quick-guide').style.display = 'none';
+    }
+  });
+
+  // Dismiss welcome banner
+  function dismissWelcome() {
+    localStorage.setItem('welcomeDismissed', 'true');
+    document.getElementById('welcome-banner').style.display = 'none';
+  }
+
+  // Dismiss quick guide
+  function dismissGuide() {
+    localStorage.setItem('guideDismissed', 'true');
+    document.getElementById('quick-guide').style.display = 'none';
+  }
+</script>

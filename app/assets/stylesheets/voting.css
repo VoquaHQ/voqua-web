@@ -1,9 +1,13 @@
+/* Button state management */
 .vote-button .vote { display: inline; }
 .vote-button .more { display: none; }
 .vote-button .fewer { display: none; }
 
+/* When votes exist, show MORE */
 .vote-button[data-state="has-votes"] .vote { display: none; }
 .vote-button[data-state="has-votes"] .more { display: inline; }
+
+/* At max votes, show FEWER instead of MORE */
 .vote-button[data-state="max-votes"] .more { display: none; }
 .vote-button[data-state="max-votes"] .fewer { display: inline; }
 
@@ -13,17 +17,53 @@
 }
 
 .credit.foreground {
-  fill: #000000;  /* black for remaining credits and in favor */
+  fill: #2563EB;  /* blue-600 for remaining credits and in favor */
+  transition: fill 0.2s ease-in-out;
 }
 
 [data-credits-against] .credit.foreground {
-  fill: #EF4444;  /* red-500 for opposed */
+  fill: #DC2626;  /* red-600 for opposed */
 }
 
 [data-all-credits] .credit.foreground {
-  fill: #000000;  /* black for remaining credits */
+  fill: #2563EB;  /* blue-600 for remaining credits */
 }
 
 [data-all-credits] .credit.foreground.used {
-  fill: #E5E7EB;  /* gray-200 for used credits in the pool */
+  fill: #93C5FD;  /* blue-300 for used credits in the pool */
+}
+
+/* Button styling */
+.vote-button {
+  transition: all 0.2s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+}
+
+.vote-button:hover {
+  transform: scale(1.05);
+}
+
+/* Dismissable elements transitions */
+#welcome-banner,
+#quick-guide {
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+#welcome-banner.hiding,
+#quick-guide.hiding {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Pulse animation for remaining credits */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+[data-credits="99"] {
+  animation: pulse 2s infinite;
 }
