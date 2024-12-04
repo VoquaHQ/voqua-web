@@ -6,8 +6,8 @@
     </div>
 
     <!-- Welcome Banner -->
-    <div id="welcome-banner" class="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-8 relative">
-      <button onclick="dismissWelcome()" class="absolute top-4 right-4 text-blue-400 hover:text-blue-600">
+    <div data-controller="onboarding" data-dismiss="welcome-banner" id="welcome-banner" class="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-8 relative">
+      <button data-action="dismiss" class="absolute top-4 right-4 text-blue-400 hover:text-blue-600">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
@@ -58,7 +58,7 @@
 
                     <div class="grid grid-cols-4 gap-4 p-6">
                       <div class="col-span-1" data-credits-for>
-                        <%= render partial: "credits_svg", locals: { flipped: false } %>
+                        <%= render partial: "credits_svg", locals: { class_name: "for", flipped: false } %>
                       </div>
                       <div class="col-span-2">
                         <div class="flex items-center justify-between pt-4">
@@ -72,11 +72,7 @@
                               <span class="fewer">FEWER</span>
                             </button>
                             <div class="mt-3 min-h-[1.5rem]">
-                              <%= render partial: "votes_count_fields", locals: { 
-                                question_id: question.id, 
-                                type: :for, 
-                                votes_count: (@votes&.data&.dig(question.id.to_s) || {})["for"].to_i
-                              } %>
+                              <%= votes_count_fields_for(@ballot, question.id, :for, @votes) %>
                             </div>
                           </div>
                           <div data-vote-type="against" class="text-center">
@@ -89,17 +85,13 @@
                               <span class="fewer">FEWER</span>
                             </button>
                             <div class="mt-3 min-h-[1.5rem]">
-                              <%= render partial: "votes_count_fields", locals: { 
-                                question_id: question.id, 
-                                type: :against, 
-                                votes_count: (@votes&.data&.dig(question.id.to_s) || {})["against"].to_i
-                              } %>
+                              <%= votes_count_fields_for(@ballot, question.id, :against, @votes) %>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div class="col-span-1" data-credits-against>
-                        <%= render partial: "credits_svg", locals: { flipped: true } %>
+                        <%= render partial: "credits_svg", locals: { class_name: "against", flipped: true } %>
                       </div>
                     </div>
                   </div>
@@ -112,9 +104,9 @@
             <% end %>
           </div>
 
-          <div id="quick-guide" class="w-56 sticky top-8 h-fit">
+          <div data-controller="onboarding" data-dismiss="quick-guide" id="quick-guide" class="w-56 sticky top-8 h-fit">
             <div class="bg-white rounded-lg shadow-sm p-6 relative">
-              <button onclick="dismissGuide()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+              <button data-action="dismiss" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
@@ -147,27 +139,3 @@
     <% end %>
   </div>
 </div>
-
-<script>
-  // Check if elements should be hidden based on local storage
-  document.addEventListener('DOMContentLoaded', function() {
-    if (localStorage.getItem('welcomeDismissed') === 'true') {
-      document.getElementById('welcome-banner').style.display = 'none';
-    }
-    if (localStorage.getItem('guideDismissed') === 'true') {
-      document.getElementById('quick-guide').style.display = 'none';
-    }
-  });
-
-  // Dismiss welcome banner
-  function dismissWelcome() {
-    localStorage.setItem('welcomeDismissed', 'true');
-    document.getElementById('welcome-banner').style.display = 'none';
-  }
-
-  // Dismiss quick guide
-  function dismissGuide() {
-    localStorage.setItem('guideDismissed', 'true');
-    document.getElementById('quick-guide').style.display = 'none';
-  }
-</script>

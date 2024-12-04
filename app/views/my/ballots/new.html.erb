@@ -1,3 +1,12 @@
+<h2 class="text-2xl font-bold mb-6">Create Your Quvo</h2>
+
 <%= form_with model: @ballot, url: my_ballots_path, local: true, data: { turbo: false } do |f| %>
-  <%= render 'form', ballot: @ballot, f: f %>
+  <div class="space-y-6">
+    <%= render 'form', ballot: @ballot, f: f %>
+
+    <div class="flex space-x-4">
+      <%= f.submit "Create Quvo", class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+      <%= link_to "Cancel", my_ballots_path, class: "px-4 py-2 border border-gray-300 rounded hover:bg-gray-100" %>
+    </div>
+  </div>
 <% end %>

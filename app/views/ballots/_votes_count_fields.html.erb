@@ -1,34 +1,6 @@
-<span class="votes-count-label votes-count-label-<%= type %> <%= type == :against ? 'text-red-700' : 'text-black' %>" data-votes-total-label="<%= type %>" data-vote-count="<%= votes_count %>">
-  <% if votes_count && votes_count > 0 %>
-    <%= votes_count == 1 ? "1 vote" : "#{votes_count} votes" %>
-  <% end %>
+<span class="votes-count-label votes-count-label-<%= type %>" data-votes-total-label="<%= type %>">
+  <span class="votes-number"><%= votes_count %></span>
+  <span class="votes-suffix singular">vote</span>
+  <span class="votes-suffix plural">votes</span>
 </span>
 <input style="display: none;" type="text" name="<%= "votes[#{question_id}][#{type}]" %>" value="<%= votes_count %>" data-votes-total-input="<%= type %>"/>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        if (mutation.type === 'characterData' || mutation.type === 'childList') {
-          const span = mutation.target.closest('.votes-count-label');
-          if (span) {
-            const count = parseInt(span.textContent) || 0;
-            if (count > 0) {
-              span.textContent = count === 1 ? "1 vote" : `${count} votes`;
-            } else {
-              span.textContent = '';
-            }
-          }
-        }
-      });
-    });
-
-    document.querySelectorAll('.votes-count-label').forEach(function(label) {
-      observer.observe(label, { 
-        characterData: true, 
-        childList: true, 
-        subtree: true 
-      });
-    });
-  });
-</script>

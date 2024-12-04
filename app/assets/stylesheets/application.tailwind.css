@@ -7,6 +7,9 @@ input[type=submit] {
 }
 
 .form-errors {
+  background-color: #f8d7da;
+  padding: 1em;
+  border: 1px solid #f5c6cb;
   @apply text-red-600 text-sm;
 }
 

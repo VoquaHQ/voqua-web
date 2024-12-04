@@ -1,5 +1,6 @@
 <h1><%= @ballot.name %></h1>
 <p><%= @ballot.description %></p>
+<%= link_to 'Edit', edit_my_ballot_path(@ballot) %> |
 <%= link_to 'Public Link', ballot_path(@ballot), target: :_blank %>
 
 <hr />

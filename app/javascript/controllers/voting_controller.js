@@ -200,10 +200,8 @@ export default class extends Controller {
         .forEach((votesInputElement) => {
           const votesCount = parseInt(votesInputElement.value);
           const type = votesInputElement.dataset.votesTotalInput;
-          try {
+          if (votesCount > 0) {
             this.vote(id, type, votesCount);
-          } catch (error) {
-            // Ignore initial load errors
           }
         });
     });
@@ -216,10 +214,11 @@ export default class extends Controller {
   }
 
   showErrorToast(message) {
-    const toast = document.createElement('div');
-    toast.className = 'fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg z-50 transform transition-all duration-300 ease-in-out';
-    toast.style.transform = 'translateX(100%)';
-    toast.style.opacity = '0';
+    const toast = document.createElement("div");
+    toast.className =
+      "fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg z-50 transform transition-all duration-300 ease-in-out";
+    toast.style.transform = "translateX(100%)";
+    toast.style.opacity = "0";
     toast.innerHTML = `
       <div class="flex items-center">
         <div class="flex-shrink-0">
@@ -232,20 +231,20 @@ export default class extends Controller {
         </div>
       </div>
     `;
-    
+
     document.body.appendChild(toast);
-    
+
     // Animate in
     requestAnimationFrame(() => {
-      toast.style.transform = 'translateX(0)';
-      toast.style.opacity = '1';
+      toast.style.transform = "translateX(0)";
+      toast.style.opacity = "1";
     });
 
     // Remove after 3 seconds
     setTimeout(() => {
-      toast.style.transform = 'translateX(100%)';
-      toast.style.opacity = '0';
-      toast.style.visibility = 'hidden';
+      toast.style.transform = "translateX(100%)";
+      toast.style.opacity = "0";
+      toast.style.visibility = "hidden";
       setTimeout(() => {
         if (toast.parentNode) {
           document.body.removeChild(toast);
@@ -268,10 +267,11 @@ export default class extends Controller {
     } catch (error) {
       if (error instanceof NotEnoughCreditsError) {
         const currentVotes = this.ballot.votesForQuestion(questionId);
-        const nextCost = Math.pow(currentVotes + 1, 2) - Math.pow(currentVotes, 2);
+        const nextCost =
+          Math.pow(currentVotes + 1, 2) - Math.pow(currentVotes, 2);
         const remainingCredits = this.ballot.availableCredits;
         this.showErrorToast(
-          `Next vote on this option needs ${nextCost} credits - you have ${remainingCredits} left. Try voting on other options!`
+          `Next vote on this option needs ${nextCost} credits - you have ${remainingCredits} left. Try voting on other options!`,
         );
       }
     }
@@ -314,6 +314,11 @@ export default class extends Controller {
     );
 
     questionElement.dataset.state = stateValue;
+    if (votes > 1) {
+      questionElement.classList.add("votes-plural");
+    } else {
+      questionElement.classList.remove("votes-plural");
+    }
   }
 
   updateVoteCounters(questionId) {
@@ -329,7 +334,9 @@ export default class extends Controller {
       `[data-votes-total-input="${question.state}"]`,
     );
 
-    votesLabelElement.textContent = question.votes;
+    const votesLabelNumber = votesLabelElement.querySelector(".votes-number");
+    votesLabelNumber.textContent = question.votes;
+
     votesInputElement.value = question.votes;
   }
 }
