@@ -11,7 +11,11 @@
       </div>
     <% end %>
   <% end %>
-  <%= yield %>
+  <div class="bg-gray-50">
+    <div class="max-w-5xl mx-auto py-8">
+      <%= yield %>
+    </div>
+  </div>
 </main>
 
 <%= render "layouts/shared/footer" %>

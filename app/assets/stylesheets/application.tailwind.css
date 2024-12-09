@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type=submit] {
-  @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800
+.button {
+  @apply cursor-pointer focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none shadow;
+}
+
+.button.button-primary {
+  @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
+}
+
+.button.button-secondary {
+  @apply bg-gray-200 hover:bg-gray-300 text-gray-800;
 }
 
 .form-errors {
@@ -118,4 +126,8 @@ input[type=submit] {
 
 #error_explanation h2 {
   font-weight: bold;
+}
+
+form.form label {
+  @apply block text-gray-700 text-sm font-bold mb-2;
 }

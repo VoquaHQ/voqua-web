@@ -5,9 +5,9 @@ class My::QuestionsController < My::BaseController
     @questions = @ballot.questions
   end
 
-  # def new
-  #   @question = @ballot.questions.build
-  # end
+  def new
+    @question = @ballot.questions.build
+  end
 
   def create
     @question = @ballot.questions.build(question_params)

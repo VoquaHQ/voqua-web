@@ -29,7 +29,7 @@ class My::BallotsController < My::BaseController
   def update
     @ballot = current_user.ballots.find(params[:id])
     if @ballot.update(ballot_params)
-      redirect_to my_ballots_path, notice: "Ballot updated."
+      redirect_to my_ballot_path(@ballot), notice: "Ballot updated."
     else
       render :edit
     end
