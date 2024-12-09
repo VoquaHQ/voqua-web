@@ -67,9 +67,9 @@
                               <span class="vote-type-label-for text-sm font-medium text-gray-900">Support This</span>
                             </div>
                             <button data-vote-button="inc" class="vote-button vote-button-for bg-white hover:bg-gray-900 text-gray-900 font-medium hover:text-white py-2 px-6 border border-gray-900 hover:border-transparent rounded-md transition-colors min-w-[100px]">
-                              <span class="vote">VOTE</span>
-                              <span class="more">MORE</span>
-                              <span class="fewer">FEWER</span>
+                              <span class="vote">Vote</span>
+                              <span class="more">More</span>
+                              <span class="fewer">Fewer</span>
                             </button>
                             <div class="mt-3 min-h-[1.5rem]">
                               <%= votes_count_fields_for(@ballot, question.id, :for, @votes) %>
@@ -80,9 +80,9 @@
                               <span class="vote-type-label-against text-sm font-medium text-red-700">Oppose This</span>
                             </div>
                             <button data-vote-button="inc" class="vote-button vote-button-against bg-white hover:bg-red-600 text-red-700 font-medium hover:text-white py-2 px-6 border border-red-600 hover:border-transparent rounded-md transition-colors min-w-[100px]">
-                              <span class="vote">VOTE</span>
-                              <span class="more">MORE</span>
-                              <span class="fewer">FEWER</span>
+                              <span class="vote">Vote</span>
+                              <span class="more">More</span>
+                              <span class="fewer">Fewer</span>
                             </button>
                             <div class="mt-3 min-h-[1.5rem]">
                               <%= votes_count_fields_for(@ballot, question.id, :against, @votes) %>
