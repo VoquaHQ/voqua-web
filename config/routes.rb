@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  match "(*any)",
+    to: redirect(subdomain: ""),
+    via: :all,
+    constraints: { subdomain: "www" }
+
+
   devise_for :users, controllers: {
     # sessions: 'users/sessions'
     registrations: 'users/registrations'
