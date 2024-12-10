@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
   #FIXME: set default from email
-  default from: "from@example.com"
+  default from: "noreply@voqua.io"
   layout "mailer"
 end
