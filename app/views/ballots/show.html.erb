@@ -46,7 +46,7 @@
           </div>
 
           <div class="flex-1">
-            <%= form_tag ballot_submit_votes_path(@ballot), data: { turbo: false } do %>
+            <%= form_tag submit_votes_ballot_path(@ballot), data: { turbo: false } do %>
               <div class="space-y-8">
                 <% @ballot.questions.each.with_index do |question, i| %>
                   <div class="bg-white rounded-lg shadow-sm" data-question-id="<%= question.id %>" data-state="">

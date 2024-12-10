@@ -25,6 +25,6 @@ class My::BallotInvitationsController < My::BaseController
   private
 
   def set_ballot
-    @ballot = current_user.ballots.find(params[:ballot_id])
+    @ballot = current_user.main_profile.owned_ballots.find(params[:ballot_id])
   end
 end

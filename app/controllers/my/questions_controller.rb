@@ -14,8 +14,7 @@ class My::QuestionsController < My::BaseController
     if @question.save
       redirect_to my_ballot_path(@ballot), notice: "Question created successfully."
     else
-      flash.now[:alert] = "There was a problem creating the question."
-      render "my/ballots/show"
+      redirect_to my_ballot_path(@ballot), alert: "There was a problem creating the question."
     end
   end
 
@@ -42,7 +41,7 @@ class My::QuestionsController < My::BaseController
   private
 
   def set_ballot
-    @ballot = current_user.ballots.find(params[:ballot_id])
+    @ballot = current_user.main_profile.owned_ballots.find(params[:ballot_id])
   end
 
   def question_params

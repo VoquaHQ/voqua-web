@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_24_103239) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_09_233703) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,14 +18,23 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_103239) do
     t.bigint "ballot_id", null: false
     t.string "email"
     t.string "token", null: false
-    t.bigint "accepted_by_id"
     t.datetime "accepted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["accepted_by_id"], name: "index_ballot_invitations_on_accepted_by_id"
-    t.index ["ballot_id", "accepted_by_id"], name: "index_ballot_invitations_on_ballot_id_and_accepted_by_id", unique: true
+    t.bigint "ballot_membership_id"
     t.index ["ballot_id"], name: "index_ballot_invitations_on_ballot_id"
+    t.index ["ballot_membership_id"], name: "index_ballot_invitations_on_ballot_membership_id"
     t.index ["token"], name: "index_ballot_invitations_on_token", unique: true
+  end
+
+  create_table "ballot_memberships", force: :cascade do |t|
+    t.bigint "ballot_id", null: false
+    t.bigint "profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ballot_id", "profile_id"], name: "index_ballot_memberships_on_ballot_id_and_profile_id", unique: true
+    t.index ["ballot_id"], name: "index_ballot_memberships_on_ballot_id"
+    t.index ["profile_id"], name: "index_ballot_memberships_on_profile_id"
   end
 
   create_table "ballots", force: :cascade do |t|
@@ -104,8 +113,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_103239) do
     t.index ["profile_id"], name: "index_votes_on_profile_id"
   end
 
+  add_foreign_key "ballot_invitations", "ballot_memberships"
   add_foreign_key "ballot_invitations", "ballots"
-  add_foreign_key "ballot_invitations", "users", column: "accepted_by_id"
+  add_foreign_key "ballot_memberships", "ballots"
+  add_foreign_key "ballot_memberships", "profiles"
   add_foreign_key "ballots", "profiles"
   add_foreign_key "questions", "ballots"
   add_foreign_key "user_profiles", "profiles"

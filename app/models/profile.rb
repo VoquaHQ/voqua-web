@@ -39,7 +39,9 @@ BANNED_WORDS = [
 
 class Profile < ApplicationRecord
   has_many :user_profiles, dependent: :destroy
-  has_many :ballots, dependent: :destroy
+  has_many :owned_ballots, class_name: "Ballot", dependent: :destroy
+  has_many :ballot_memberships, dependent: :destroy
+  has_many :ballots, through: :ballot_memberships
 
   validates :handle,
     presence: true,

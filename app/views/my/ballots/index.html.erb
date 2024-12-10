@@ -37,24 +37,7 @@
                        .sort_by(&:ends_at)
                        .first(10)
                        .each do |ballot| %>
-              <%= link_to my_ballot_path(ballot), class: "block hover:bg-gray-50 transition-colors duration-150" do %>
-                <div class="p-6 flex items-center justify-between">
-                  <div class="min-w-0 flex-1">
-                    <h3 class="text-lg font-medium text-gray-900 truncate"><%= ballot.name %></h3>
-                    <div class="mt-1 flex items-center">
-                      <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-green-400 mr-2"></div>
-                      <p class="text-sm text-gray-600">
-                        <%= format_end_date(ballot.ends_at) %>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="ml-6">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                  </div>
-                </div>
-              <% end %>
+              <%= render "ballot_list_item", ballot: ballot %>
             <% end %>
             <% if @ballots.select { |b| b.ends_at > Time.current }.count > 10 %>
               <div class="p-4 bg-gray-50 text-center">
@@ -73,24 +56,7 @@
                        .reverse
                        .first(10)
                        .each do |ballot| %>
-              <%= link_to my_ballot_path(ballot), class: "block hover:bg-gray-50 transition-colors duration-150" do %>
-                <div class="p-6 flex items-center justify-between">
-                  <div class="min-w-0 flex-1">
-                    <h3 class="text-lg font-medium text-gray-900 truncate"><%= ballot.name %></h3>
-                    <div class="mt-1 flex items-center">
-                      <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-gray-400 mr-2"></div>
-                      <p class="text-sm text-gray-600">
-                        <%= format_end_date(ballot.ends_at) %>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="ml-6">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                  </div>
-                </div>
-              <% end %>
+              <%= render "ballot_list_item", ballot: ballot %>
             <% end %>
             <% if @ballots.select { |b| b.ends_at <= Time.current }.count > 10 %>
               <div class="p-4 bg-gray-50 text-center">

@@ -1,33 +1,49 @@
 <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <h2 class="text-2xl font-bold mb-6"><%= @ballot.name %></h1>
-  <p><%= @ballot.description %></p>
-  <%= link_to 'Edit', edit_my_ballot_path(@ballot) %> |
-  <%= link_to 'Public Link', ballot_path(@ballot), target: :_blank %>
+  <h2 class="text-2xl font-bold mb-2"><%= @ballot.name %></h1>
+  <p class="py-4"><%= @ballot.description %></p>
+  <%= link_to 'Edit', edit_my_ballot_path(@ballot), class: "button button-primary" %>
+
+  <a href="<%= results_ballot_path %>" target="_blank" class="button button-primary inline-flex items-center">
+    Results
+    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+    </svg>
+  </a>
+
+  <a href="<%= ballot_path %>" target="_blank" class="button inline-flex items-center">
+    Public Link
+    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+    </svg>
+  </a>
 </div>
 
 <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
   <h2 class="text-2xl font-bold mb-6">Questions</h2>
   <% if @ballot.questions.empty? %>
-    <p>There are no questions for this ballot.</p>
+    <p class="my-6 text-center text-gray-500">There are no questions for this ballot.</p>
   <% else %>
     <ul>
       <% @ballot.questions.each do |question| %>
-        <li>
-          <%= question.title %> -
-          <%= question.description %>
-          (
-            <%= link_to 'Delete', my_ballot_question_path(@ballot, question), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
-          )
+        <li class="mb-2">
+          <span class="text-lg font-bold block">
+            <%= question.title %>
+          </span>
+          <span class="text-sm block text-gray-500">
+            <%= question.description %>
+          </span>
+            <span class="text-sm block text-red-500">
+              [<%= link_to 'Delete', my_ballot_question_path(@ballot, question), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>]
+            </span>
         </li>
       <% end %>
     </ul>
   <% end %>
+</div>
 
-  <hr />
-
-  <h2>Add Question</h2>
-
-  <%= form_with model: @question, url: my_ballot_questions_path(@ballot), local: true, data: { turbo: false } do |f| %>
+<div id="questions" class="bg-white rounded-lg shadow-sm p-6 mb-8">
+  <h2 class="font-bold my-2">Add a question</h2>
+  <%= form_with model: @question, url: my_ballot_questions_path(@ballot), local: true, data: { turbo: false }, class: "form" do |f| %>
     <%= render "my/questions/form", question: @question, f: f %>
   <% end %>
 </div>
@@ -59,7 +75,9 @@
                 </td>
                 <td class="p-4 border-b border-blue-gray-50">
                   <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
-                    <%= invitation.accepted_by.try(:handle) %>
+                    <% if membership = invitation.ballot_membership %>
+                      @<%= membership.profile.handle %>
+                    <% end %>
                   </p>
                 </td>
                 <td class="p-4 border-b border-blue-gray-50">
@@ -67,7 +85,7 @@
                     <%= invitation.accepted_at %>
                   </p>
                 </td>
-                <td class="p-4 border-b border-blue-gray-50 text-right">
+                <td class="p-4 border-b border-blue-gray-50 text-right text-sm text-red-500">
                   <%= link_to 'remove', my_ballot_ballot_invitation_path(@ballot, invitation), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
                 </td>
               </tr>

@@ -1,25 +1,29 @@
 class BallotInvitation < ApplicationRecord
   belongs_to :ballot
-  belongs_to :accepted_by, class_name: "User", optional: true
+  belongs_to :ballot_membership, class_name: "BallotMembership", optional: true, dependent: :destroy
 
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :email, uniqueness: { scope: :ballot_id }
-  validates :accepted_by, uniqueness: { scope: :ballot_id }, if: -> { accepted_by.present? }
+  validates :ballot_membership, uniqueness: { scope: :ballot_id }, if: -> { ballot_membership.present? }
 
   before_save :generate_token
 
-  def accept!(user)
-    if accepted_by.present?
-      errors.add(:accepted_by, "has already accepted this invitation")
+  #FIXME: Destroy votes when invitation and membership are destroyed?
+
+  def accept!(profile)
+    if ballot_membership.present?
+      errors.add(:ballot_membership, "has already accepted this invitation")
       return false
     end
 
-    if user.email != email
-      errors.add(:email, "does not match the user's email")
-      return false
-    end
+    # if user.email != email
+    #   errors.add(:email, "does not match the user's email")
+    #   return false
+    # end
 
-    update!(accepted_by: user, accepted_at: Time.current)
+    self.ballot_membership = BallotMembership.create!(ballot: ballot, profile: profile)
+    self.accepted_at = Time.current
+    save!
   end
 
   private
