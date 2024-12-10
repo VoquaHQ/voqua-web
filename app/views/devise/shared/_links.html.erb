@@ -1,25 +1,52 @@
 <%- if controller_name != 'sessions' %>
-  <%= link_to "Log in", new_session_path(resource_name) %><br />
+  <div class="text-sm">
+    Already have an account?
+    <%= link_to "Sign in", new_session_path(resource_name), class: "text-blue-600 hover:underline dark:text-blue-500" %>
+  </div>
 <% end %>
 
 <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <%= link_to "Sign up", new_registration_path(resource_name) %><br />
+  <div class="text-sm">
+    Don't have an account?
+    <%= link_to "Sign up", new_registration_path(resource_name), class: "text-blue-600 hover:underline dark:text-blue-500" %>
+  </div>
 <% end %>
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
+  <div class="text-sm">
+    <%= link_to "Forgot your password?", new_password_path(resource_name), class: "text-blue-600 hover:underline dark:text-blue-500" %>
+  </div>
 <% end %>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %><br />
+  <div class="text-sm">
+    <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name), class: "text-blue-600 hover:underline dark:text-blue-500" %>
+  </div>
 <% end %>
 
 <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br />
+  <div class="text-sm">
+    <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name), class: "text-blue-600 hover:underline dark:text-blue-500" %>
+  </div>
 <% end %>
 
 <%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %><br />
-  <% end %>
+  <div class="mt-4 space-y-2">
+    <div class="relative">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-gray-300"></div>
+      </div>
+      <div class="relative flex justify-center text-sm">
+        <span class="px-2 bg-white text-gray-500">Or continue with</span>
+      </div>
+    </div>
+    
+    <%- resource_class.omniauth_providers.each do |provider| %>
+      <%= button_to omniauth_authorize_path(resource_name, provider), 
+          class: "w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500",
+          data: { turbo: false } do %>
+        <span>Sign in with <%= OmniAuth::Utils.camelize(provider) %></span>
+      <% end %>
+    <% end %>
+  </div>
 <% end %>
