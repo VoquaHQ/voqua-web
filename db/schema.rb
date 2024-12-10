@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_09_233703) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_10_150751) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,12 +49,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_09_233703) do
   end
 
   create_table "profiles", force: :cascade do |t|
-    t.string "handle", null: false
+    t.string "handle"
     t.string "name"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["handle"], name: "index_profiles_on_handle", unique: true
+    t.index ["handle"], name: "index_profiles_on_handle", unique: true, where: "(handle IS NOT NULL)"
   end
 
   create_table "questions", force: :cascade do |t|

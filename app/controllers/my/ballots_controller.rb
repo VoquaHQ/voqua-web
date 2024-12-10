@@ -1,6 +1,6 @@
 class My::BallotsController < My::BaseController
   def index
-    @ballots = current_user.main_profile.ballots
+    @ballots = current_user.main_profile.ballots.includes(profile: :user)
   end
 
   def new

@@ -43,16 +43,25 @@ class Profile < ApplicationRecord
   has_many :ballot_memberships, dependent: :destroy
   has_many :ballots, through: :ballot_memberships
 
-  validates :handle,
-    presence: true,
-    uniqueness: true,
-    length: { in: 1..20 }
+  has_one :user, class_name: "User", foreign_key: "main_profile_id"
+
+  validates :handle, length: { in: 1..20, if: -> { !handle.nil? } }
 
   validate :handle_does_not_contain_banned_words
 
+  before_validation :nullify_blank_handle
+
   def handle_does_not_contain_banned_words
+    return if handle.nil?
+
     if BANNED_WORDS.any? { |word| handle.downcase == word }
       errors.add(:handle, "has already been taken")
     end
+  end
+
+  private
+
+  def nullify_blank_handle
+    self.handle = nil if handle.blank?
   end
 end

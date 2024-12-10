@@ -6,7 +6,7 @@
         <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-green-400 mr-2"></div>
         <p class="text-sm text-gray-600">
           <%= format_end_date(ballot.ends_at) %>
-          - created by <%= ballot.profile.handle %>
+          - created by <%= ballot.profile.user.try(:email) %>
         </p>
       </div>
     </div>
