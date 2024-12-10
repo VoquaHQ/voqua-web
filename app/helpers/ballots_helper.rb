@@ -21,4 +21,16 @@ module BallotsHelper
       "Open until #{end_date.strftime("%B %-d, %Y")}"
     end
   end
+
+  def vote_results_for(question_id, results)
+    votes = results[question_id.to_s] || { for: 0, against: 0 }
+    votes_for = votes[:for]
+    votes_against = votes[:against]
+    value = votes_for - votes_against
+    if value < 0
+      value = 0
+    end
+
+    value
+  end
 end

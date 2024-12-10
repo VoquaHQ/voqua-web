@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  match "(*any)",
+    to: redirect(subdomain: ""),
+    via: :all,
+    constraints: { subdomain: "www" }
+
+
   devise_for :users, controllers: {
     # sessions: 'users/sessions'
     registrations: 'users/registrations'
@@ -28,7 +34,11 @@ Rails.application.routes.draw do
   end
 
   resources :ballots, only: [:show] do
+    member do
+      get :results
+      post :submit_votes
+    end
+
     get "/invite/:token", to: "ballot_invitations#accept", as: :accept_invitation
-    post :submit_votes
   end
 end

@@ -1,0 +1,39 @@
+<div class="bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
+      <h1 class="text-3xl font-semibold text-gray-900 mb-3"><%= @ballot.name %></h1>
+      <p class="text-lg text-gray-600 leading-relaxed"><%= @ballot.description %></p>
+    </div>
+
+    <% if @ballot.questions.empty? %>
+      <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+        <p class="text-gray-600">No options have been added to this feedback collection yet.</p>
+      </div>
+    <% else %>
+      <div class="flex gap-8">
+        <div class="flex-1">
+          <div class="space-y-8">
+
+            <% @ballot.questions.each.with_index do |question, i| %>
+              <div class="bg-white rounded-lg shadow-sm" data-question-id="<%= question.id %>" data-state="">
+                <div class="p-6 border-b border-gray-100">
+                  <div class="mb-2">
+                    <span class="block text-sm font-medium text-blue-600">
+                      Option <%= i + 1 %> of <%= @ballot.questions.size %>
+                    </span>
+                    <span class="text-green-500 text-lg block">
+                      Votes: <%= vote_results_for question.id, @results %>
+                    </span>
+                  </div>
+                  <h3 class="text-xl font-medium text-gray-900 mb-2"><%= question.title %></h3>
+                  <p class="text-gray-600"><%= question.description %></p>
+                </div>
+              </div>
+            <% end %>
+
+          </div>
+        </div>
+     </div>
+    <% end %>
+  </div>
+</div>

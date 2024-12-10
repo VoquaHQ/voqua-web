@@ -78,12 +78,12 @@ Rails.application.configure do
     :address        => ENV['MAILGUN_SMTP_SERVER'],
     :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
     :password       => ENV['MAILGUN_SMTP_PASSWORD'],
-    :domain         => 'yourapp.heroku.com',
+    :domain         => "mailer.voqua.io",
     :authentication => :plain,
   }
 
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = { host: "voqua-d85d9f43aea7.herokuapp.com" }
+  config.action_mailer.default_url_options = { host: "voqua.io" }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

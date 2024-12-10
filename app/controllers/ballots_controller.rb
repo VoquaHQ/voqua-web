@@ -48,20 +48,42 @@ class Voting
   end
 end
 
+class BallotResults
+  def initialize(votes)
+    @votes = votes
+  end
+
+  def process!
+    results = {}
+
+    @votes.each do |vote|
+      vote.data.each do |question_id, answer|
+        results[question_id] ||= { for: 0, against: 0 }
+        results[question_id][:for] += answer["for"]
+        results[question_id][:against] += answer["against"]
+      end
+    end
+
+    results
+  end
+end
+
 class BallotsController < ApplicationController
   before_action :authenticate_user!
+  before_action :load_ballot
+  before_action :check_ballot_permissions
+  before_action :check_ballot_open, only: [:show, :submit_votes]
 
   def show
-    @ballot = Ballot.includes(:questions).find(params[:id])
     @votes = @ballot.votes.find_by(profile: current_user.main_profile)
-    if @ballot.private? && !@ballot.invited?(current_user)
-      redirect_to root_path, alert: "You are not allowed to view that ballot."
-    end
+  end
+
+  def results
+    @votes = @ballot.votes
+    @results = BallotResults.new(@votes).process!
   end
 
   def submit_votes
-    @ballot = Ballot.includes(:questions).find(params[:ballot_id])
-
     voting = Voting.new(@ballot, @ballot.questions, params[:votes])
     data = voting.process!
 
@@ -77,5 +99,24 @@ class BallotsController < ApplicationController
   rescue Voting::VotingError
     flash[:error] = "Invalid votes"
     redirect_to ballot_path(@ballot)
+  end
+
+  private
+
+  def load_ballot
+    @ballot = Ballot.includes(:questions).find(params[:id])
+  end
+
+  def check_ballot_permissions
+    if @ballot.private? && !@ballot.member?(current_user)
+      #FIXME: This should be a 404
+      redirect_to root_path, alert: "You are not allowed to view that ballot."
+    end
+  end
+
+  def check_ballot_open
+    if @ballot.ends_at < Time.current
+      redirect_to results_ballot_path(@ballot)
+    end
   end
 end
