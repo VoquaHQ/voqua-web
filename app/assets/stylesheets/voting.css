@@ -98,7 +98,6 @@ svg.credits.credits-for .credit.foreground {
 /* Button styling */
 .vote-button {
   transition: all 0.2s ease-in-out;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.875rem;
 }
