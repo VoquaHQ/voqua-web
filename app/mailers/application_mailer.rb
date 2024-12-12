@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "noreply@mailer.voqua.io"
+  default from: "Voqua <notifications@voqua.com>"
   layout "mailer"
 end
