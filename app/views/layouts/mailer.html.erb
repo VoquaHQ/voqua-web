@@ -2,12 +2,66 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      /* Email styles need to be inline */
+      /* Base styles */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        color: #1a1a1a;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+      }
+      .container {
+        max-width: 580px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        text-align: left;
+        padding: 20px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+      .content {
+        background: #ffffff;
+        padding: 32px;
+        border-radius: 8px;
+        margin: 20px 0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #4A5568;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        margin: 16px 0;
+      }
+      .footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+        color: #6c757d;
+      }
+      p {
+        margin: 16px 0;
+      }
     </style>
   </head>
-
   <body>
-    <%= yield %>
+    <div class="container">
+      <div class="header">
+        <strong style="font-size: 24px; color: #4A5568;">Voqua</strong>
+      </div>
+      <div class="content">
+        <%= yield %>
+      </div>
+      <div class="footer">
+        <p>Sent by Voqua - Quadratic Voting for Organizations</p>
+      </div>
+    </div>
   </body>
 </html>
