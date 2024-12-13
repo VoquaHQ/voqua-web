@@ -2,7 +2,7 @@
 
 Devise.setup do |config|
   # Email configuration
-  config.mailer_sender = 'Voqua <notifications@voqua.com>'
+  config.mailer_sender = 'Voqua <notifications@mailer.voqua.io>'
   
   require 'devise/orm/active_record'
 
