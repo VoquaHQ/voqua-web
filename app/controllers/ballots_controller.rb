@@ -54,17 +54,22 @@ class BallotResults
   end
 
   def process!
-    results = {}
+    results = []
 
     @votes.each do |vote|
       vote.data.each do |question_id, answer|
-        results[question_id] ||= { for: 0, against: 0 }
-        results[question_id][:for] += answer["for"]
-        results[question_id][:against] += answer["against"]
+        results << {
+          question_id: question_id.to_i,
+          for: answer["for"],
+          against: answer["against"],
+          value: answer["for"] - answer["against"]
+        }
       end
     end
 
-    results
+    results.sort{ |a, b|
+      b[:value] <=> a[:value]
+    }
   end
 end
 
@@ -91,7 +96,7 @@ class BallotsController < ApplicationController
     votes.data = data
 
     if votes.save
-      redirect_to ballot_path(@ballot), notice: "Votes submitted successfully."
+      redirect_to my_root_path , notice: "Votes submitted successfully."
     else
       flash[:error] = "There was a problem submitting your votes"
       redirect_to ballot_path(@ballot)

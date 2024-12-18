@@ -6,7 +6,12 @@
         <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-green-400 mr-2"></div>
         <p class="text-sm text-gray-600">
           <%= format_end_date(ballot.ends_at) %>
-          - created by <%= ballot.profile.user.try(:email) %>
+          - created by
+          <% if ballot.profile_id == current_user.id %>
+            you
+          <% else %>
+            <%= ballot.profile.user.try(:email) %>
+          <% end %>
         </p>
       </div>
     </div>

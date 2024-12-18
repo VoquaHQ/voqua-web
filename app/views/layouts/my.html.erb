@@ -11,6 +11,16 @@
       </div>
     <% end %>
   <% end %>
+
+
+  <% if @invitations.any? %>
+    <% @invitations.each do |i| %>
+      <div class="alert alert-dark" role="alert" data-controller="alert">
+        <span class="block sm:inline">You've been invited to the ballot: <%= i.ballot.name %>.</span>
+        <%= link_to "Join now!", ballot_accept_invitation_path(i.ballot, token: i.token), class: "underline" %>
+      </div>
+    <% end %>
+  <% end %>
   <div class="bg-gray-50">
     <div class="max-w-5xl mx-auto py-8">
       <%= yield %>

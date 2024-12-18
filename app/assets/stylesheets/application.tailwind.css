@@ -103,11 +103,19 @@
   @apply text-blue-500;
 }
 
+.alert-dark {
+  @apply bg-gray-50 text-gray-800 border-gray-400;
+}
+
+.alert-dark svg {
+  @apply text-gray-800;
+}
+
 .alert-warning, .alert-alert {
   @apply bg-yellow-100 text-yellow-700 border-yellow-400;
 }
 
-.alert-warning svg, .alert-alert svg {
+alert-warning svg, .alert-alert svg {
   @apply text-yellow-500;
 }
 

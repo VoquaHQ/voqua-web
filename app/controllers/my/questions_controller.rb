@@ -12,9 +12,9 @@ class My::QuestionsController < My::BaseController
   def create
     @question = @ballot.questions.build(question_params)
     if @question.save
-      redirect_to my_ballot_path(@ballot), notice: "Question created successfully."
+      redirect_to my_ballot_path(@ballot), notice: "Option created successfully."
     else
-      redirect_to my_ballot_path(@ballot), alert: "There was a problem creating the question."
+      redirect_to my_ballot_path(@ballot), alert: "There was a problem creating the option."
     end
   end
 
@@ -35,7 +35,7 @@ class My::QuestionsController < My::BaseController
   def destroy
     @question = @ballot.questions.find(params[:id])
     @question.destroy
-    redirect_to my_ballot_path(@ballot), notice: "Question deleted successfully."
+    redirect_to my_ballot_path(@ballot), notice: "Option deleted successfully."
   end
 
   private

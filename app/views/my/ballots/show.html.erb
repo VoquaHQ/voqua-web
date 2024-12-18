@@ -11,7 +11,7 @@
   </a>
 
   <a href="<%= ballot_path %>" target="_blank" class="button inline-flex items-center">
-    Public Link
+    Voting Page
     <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
     </svg>
@@ -19,9 +19,9 @@
 </div>
 
 <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <h2 class="text-2xl font-bold mb-6">Questions</h2>
+  <h2 class="text-2xl font-bold mb-6">Options</h2>
   <% if @ballot.questions.empty? %>
-    <p class="my-6 text-center text-gray-500">There are no questions for this ballot.</p>
+    <p class="my-6 text-center text-gray-500">There are no options for this ballot.</p>
   <% else %>
     <ul>
       <% @ballot.questions.each do |question| %>
@@ -42,7 +42,7 @@
 </div>
 
 <div id="questions" class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <h2 class="font-bold my-2">Add a question</h2>
+  <h2 class="font-bold my-2">Add an option</h2>
   <%= form_with model: @question, url: my_ballot_questions_path(@ballot), local: true, data: { turbo: false }, class: "form" do |f| %>
     <%= render "my/questions/form", question: @question, f: f %>
   <% end %>

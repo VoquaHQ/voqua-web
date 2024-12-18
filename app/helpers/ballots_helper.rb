@@ -22,15 +22,11 @@ module BallotsHelper
     end
   end
 
-  def vote_results_for(question_id, results)
-    votes = results[question_id.to_s] || { for: 0, against: 0 }
-    votes_for = votes[:for]
-    votes_against = votes[:against]
-    value = votes_for - votes_against
-    if value < 0
-      value = 0
-    end
+  def for_each_ballot_result(results, questions)
+    results.each.with_index do |result, i|
 
-    value
+      question = questions.find { |q| q.id == result[:question_id] }
+      yield result[:value], question, i
+    end
   end
 end

@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   connect() {
-    this.btn = document.querySelector(".close", this.element);
+    this.btn = this.element.querySelector(".close");
     this.onClick = this.onClick.bind(this);
     this.btn.addEventListener("click", this.onClick);
   }

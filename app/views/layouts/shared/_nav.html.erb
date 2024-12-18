@@ -1,22 +1,22 @@
 <header>
-  <nav data-controller="menu" class="fixed top-0 overflow-hidden z-20 w-full bg-white/80 dark:bg-gray-950/75 dark:shadow-md dark:shadow-gray-950/10 border-b border-gray-200 dark:border-white backdrop-blur">
+  <nav data-controller="menu" class="fixed top-0 overflow-hidden z-20 w-full bg-white/80 border-b border-gray-200 backdrop-blur">
     <div class="px-6 m-auto max-w-5xl 2xl:px-0">
       <div class="flex flex-wrap items-center justify-between py-2">
         <div class="w-full items-center flex justify-between lg:w-auto">
           <%= render partial: "shared/logo", locals: { size: 48 } %>
           <div class="flex lg:hidden">
-            <button data-menu-target="button" data-action="menu#toggle" aria-label="Menu" class="relative border border-gray-200 dark:border-white/20 size-10 rounded-lg transition duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 active:scale-95">
-              <div data-menu-target="line1" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-gray-600 transition-all duration-300 dark:bg-gray-300"></div>
-              <div data-menu-target="line2" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-gray-600 transition-all duration-300 dark:bg-gray-300"></div>
+            <button data-menu-target="button" data-action="menu#toggle" aria-label="Menu" class="relative border border-gray-200 size-10 rounded-lg transition duration-300 hover:bg-gray-100 active:scale-95">
+              <div data-menu-target="line1" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-gray-600 transition-all duration-300"></div>
+              <div data-menu-target="line2" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-gray-600 transition-all duration-300"></div>
             </button>
           </div>
         </div>
-        
+
         <div data-menu-target="menu" class="w-full h-0 lg:h-fit overflow-hidden transition-all duration-300 lg:w-fit flex-wrap justify-end items-center space-y-8 lg:space-y-0 lg:flex lg:overflow-visible md:flex-nowrap">
-          <div class="mt-6 text-gray-600 dark:text-gray-300 md:-ml-4 lg:pr-4 lg:mt-0">
+          <div class="mt-6 text-gray-600 md:-ml-4 lg:pr-4 lg:mt-0">
             <ul class="space-y-4 tracking-wide text-base lg:text-sm lg:flex lg:space-y-0 lg:items-center">
               <li class="px-4 lg:px-0">
-                <a href="https://voqua.substack.com/" target="_blank" rel="noopener noreferrer" class="flex items-center md:px-4 transition hover:text-primary-600 dark:hover:text-primary-400 group">
+                <a href="https://voqua.substack.com/" target="_blank" rel="noopener noreferrer" class="flex items-center md:px-4 transition hover:text-primary-600 group">
                   <svg class="w-4 h-4 mr-1.5 transition-transform group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
                   </svg>
@@ -24,7 +24,7 @@
                 </a>
               </li>
               <li class="px-4 lg:px-0">
-                <a href="https://x.com/VoquaHQ" target="_blank" rel="noopener noreferrer" class="flex items-center md:px-4 transition hover:text-primary-600 dark:hover:text-primary-400 group">
+                <a href="https://x.com/VoquaHQ" target="_blank" rel="noopener noreferrer" class="flex items-center md:px-4 transition hover:text-primary-600 group">
                   <svg class="w-4 h-4 mr-1.5 transition-transform group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
@@ -34,17 +34,17 @@
             </ul>
           </div>
 
-          <div class="w-full space-y-2 gap-2 pt-4 pb-6 lg:pb-0 border-t lg:border-t-0 border-gray-200 dark:border-gray-800 items-center flex flex-col lg:flex-row lg:space-y-0 lg:w-fit lg:border-l lg:pt-0 lg:pl-6">
+          <div class="w-full space-y-2 gap-2 pt-4 pb-6 lg:pb-0 border-t lg:border-t-0 border-gray-200 items-center flex flex-col lg:flex-row lg:space-y-0 lg:w-fit lg:border-l lg:pt-0 lg:pl-6">
             <% if current_user.nil? %>
-              <a href="<%= new_user_session_path %>" class="w-full h-10 lg:w-fit group flex items-center rounded-lg border border-gray-200 dark:border-gray-800 disabled:border *:select-none [&>*:not(.sr-only)]:relative *:disabled:opacity-20 *:disabled:text-gray-950 disabled:border-gray-200 disabled:bg-gray-100 dark:disabled:border dark:disabled:border-gray-800 disabled:dark:bg-gray-900 dark:*:disabled:!text-white text-gray-800 hover:bg-gray-100 active:bg-gray-200/75 dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700 lg:text-sm lg:h-9 px-4 justify-center transition-colors">
+              <a href="<%= new_user_session_path %>" class="w-full h-10 lg:w-fit group flex items-center rounded-lg border border-gray-200 disabled:border *:select-none [&>*:not(.sr-only)]:relative *:disabled:opacity-20 *:disabled:text-gray-950 disabled:border-gray-200 disabled:bg-gray-100 text-gray-800 hover:bg-gray-100 active:bg-gray-200/75 lg:text-sm lg:h-9 px-4 justify-center transition-colors">
                 <span>Sign in</span>
               </a>
-              <a href="<%= new_user_registration_path %>" class="w-full h-10 lg:w-fit group flex items-center rounded-lg bg-gray-900 hover:bg-gray-800 active:bg-gray-950 dark:bg-white dark:hover:bg-gray-100 dark:active:bg-gray-200 disabled:opacity-70 text-white dark:text-gray-900 lg:text-sm lg:h-9 px-4 justify-center transition-colors">
+              <a href="<%= new_user_registration_path %>" class="w-full h-10 lg:w-fit group flex items-center rounded-lg bg-gray-900 hover:bg-gray-800 active:bg-gray-950 disabled:opacity-70 text-white lg:text-sm lg:h-9 px-4 justify-center transition-colors">
                 <span>Sign up</span>
               </a>
             <% else %>
-              <%= link_to "Dashboard", my_root_path, class: "w-full h-10 lg:w-fit group flex items-center rounded-lg border border-gray-200 dark:border-gray-800 disabled:border *:select-none [&>*:not(.sr-only)]:relative *:disabled:opacity-20 *:disabled:text-gray-950 disabled:border-gray-200 disabled:bg-gray-100 dark:disabled:border dark:disabled:border-gray-800 disabled:dark:bg-gray-900 dark:*:disabled:!text-white text-gray-800 hover:bg-gray-100 active:bg-gray-200/75 dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700 lg:text-sm lg:h-9 px-4 justify-center transition-colors" %>
-              <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "w-full h-10 lg:w-fit group flex items-center rounded-lg bg-gray-900 hover:bg-gray-800 active:bg-gray-950 dark:bg-white dark:hover:bg-gray-100 dark:active:bg-gray-200 disabled:opacity-70 text-white dark:text-gray-900 lg:text-sm lg:h-9 px-4 justify-center transition-colors" %>
+              <%= link_to "Dashboard", my_root_path, class: "w-full h-10 lg:w-fit group flex items-center rounded-lg border border-gray-200 disabled:border *:select-none [&>*:not(.sr-only)]:relative *:disabled:opacity-20 *:disabled:text-gray-950 disabled:border-gray-200 disabled:bg-gray-100 text-gray-800 hover:bg-gray-100 active:bg-gray-200/75 lg:text-sm lg:h-9 px-4 justify-center transition-colors" %>
+              <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-sm ml-2" %>
             <% end %>
           </div>
         </div>

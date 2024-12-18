@@ -14,15 +14,15 @@
         <div class="flex-1">
           <div class="space-y-8">
 
-            <% @ballot.questions.each.with_index do |question, i| %>
+            <% for_each_ballot_result @results, @ballot.questions do |result, question, i| %>
               <div class="bg-white rounded-lg shadow-sm" data-question-id="<%= question.id %>" data-state="">
                 <div class="p-6 border-b border-gray-100">
                   <div class="mb-2">
                     <span class="block text-sm font-medium text-blue-600">
                       Option <%= i + 1 %> of <%= @ballot.questions.size %>
                     </span>
-                    <span class="text-green-500 text-lg block">
-                      Votes: <%= vote_results_for question.id, @results %>
+                    <span class="text-lg block text-<%= result > 0 && "green" || "red" %>-500">
+                      <%= pluralize result, "vote" %>
                     </span>
                   </div>
                   <h3 class="text-xl font-medium text-gray-900 mb-2"><%= question.title %></h3>
