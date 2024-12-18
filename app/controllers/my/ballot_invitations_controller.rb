@@ -13,13 +13,15 @@ class My::BallotInvitationsController < My::BaseController
       end
     end
 
-    redirect_to my_ballot_path(@ballot), notice: "#{emails.size - errors_count} invitations created successfully."
+    flash[:success] = "#{emails.size - errors_count} invitations created successfully."
+    redirect_to my_ballot_path(@ballot)
   end
 
   def destroy
     @invitation = @ballot.invitations.find(params[:id])
     @invitation.destroy
-    redirect_to my_ballot_path(@ballot), notice: "Invitation deleted successfully."
+    flash[:success] = "Invitation deleted successfully."
+    redirect_to my_ballot_path(@ballot)
   end
 
   private

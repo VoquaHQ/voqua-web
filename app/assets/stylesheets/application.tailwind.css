@@ -14,6 +14,10 @@
   @apply bg-gray-200 hover:bg-gray-300 text-gray-800;
 }
 
+.button.button-danger {
+  @apply text-white bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800;
+}
+
 .form-errors {
   background-color: #f8d7da;
   padding: 1em;
@@ -140,7 +144,8 @@ form.form label {
   @apply block text-gray-700 text-sm font-bold mb-2;
 }
 
-form.form input,
+form.form input[type="text"],
+form.form input[type="password"],
 form.form textarea {
   @apply w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none mb-4;
 }

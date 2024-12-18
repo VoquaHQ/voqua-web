@@ -99,8 +99,14 @@
       <label for="emails">Invite Members</label>
       <%= text_area_tag :emails, nil, placeholder: 'Emails (comma separated or new lines)', rows: 5, class: "w-full" %>
       <div class="text-right">
-      <%= submit_tag "Invite", class: "button button-primary" %>
+        <%= submit_tag "Invite", class: "button button-primary" %>
       </div>
     <% end %>
   <% end %>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+    <h2 class="text-2xl font-bold mb-6">Delete Ballot</h2>
+
+    <%= link_to "Delete", my_ballot_path(@ballot), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "button text-center button-danger block w-full" %>
 </div>

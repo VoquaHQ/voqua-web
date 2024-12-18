@@ -11,9 +11,10 @@ class My::BallotsController < My::BaseController
     @ballot = current_user.main_profile.owned_ballots.build(ballot_params)
     if @ballot.save
       BallotMembership.create!(ballot: @ballot, profile: current_user.main_profile)
-      redirect_to my_ballot_path(@ballot), notice: "Ballot created."
+      flash[:success] = "Ballot created successfully."
+      redirect_to my_ballot_path(@ballot)
     else
-      flash.now[:alert] = "There was a problem creating the ballot."
+      flash.now[:error] = "There was a problem creating the ballot."
       render :new
     end
   end
@@ -30,7 +31,8 @@ class My::BallotsController < My::BaseController
   def update
     @ballot = current_user.main_profile.owned_ballots.find(params[:id])
     if @ballot.update(ballot_params)
-      redirect_to my_ballot_path(@ballot), notice: "Ballot updated."
+      flash[:success] = "Ballot updated."
+      redirect_to my_ballot_path(@ballot)
     else
       render :edit
     end
@@ -39,7 +41,8 @@ class My::BallotsController < My::BaseController
   def destroy
     @ballot = current_user.main_profile.owned_ballots.find(params[:id])
     @ballot.destroy
-    redirect_to my_ballots_path, notice: "Ballot deleted."
+    flash[:success] = "Ballot deleted."
+    redirect_to my_ballots_path
   end
 
   private

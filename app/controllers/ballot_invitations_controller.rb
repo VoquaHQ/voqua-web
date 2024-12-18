@@ -4,9 +4,11 @@ class BallotInvitationsController < ApplicationController
   def accept
     invitation = BallotInvitation.find_by!(token: params[:token])
     if invitation.accept!(current_user.main_profile)
-      redirect_to my_ballots_path, notice: "Invitation accepted successfully."
+      flash[:success] = "Invitation accepted successfully."
+      redirect_to my_ballots_path
     else
-      redirect_to root_path, alert: "Failed to accept invitation: #{invitation.errors.full_messages.to_sentence}"
+      flash[:error] = "Failed to accept invitation: #{invitation.errors.full_messages.to_sentence}"
+      redirect_to root_path
     end
   end
 end

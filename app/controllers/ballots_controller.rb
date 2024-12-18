@@ -96,7 +96,8 @@ class BallotsController < ApplicationController
     votes.data = data
 
     if votes.save
-      redirect_to my_root_path , notice: "Votes submitted successfully."
+      flash[:success] = "Votes submitted successfully."
+      redirect_to my_root_path
     else
       flash[:error] = "There was a problem submitting your votes"
       redirect_to ballot_path(@ballot)
@@ -115,7 +116,8 @@ class BallotsController < ApplicationController
   def check_ballot_permissions
     if @ballot.private? && !@ballot.member?(current_user)
       #FIXME: This should be a 404
-      redirect_to root_path, alert: "You are not allowed to view that ballot."
+      flash[:error] = "You are not allowed to view that ballot."
+      redirect_to root_path
     end
   end
 
