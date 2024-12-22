@@ -1,8 +1,12 @@
-<div class="bg-gray-50">
-  <div class="max-w-5xl mx-auto px-4 py-8">
-    <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
-      <h1 class="text-3xl font-semibold text-gray-900 mb-3"><%= @ballot.name %></h1>
-      <p class="text-lg text-gray-600 leading-relaxed"><%= @ballot.description %></p>
+<div class="bg-gray-50 min-h-screen">
+  <div class="max-w-3xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-sm p-8 mb-6">
+      <h1 class="text-3xl font-semibold text-gray-900 mb-2"><%= @ballot.name %></h1>
+      <p class="text-lg text-gray-600"><%= @ballot.description %></p>
+      <div class="mt-4 text-sm text-gray-500">
+        <p>Results based on <%= pluralize @votes.count, "participant" %></p>
+      </div>
     </div>
 
     <% if @ballot.questions.empty? %>
@@ -10,30 +14,43 @@
         <p class="text-gray-600">No options have been added to this feedback collection yet.</p>
       </div>
     <% else %>
-      <div class="flex gap-8">
-        <div class="flex-1">
-          <div class="space-y-8">
-
-            <% for_each_ballot_result @results, @ballot.questions do |result, question, i| %>
-              <div class="bg-white rounded-lg shadow-sm" data-question-id="<%= question.id %>" data-state="">
-                <div class="p-6 border-b border-gray-100">
-                  <div class="mb-2">
-                    <span class="block text-sm font-medium text-blue-600">
-                      Option <%= i + 1 %> of <%= @ballot.questions.size %>
-                    </span>
-                    <span class="text-lg block text-<%= result > 0 && "green" || "red" %>-500">
-                      <%= pluralize result, "vote" %>
-                    </span>
-                  </div>
-                  <h3 class="text-xl font-medium text-gray-900 mb-2"><%= question.title %></h3>
-                  <p class="text-gray-600"><%= question.description %></p>
-                </div>
+      <!-- Results Summary -->
+      <h2 class="text-xl font-medium text-gray-700 mb-4">Results Summary</h2>
+      <div class="space-y-4">
+        <% for_each_ballot_result @results, @ballot.questions do |result, question, i| %>
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <div>
+              <h3 class="text-lg font-medium text-gray-900 mb-2"><%= question.title %></h3>
+              <p class="text-gray-600 mb-3"><%= question.description %></p>
+              
+              <div class="flex items-center gap-2">
+                <% if result[:value] > 0 %>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    Supported by <%= pluralize result[:value], "vote" %>
+                  </span>
+                <% elsif result[:value] < 0 %>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                    Opposed by <%= pluralize result[:value].abs, "vote" %>
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                    No clear consensus (0 votes)
+                  </span>
+                <% end %>
               </div>
-            <% end %>
-
+            </div>
           </div>
-        </div>
-     </div>
+        <% end %>
+      </div>
+
+      <!-- Help Text -->
+      <div class="mt-8 bg-blue-50 rounded-lg p-4">
+        <h3 class="text-sm font-medium text-blue-800 mb-1">Understanding the Results</h3>
+        <p class="text-sm text-blue-600">
+          Options are ordered by total votes received. Positive votes indicate support, while negative votes indicate opposition. 
+          The vote count shows the overall strength of support or opposition for each option.
+        </p>
+      </div>
     <% end %>
   </div>
 </div>

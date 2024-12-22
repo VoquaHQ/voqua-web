@@ -24,9 +24,8 @@ module BallotsHelper
 
   def for_each_ballot_result(results, questions)
     results.each.with_index do |result, i|
-
       question = questions.find { |q| q.id == result[:question_id] }
-      yield result[:value], question, i
+      yield result, question, i
     end
   end
 end
