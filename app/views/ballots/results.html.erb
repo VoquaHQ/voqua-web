@@ -2,10 +2,41 @@
   <div class="max-w-3xl mx-auto px-4 py-8">
     <!-- Header -->
     <div class="bg-white rounded-lg shadow-sm p-8 mb-6">
-      <h1 class="text-3xl font-semibold text-gray-900 mb-2"><%= @ballot.name %></h1>
-      <p class="text-lg text-gray-600"><%= @ballot.description %></p>
-      <div class="mt-4 text-sm text-gray-500">
-        <p>Results based on <%= pluralize @votes.count, "participant" %></p>
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 class="text-3xl font-semibold text-gray-900 mb-2"><%= @ballot.name %></h1>
+          <p class="text-lg text-gray-600"><%= @ballot.description %></p>
+          <div class="mt-4 text-sm text-gray-500">
+            <p>Results based on <%= pluralize @votes.count, "participant" %></p>
+          </div>
+        </div>
+
+        <!-- Copy Results Button -->
+        <div data-controller="copy-results" class="flex-shrink-0">
+          <% summary = []
+             summary << "Here are the results of the Voqua on \"#{@ballot.name}\":"
+             summary << ""
+             @results.each_with_index do |result, i|
+               question = @ballot.questions.find { |q| q.id == result[:question_id] }
+               votes = result[:value]
+               summary << "#{i + 1}. #{question.title} (#{votes >= 0 ? '+' : ''}#{votes} votes)"
+             end
+             summary << ""
+             summary << "Link to Voqua ballot: #{ballot_url(@ballot)}"
+             formatted_summary = summary.join("\n")
+          %>
+          
+          <textarea data-copy-results-target="source" class="sr-only"><%= formatted_summary %></textarea>
+          
+          <button data-copy-results-target="button"
+                  data-action="click->copy-results#copy"
+                  class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            Copy Results Summary
+          </button>
+        </div>
       </div>
     </div>
 
@@ -15,7 +46,6 @@
       </div>
     <% else %>
       <!-- Results Summary -->
-      <h2 class="text-xl font-medium text-gray-700 mb-4">Results Summary</h2>
       <div class="space-y-4">
         <% for_each_ballot_result @results, @ballot.questions do |result, question, i| %>
           <div class="bg-white rounded-lg shadow-sm p-6">
@@ -26,30 +56,21 @@
               <div class="flex items-center gap-2">
                 <% if result[:value] > 0 %>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                    Supported by <%= pluralize result[:value], "vote" %>
+                    <%= result[:value] %> votes in favor
                   </span>
                 <% elsif result[:value] < 0 %>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                    Opposed by <%= pluralize result[:value].abs, "vote" %>
+                    <%= result[:value] %> votes against
                   </span>
                 <% else %>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-                    No clear consensus (0 votes)
+                    No votes
                   </span>
                 <% end %>
               </div>
             </div>
           </div>
         <% end %>
-      </div>
-
-      <!-- Help Text -->
-      <div class="mt-8 bg-blue-50 rounded-lg p-4">
-        <h3 class="text-sm font-medium text-blue-800 mb-1">Understanding the Results</h3>
-        <p class="text-sm text-blue-600">
-          Options are ordered by total votes received. Positive votes indicate support, while negative votes indicate opposition. 
-          The vote count shows the overall strength of support or opposition for each option.
-        </p>
       </div>
     <% end %>
   </div>
