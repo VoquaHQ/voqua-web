@@ -7,37 +7,43 @@
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div class="px-6 md:space-y-4 sm:px-8">
-      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4 md:space-y-6" }) do |f| %>
-        <%= f.fields_for :main_profile do |fp| %>
-          <!-- FIXME -->
-          <div class="w-full pl-2 bg-white rounded-lg border">
-            <div class="flex items-center">
-              <%= fp.text_field :handle, placeholder: "Claim your handle!", class: "hidden" %>
-            </div>
-          </div>
-        <% end %>
-
+      <%= form_tag(registration_path(resource_name), method: :post, class: "space-y-4 md:space-y-6", data: { turbo: false }) do %>
         <div>
-          <label for="user_email" class="block mb-2 text-sm font-medium text-gray-900">Your email</label>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "name@company.com", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" %>
+          <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Your email</label>
+          <%= email_field_tag :email, params[:email], autofocus: true, autocomplete: "email", 
+              placeholder: "name@company.com",
+              class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" %>
         </div>
 
-        <div>
-          <label for="user_password" class="block mb-2 text-sm font-medium text-gray-900">
-            Password
-            <% if @minimum_password_length %>
-              <span class="text-gray-500 font-normal">(<%= @minimum_password_length %> characters minimum)</span>
-            <% end %>
-          </label>
-          <%= f.password_field :password, autocomplete: "new-password", placeholder: "••••••••", class: "placeholder:text-gray-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" %>
-        </div>
-
-        <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create account</button>
+        <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-200">
+          Continue
+        </button>
 
         <div class="text-sm text-center">
           Already have an account?
           <%= link_to "Sign in", new_session_path(resource_name), class: "text-blue-600 hover:underline" %>
         </div>
+
+        <%- if devise_mapping.omniauthable? %>
+          <div class="mt-4 space-y-2">
+            <div class="relative">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-300"></div>
+              </div>
+              <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-white text-gray-500">Or continue with</span>
+              </div>
+            </div>
+
+            <%- resource_class.omniauth_providers.each do |provider| %>
+              <%= button_to omniauth_authorize_path(resource_name, provider),
+                  class: "w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500",
+                  data: { turbo: false } do %>
+                <span>Sign up with <%= OmniAuth::Utils.camelize(provider) %></span>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>

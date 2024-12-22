@@ -6,16 +6,42 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
-    super do |user|
-      user.build_main_profile(handle: params[:handle])
+    # If email is provided, show the password step
+    if params[:email].present?
+      @email = params[:email]
+      build_resource(email: @email)
+      resource.build_main_profile(handle: params[:handle])
+      render :password_step
+    else
+      super do |user|
+        user.build_main_profile(handle: params[:handle])
+      end
     end
   end
 
   # POST /resource
   def create
-    super do |user|
-      user.build_main_profile if user.main_profile.nil?
-      user.profiles << user.main_profile
+    # If password not provided, it means we're on the first step
+    if params[:user].nil? || params[:user][:password].nil?
+      @email = params[:email]
+      if @email.present?
+        if User.find_by(email: @email)
+          build_resource
+          resource.errors.add(:email, :taken)
+          render :new
+        else
+          redirect_to new_user_registration_path(email: @email)
+        end
+      else
+        build_resource
+        resource.errors.add(:email, :blank)
+        render :new
+      end
+    else
+      super do |user|
+        user.build_main_profile if user.main_profile.nil?
+        user.profiles << user.main_profile
+      end
     end
   end
 
@@ -43,7 +69,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # protected
+  protected
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
