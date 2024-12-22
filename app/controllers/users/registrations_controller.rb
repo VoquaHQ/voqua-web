@@ -6,13 +6,22 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
-    # If email is provided, show the password step
-    if params[:email].present?
+    if params[:email].present? && params[:first_name].present?
+      # Show password step (final)
+      @email = params[:email]
+      @first_name = params[:first_name]
+      @last_name = params[:last_name]
+      build_resource(email: @email, first_name: @first_name, last_name: @last_name)
+      resource.build_main_profile(handle: params[:handle])
+      render :password_step
+    elsif params[:email].present?
+      # Show name step
       @email = params[:email]
       build_resource(email: @email)
       resource.build_main_profile(handle: params[:handle])
-      render :password_step
+      render :name_step
     else
+      # Show email step
       super do |user|
         user.build_main_profile(handle: params[:handle])
       end
@@ -21,8 +30,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    # If password not provided, it means we're on the first step
-    if params[:user].nil? || params[:user][:password].nil?
+    if params[:user].nil?
+      # First step - email validation
       @email = params[:email]
       if @email.present?
         if User.find_by(email: @email)
@@ -37,57 +46,42 @@ class Users::RegistrationsController < Devise::RegistrationsController
         resource.errors.add(:email, :blank)
         render :new
       end
+    elsif params[:user][:password].nil?
+      # Second step - name validation
+      @email = params[:user][:email]
+      @first_name = params[:first_name]
+      @last_name = params[:last_name]
+      
+      if @first_name.present?
+        redirect_to new_user_registration_path(
+          email: @email,
+          first_name: @first_name,
+          last_name: @last_name
+        )
+      else
+        build_resource(email: @email)
+        resource.errors.add(:first_name, :blank)
+        render :name_step
+      end
     else
-      super do |user|
-        user.build_main_profile if user.main_profile.nil?
-        user.profiles << user.main_profile
+      # Final step - create user with password validation
+      if params[:user][:password] != params[:user][:password_confirmation]
+        build_resource(sign_up_params)
+        resource.errors.add(:password_confirmation, :confirmation)
+        render :password_step
+      else
+        super do |user|
+          user.build_main_profile if user.main_profile.nil?
+          user.profiles << user.main_profile
+        end
       end
     end
   end
-
-  # GET /resource/edit
-  # def edit
-  #   super
-  # end
-
-  # PUT /resource
-  # def update
-  #   super
-  # end
-
-  # DELETE /resource
-  # def destroy
-  #   super
-  # end
-
-  # GET /resource/cancel
-  # Forces the session data which is usually expired after sign
-  # in to be expired now. This is useful if the user wants to
-  # cancel oauth signing in/up in the middle of the process,
-  # removing all OAuth session data.
-  # def cancel
-  #   super
-  # end
 
   protected
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [main_profile_attributes: [:handle]])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, main_profile_attributes: [:handle]])
   end
-
-  # If you have extra params to permit, append them to the sanitizer.
-  # def configure_account_update_params
-  #   devise_parameter_sanitizer.permit(:account_update, keys: [:attribute])
-  # end
-
-  # The path used after sign up.
-  # def after_sign_up_path_for(resource)
-  #   super(resource)
-  # end
-
-  # The path used after sign up for inactive accounts.
-  # def after_inactive_sign_up_path_for(resource)
-  #   super(resource)
-  # end
 end
