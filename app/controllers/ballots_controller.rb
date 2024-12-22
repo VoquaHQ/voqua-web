@@ -54,22 +54,30 @@ class BallotResults
   end
 
   def process!
-    results = []
+    # Group votes by question_id and sum for/against values
+    question_totals = {}
 
     @votes.each do |vote|
       vote.data.each do |question_id, answer|
-        results << {
-          question_id: question_id.to_i,
-          for: answer["for"],
-          against: answer["against"],
-          value: answer["for"] - answer["against"]
-        }
+        qid = question_id.to_i
+        question_totals[qid] ||= { for: 0, against: 0 }
+        question_totals[qid][:for] += answer["for"].to_i
+        question_totals[qid][:against] += answer["against"].to_i
       end
     end
 
-    results.sort{ |a, b|
-      b[:value] <=> a[:value]
-    }
+    # Convert to array format and calculate final values
+    results = question_totals.map do |question_id, totals|
+      {
+        question_id: question_id,
+        for: totals[:for],
+        against: totals[:against],
+        value: totals[:for] - totals[:against]
+      }
+    end
+
+    # Sort by value (highest to lowest)
+    results.sort{ |a, b| b[:value] <=> a[:value] }
   end
 end
 
