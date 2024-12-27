@@ -1,151 +1,48 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-.button {
-  @apply cursor-pointer focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none shadow;
-}
+/* Custom Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-.button.button-primary {
-  @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
-}
-
-.button.button-secondary {
-  @apply bg-gray-200 hover:bg-gray-300 text-gray-800;
-}
-
-.button.button-danger {
-  @apply text-white bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800;
-}
-
-.form-errors {
-  background-color: #f8d7da;
-  padding: 1em;
-  border: 1px solid #f5c6cb;
-  @apply text-red-600 text-sm;
-}
-
-/*
-
-@layer components {
-  .btn-primary {
-    @apply py-2 px-4 bg-blue-200;
+@layer base {
+  .font-display {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
-*/
-
-.text-gradient {
-  background-image: radial-gradient(circle, #c058ff 0, #ff5858 26%, #000 27%);
-  background-position: 90% 100%;
-  background-size: 150%;
-  background-repeat: no-repeat;
-
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  animation-timing-function: ease-in-out;
-  -webkit-animation-name: text-gradient-animation;
-  animation-name: text-gradient-animation;
-  -webkit-animation-duration: 7s;
-  animation-duration: 7s;
-  -webkit-animation-delay: 0s;
-  animation-delay: 0s;
-  -webkit-animation-iteration-count: infinite;
-  animation-iteration-count: infinite;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-  animation-direction: alternate;
+/* Animation Classes */
+[data-show="true"] [data-transition-enter] {
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
-@media (prefers-color-scheme: dark) {
-  .text-gradient {
-    background-image: radial-gradient(circle, #c058ff 0, #ff5858 26%, #fff 27%);
-  }
-}
-
-@keyframes text-gradient-animation {
-  0% {
-    background-size: 350%;
-    background-position: left 90% bottom 0;
-  }
-  50% {
-    background-size:350%;
-    background-position: left 10% bottom 0;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
   }
   to {
-    background-size:350%;
-    background-position: left 90% bottom 0;
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.alert {
-  @apply border px-4 py-3 rounded relative mb-8;
+/* Hover Effects */
+.hover\:scale-105 {
+  transition: transform 0.3s ease-in-out;
 }
 
-.alert-error {
-  @apply bg-red-100 text-red-700 border-red-400;
+.hover\:shadow-md {
+  transition: box-shadow 0.3s ease-in-out;
 }
 
-.alert-error svg {
-  @apply text-red-500;
+/* FAQ Animations */
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
 }
 
-.alert-success {
-  @apply bg-green-100 text-green-700 border-green-400;
-}
-
-.alert-success .svg {
-  @apply text-green-500;
-}
-
-.alert-notice {
-  @apply bg-blue-100 text-blue-700 border-blue-400;
-}
-
-.alert-notice svg {
-  @apply text-blue-500;
-}
-
-.alert-dark {
-  @apply bg-gray-50 text-gray-800 border-gray-400;
-}
-
-.alert-dark svg {
-  @apply text-gray-800;
-}
-
-.alert-warning, .alert-alert {
-  @apply bg-yellow-100 text-yellow-700 border-yellow-400;
-}
-
-alert-warning svg, .alert-alert svg {
-  @apply text-yellow-500;
-}
-
-.session-links {
-  text-align: center;
-  @apply text-sm font-light text-gray-500 dark:text-gray-400;
-}
-
-.session-links a {
-  display: block;
-}
-
-#error_explanation {
-  @apply my-4 p-4 bg-red-100 text-red-700 border-red-400;
-}
-
-#error_explanation h2 {
-  font-weight: bold;
-}
-
-form.form label {
-  @apply block text-gray-700 text-sm font-bold mb-2;
-}
-
-form.form input[type="text"],
-form.form input[type="password"],
-form.form textarea {
-  @apply w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none mb-4;
+.faq-answer[data-show="true"] {
+  max-height: 500px;
 }
