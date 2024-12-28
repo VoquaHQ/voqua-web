@@ -1,50 +1,88 @@
 <% if @ballot.errors.any? %>
-  <ul class="form-errors">
-    <% @ballot.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-  </ul>
+  <div class="form-errors">
+    <div class="flex items-center gap-2 mb-2">
+      <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <h3 class="font-medium text-red-800">Please fix the following errors:</h3>
+    </div>
+    < ul class="list-disc pl-5">
+      <% @ballot.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
 <% end %>
 
-<div>
-  <%= f.label :ends_at, "End Date", class: "block font-medium mb-1" %>
-  <div class="text-sm text-gray-600 mb-2">Set when input collection closes.</div>
-  <div class="datetime-field" style="display: inline-block; position: relative;">
-    <%= f.datetime_local_field :ends_at, value: @ballot.ends_at %>
+<div class="space-y-8">
+  <div>
+    <%= f.label :name, class: "block text-sm font-medium text-gray-900" do %>
+      Title <span class="text-red-500">*</span>
+    <% end %>
+    <div class="mt-1">
+      <%= f.text_field :name, 
+          placeholder: "e.g., Q4 Product Roadmap Priorities",
+          class: "w-full",
+          required: true %>
+    </div>
+    <p class="mt-1 text-sm text-gray-500">
+      Give your vote a clear, descriptive title that helps participants understand its purpose
+    </p>
+  </div>
+
+  <div>
+    <%= f.label :description, "Description (Optional)", class: "block text-sm font-medium text-gray-900" %>
+    <div class="mt-1">
+      <%= f.text_area :description, 
+          rows: 4,
+          placeholder: "Add context about what you're collecting feedback on...",
+          class: "w-full" %>
+    </div>
+    <p class="mt-1 text-sm text-gray-500">
+      Optional: Add context or guidelines to help participants provide better feedback
+    </p>
+  </div>
+
+  <div>
+    <%= f.label :ends_at, class: "block text-sm font-medium text-gray-900" do %>
+      End Date & Time <span class="text-red-500">*</span>
+    <% end %>
+    <div class="mt-1">
+      <div class="datetime-field">
+        <%= f.datetime_local_field :ends_at, 
+            value: @ballot.ends_at&.strftime('%Y-%m-%dT%H:%M'),
+            required: true,
+            min: Time.current.strftime('%Y-%m-%dT%H:%M'),
+            class: "rounded-lg" %>
+      </div>
+    </div>
+    <p class="mt-1 text-sm text-gray-500">
+      Choose when voting will close. Participants can vote until this time
+    </p>
+  </div>
+
+  <div>
+    <span class="block text-sm font-medium text-gray-900 mb-3">Access Control</span>
+    <div class="bg-white rounded-lg border border-gray-200 divide-y">
+      <div class="p-4">
+        <label class="flex items-start gap-3 cursor-pointer">
+          <%= f.radio_button :private, "1", checked: "checked", class: "mt-1" %>
+          <div>
+            <div class="font-medium text-gray-900">Private - Invite Only</div>
+            <div class="text-sm text-gray-500">Only invited team members can participate. Best for sensitive decisions or specific team feedback.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="p-4">
+        <label class="flex items-start gap-3 cursor-pointer">
+          <%= f.radio_button :private, "0", class: "mt-1" %>
+          <div>
+            <div class="font-medium text-gray-900">Public - Anyone with Link</div>
+            <div class="text-sm text-gray-500">Anyone with the link can participate. You can still invite specific people. Best for broader feedback collection.</div>
+          </div>
+        </label>
+      </div>
+    </div>
   </div>
 </div>
-
-<div>
-  <%= f.label :name, "Title", class: "block font-medium mb-1" %>
-  <div class="text-sm text-gray-600 mb-2">Give it a clear name.</div>
-  <%= f.text_field :name, class: "w-full" %>
-</div>
-
-<div>
-  <%= f.label :description, "Details", class: "block font-medium mb-1" %>
-  <div class="text-sm text-gray-600 mb-2">Provide a brief description.</div>
-  <%= f.text_area :description, rows: 5, class: "w-full" %>
-</div>
-
-<div class="space-y-4">
-  <label class="block font-medium mb-1">Access Control</label>
-  <div class="space-y-3">
-    <div class="flex items-start space-x-3">
-      <%= f.radio_button :private, "1", checked: "checked", class: "mt-1", id: "private_mode" %>
-      <label for="private_mode" class="cursor-pointer">
-        <div class="font-medium">Private - Invite only</div>
-        <div class="text-sm text-gray-600">Only invited people can participate</div>
-      </label>
-    </div>
-
-    <div class="flex items-start space-x-3">
-      <%= f.radio_button :private, "0", class: "mt-1", id: "public_mode" %>
-      <label for="public_mode" class="cursor-pointer">
-        <div class="font-medium">Public - Anyone with the link</div>
-        <div class="text-sm text-gray-600">Anyone with the link can participate, and you can still invite people</div>
-      </label>
-    </div>
-  </div>
-</div>
-
-

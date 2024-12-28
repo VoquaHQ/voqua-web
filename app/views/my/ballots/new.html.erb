@@ -1,14 +1,54 @@
-<div class="container max-w-5xl mx-auto px-6">
-  <h2 class="text-2xl font-bold mb-6">Create Your Voqua</h2>
-
-  <%= form_with model: @ballot, url: my_ballots_path, local: true, data: { turbo: false } do |f| %>
-    <div class="pb-12 space-y-6">
-      <%= render 'form', ballot: @ballot, f: f %>
-
-      <div class="flex space-x-4 p-y 4">
-        <%= f.submit "Create Voqua", class: "button button-primary" %>
-        <%= link_to "Cancel", my_ballots_path, class: "button button-secondary" %>
+<div class="min-h-screen bg-gray-50 py-12">
+  <div class="container max-w-3xl mx-auto px-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="px-8 py-6 border-b border-gray-100">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Create New Vote</h1>
+            <p class="mt-1 text-sm text-gray-600">Set up a new quadratic vote to gather team feedback</p>
+          </div>
+          <div class="h-12 w-12 bg-indigo-50 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+        </div>
       </div>
+
+      <%= form_with model: @ballot, url: my_ballots_path, local: true, data: { turbo: false }, class: "divide-y divide-gray-100" do |f| %>
+        <div class="p-8">
+          <%= render 'form', ballot: @ballot, f: f %>
+        </div>
+
+        <div class="px-8 py-4 bg-gray-50 flex items-center justify-between">
+          <%= link_to "Cancel", my_ballots_path, class: "button button-secondary" %>
+          <%= f.submit "Create Vote", class: "button button-primary" %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+
+    <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <h2 class="text-sm font-medium text-gray-900 mb-4">Tips for creating effective votes:</h2>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex gap-2">
+          <svg class="w-5 h-5 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          <span>Keep titles clear and specific to help participants understand the context</span>
+        </li>
+        <li class="flex gap-2">
+          <svg class="w-5 h-5 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          <span>Provide enough details in the description to guide informed decisions</span>
+        </li>
+        <li class="flex gap-2">
+          <svg class="w-5 h-5 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          <span>Set reasonable deadlines to ensure active participation</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
