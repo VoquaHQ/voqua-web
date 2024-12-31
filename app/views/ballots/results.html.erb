@@ -1,8 +1,23 @@
-<div class="bg-gray-50">
-  <div class="max-w-5xl mx-auto px-4 py-8">
-    <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
-      <h1 class="text-3xl font-semibold text-gray-900 mb-3"><%= @ballot.name %></h1>
-      <p class="text-lg text-gray-600 leading-relaxed"><%= @ballot.description %></p>
+<div class="bg-gray-50 min-h-screen">
+  <div class="max-w-3xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-sm p-8 mb-6">
+      <h1 class="text-3xl font-semibold text-gray-900 mb-2"><%= @ballot.name %></h1>
+      <p class="text-lg text-gray-600"><%= @ballot.description %></p>
+      <div class="mt-4 flex items-center justify-between">
+        <p class="text-sm text-gray-500">
+          Results based on <%= pluralize @votes.count, "participant" %>
+        </p>
+        <!-- Copy Results Button -->
+        <div data-controller="copy-results">
+          <textarea data-copy-results-target="source" class="sr-only"><%= ballot_text_summary(@ballot, @results) %></textarea>
+          <button data-copy-results-target="button"
+                  data-action="click->copy-results#copy"
+                  class="text-sm text-gray-600 hover:text-gray-900">
+            Copy results to clipboard
+          </button>
+        </div>
+      </div>
     </div>
 
     <% if @ballot.questions.empty? %>
@@ -10,30 +25,33 @@
         <p class="text-gray-600">No options have been added to this feedback collection yet.</p>
       </div>
     <% else %>
-      <div class="flex gap-8">
-        <div class="flex-1">
-          <div class="space-y-8">
+      <!-- Results Summary -->
+      <div class="space-y-4">
+        <% for_each_ballot_result @results, @ballot.questions do |result, question, i| %>
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <div>
+              <h3 class="text-lg font-medium text-gray-900 mb-2"><%= question.title %></h3>
+              <p class="text-gray-600 mb-3"><%= question.description %></p>
 
-            <% for_each_ballot_result @results, @ballot.questions do |result, question, i| %>
-              <div class="bg-white rounded-lg shadow-sm" data-question-id="<%= question.id %>" data-state="">
-                <div class="p-6 border-b border-gray-100">
-                  <div class="mb-2">
-                    <span class="block text-sm font-medium text-blue-600">
-                      Option <%= i + 1 %> of <%= @ballot.questions.size %>
-                    </span>
-                    <span class="text-lg block text-<%= result > 0 && "green" || "red" %>-500">
-                      <%= pluralize result, "vote" %>
-                    </span>
-                  </div>
-                  <h3 class="text-xl font-medium text-gray-900 mb-2"><%= question.title %></h3>
-                  <p class="text-gray-600"><%= question.description %></p>
-                </div>
+              <div class="flex items-center gap-2">
+                <% if result[:value] > 0 %>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    <%= result[:value] %> votes in favor
+                  </span>
+                <% elsif result[:value] < 0 %>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                    <%= result[:value] %> votes against
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                    No votes
+                  </span>
+                <% end %>
               </div>
-            <% end %>
-
+            </div>
           </div>
-        </div>
-     </div>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
