@@ -10,19 +10,7 @@
         </p>
         <!-- Copy Results Button -->
         <div data-controller="copy-results">
-          <% summary = []
-             summary << "Here are the results of the Voqua on \"#{@ballot.name}\":"
-             summary << ""
-             @results.each_with_index do |result, i|
-               question = @ballot.questions.find { |q| q.id == result[:question_id] }
-               votes = result[:value]
-               summary << "#{i + 1}. #{question.title} (#{votes >= 0 ? '+' : ''}#{votes} votes)"
-             end
-             summary << ""
-             summary << "Link to Voqua ballot: #{ballot_url(@ballot)}"
-             formatted_summary = summary.join("\n")
-          %>
-          <textarea data-copy-results-target="source" class="sr-only"><%= formatted_summary %></textarea>
+          <textarea data-copy-results-target="source" class="sr-only"><%= ballot_text_summary(@ballot, @results) %></textarea>
           <button data-copy-results-target="button"
                   data-action="click->copy-results#copy"
                   class="text-sm text-gray-600 hover:text-gray-900">
@@ -44,7 +32,7 @@
             <div>
               <h3 class="text-lg font-medium text-gray-900 mb-2"><%= question.title %></h3>
               <p class="text-gray-600 mb-3"><%= question.description %></p>
-              
+
               <div class="flex items-center gap-2">
                 <% if result[:value] > 0 %>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">

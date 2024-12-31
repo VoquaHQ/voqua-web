@@ -28,4 +28,18 @@ module BallotsHelper
       yield result, question, i
     end
   end
+
+  def ballot_text_summary(ballot, results)
+    summary = []
+    summary << "Here are the results of the Voqua on \"#{ballot.name}\":"
+    summary << ""
+    results.each_with_index do |result, i|
+      question = ballot.questions.find { |q| q.id == result[:question_id] }
+      votes = result[:value]
+      summary << "#{i + 1}. #{question.title} (#{votes >= 0 ? '+' : ''}#{votes} votes)"
+    end
+    summary << ""
+    summary << "Link to Voqua ballot: #{ballot_url(ballot)}"
+    summary.join("\n")
+  end
 end
