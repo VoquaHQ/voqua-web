@@ -31,7 +31,6 @@ class My::BallotsController < My::BaseController
   def update
     @ballot = current_user.main_profile.owned_ballots.find(params[:id])
     if @ballot.update(ballot_params)
-      flash[:success] = "Ballot updated."
       redirect_to my_ballot_path(@ballot)
     else
       render :edit

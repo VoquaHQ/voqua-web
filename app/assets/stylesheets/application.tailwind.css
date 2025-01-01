@@ -2,6 +2,36 @@
 @import "tailwindcss/components";
 
 @layer components {
+  /* Alert/Toast Styles */
+  .alert {
+    @apply fixed top-24 right-6 z-[9999] p-4 rounded-lg shadow-2xl max-w-sm w-full;
+    @apply flex items-center justify-between;
+    @apply transform transition-all duration-500 ease-in-out;
+    @apply translate-x-0 opacity-100;
+    @apply backdrop-blur-md;
+    @apply ring-1 ring-black/5;
+  }
+
+  .alert[data-show="false"] {
+    @apply translate-x-full opacity-0;
+  }
+
+  .alert-success {
+    @apply bg-green-50/95 text-green-800 border-2 border-green-200 shadow-green-100;
+  }
+
+  .alert-error {
+    @apply bg-red-50/95 text-red-800 border-2 border-red-200 shadow-red-100;
+  }
+
+  .alert-notice {
+    @apply bg-blue-50/95 text-blue-800 border-2 border-blue-200 shadow-blue-100;
+  }
+
+  .alert .close {
+    @apply text-gray-400 hover:text-gray-500 transition-colors duration-150 cursor-pointer;
+  }
+
   .button {
     @apply inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150;
   }

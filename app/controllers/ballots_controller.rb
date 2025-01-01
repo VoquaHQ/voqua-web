@@ -124,8 +124,7 @@ class BallotsController < ApplicationController
   def check_ballot_permissions
     if @ballot.private? && !@ballot.member?(current_user)
       #FIXME: This should be a 404
-      flash[:error] = "You are not allowed to view that ballot."
-      redirect_to root_path
+      redirect_to root_path, status: :not_found
     end
   end
 
