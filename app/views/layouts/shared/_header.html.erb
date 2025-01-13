@@ -4,7 +4,7 @@
     <title>Voqua - Better Team Decisions Through Quadratic Voting</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="Voqua helps teams make confident decisions by revealing what truly matters. Powered by quadratic voting, the most advanced system for aligning teams and driving results.">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta proper ty="og:url" content="<%= request.base_url %>">
@@ -18,7 +18,7 @@
     <meta name="twitter:title" content="Voqua - Better Team Decisions Through Quadratic Voting">
     <meta name="twitter:description" content="Transform how your team makes decisions. Surface true priorities, build consensus, and move faster with quadratic voting.">
     <meta name="twitter:image" content="<%= image_url "logo.svg" %>">
-    
+
     <!-- Additional SEO -->
     <meta name="keywords" content="quadratic voting, team decisions, decision making, consensus building, organizational alignment">
     <meta name="author" content="Voqua">
@@ -29,14 +29,20 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <link rel="icon" href="<%= image_path "logo.svg" %>">
-    
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVCRBRGSL6"></script>
     <script>
+      const gaId = "G-RVCRBRGSL6";
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-RVCRBRGSL6');
+      document.addEventListener("turbo:load", () => {
+        console.log("turbo:load");
+        gtag('config', gaId, {
+          page_path: window.location.pathname,
+        });
+      });
     </script>
   </head>
 
