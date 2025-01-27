@@ -1,44 +1,41 @@
 <header>
-  <nav data-controller="menu" class="fixed top-0 overflow-hidden z-20 w-full bg-white/80 border-b border-gray-200 backdrop-blur">
-    <div class="px-6 m-auto max-w-5xl 2xl:px-0">
-      <div class="flex flex-wrap items-center justify-between py-2">
-        <div class="w-full items-center flex justify-between lg:w-auto">
-          <%= render partial: "shared/logo", locals: { size: 48 } %>
-          <div class="flex lg:hidden">
-            <button data-menu-target="button" data-action="menu#toggle" aria-label="Menu" class="relative border border-gray-200 size-10 rounded-lg transition duration-300 hover:bg-gray-100 active:scale-95">
-              <div data-menu-target="line1" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-gray-600 transition-all duration-300"></div>
-              <div data-menu-target="line2" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-gray-600 transition-all duration-300"></div>
-            </button>
-          </div>
+  <nav data-controller="scroll" class="fixed top-0 overflow-hidden z-20 w-full transition-all duration-300 backdrop-blur-sm" 
+    data-action="scroll@window->scroll#onScroll"
+    data-scroll-target="nav">
+    <div class="px-4 sm:px-6 mx-auto max-w-7xl">
+      <div class="flex items-center justify-between h-14 sm:h-16">
+        <div class="flex items-center transition-all duration-300 overflow-hidden sm:w-auto w-32" data-scroll-target="logo">
+          <%= render partial: "shared/logo", locals: { size: 36 } %>
         </div>
 
-        <div data-menu-target="menu" class="w-full h-0 lg:h-fit overflow-hidden transition-all duration-300 lg:w-fit flex-wrap justify-end items-center space-y-8 lg:space-y-0 lg:flex lg:overflow-visible md:flex-nowrap">
-          <div class="mt-6 text-gray-600 md:-ml-4 lg:pr-4 lg:mt-0">
-            <ul class="space-y-4 tracking-wide text-base lg:text-sm lg:flex lg:space-y-0 lg:items-center">
-              <li class="px-4 lg:px-0">
-                <a href="mailto:support@voqua.io" class="flex items-center md:px-4 transition hover:text-primary-600 group">
-                  <svg class="w-4 h-4 mr-1.5 transition-transform group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/>
-                    <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/>
-                  </svg>
-                  <span>Support</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="w-full space-y-2 gap-2 pt-4 pb-6 lg:pb-0 border-t lg:border-t-0 border-gray-200 items-center flex flex-col lg:flex-row lg:space-y-0 lg:w-fit lg:border-l lg:pt-0 lg:pl-6">
-            <% if current_user.nil? %>
-              <a href="<%= new_user_session_path %>" class="w-full h-10 lg:w-fit group flex items-center rounded-lg border border-gray-200 disabled:border *:select-none [&>*:not(.sr-only)]:relative *:disabled:opacity-20 *:disabled:text-gray-950 disabled:border-gray-200 disabled:bg-gray-100 text-gray-800 hover:bg-gray-100 active:bg-gray-200/75 lg:text-sm lg:h-9 px-4 justify-center transition-colors">
-                <span>Sign in</span>
-              </a>
-              <a href="<%= new_user_registration_path %>" class="w-full h-10 lg:w-fit group flex items-center rounded-lg bg-gray-900 hover:bg-gray-800 active:bg-gray-950 disabled:opacity-70 text-white lg:text-sm lg:h-9 px-4 justify-center transition-colors">
-                <span>Sign up</span>
-              </a>
-            <% else %>
-              <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-sm text-gray-500 hover:text-gray-700 transition-colors" %>
+        <div class="flex items-center space-x-2 sm:space-x-4 transition-all duration-300 transform sm:transform-none ml-auto" data-scroll-target="menu">
+          <a href="mailto:support@voqua.io" class="hidden sm:flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-white/20 transition-all text-xs sm:text-base" data-scroll-target="support">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.364 5.636C21.879 9.15 21.879 14.85 18.364 18.364C14.849 21.879 9.151 21.879 5.636 18.364C2.121 14.849 2.121 9.151 5.636 5.636M8 15C8.5 15.5 9.5 16 12 16C14.5 16 15.5 15.5 16 15M9 10H9.01M15 10H15.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-gray-600">Support</span>
+          </a>
+          <% if current_user.nil? %>
+            <a href="<%= new_user_session_path %>" class="flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-white/20 transition-all text-sm sm:text-base">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="text-gray-600">Log In</span>
+            </a>
+            <a href="<%= new_user_registration_path %>" class="flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-sm text-xs sm:text-base font-medium">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7ZM23 12V18M20 15H26" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Sign Up</span>
+            </a>
+          <% else %>
+            <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-white/20 transition-all text-xs sm:text-base" do %>
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H9M16 17L21 12M21 12L16 7M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="text-gray-600">Log Out</span>
             <% end %>
-          </div>
+          <% end %>
         </div>
       </div>
     </div>

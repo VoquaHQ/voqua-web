@@ -28,18 +28,20 @@ export default class extends Controller {
   }
 
   open() {
-    this.menuTarget.classList.remove("h-0")
-    this.menuTarget.classList.add("h-fit")
-    this.buttonTarget.classList.add("active")
+    const mobileMenu = this.menuTargets.find(menu => menu.classList.contains('lg:hidden'))
+    if (mobileMenu) {
+      mobileMenu.classList.remove('hidden')
+    }
     this.line1Target.classList.add("rotate-45", "translate-y-[7px]")
     this.line2Target.classList.add("-rotate-45", "-translate-y-[7px]")
     this.isOpen = true
   }
 
   close() {
-    this.menuTarget.classList.add("h-0")
-    this.menuTarget.classList.remove("h-fit")
-    this.buttonTarget.classList.remove("active")
+    const mobileMenu = this.menuTargets.find(menu => menu.classList.contains('lg:hidden'))
+    if (mobileMenu) {
+      mobileMenu.classList.add('hidden')
+    }
     this.line1Target.classList.remove("rotate-45", "translate-y-[7px]")
     this.line2Target.classList.remove("-rotate-45", "-translate-y-[7px]")
     this.isOpen = false

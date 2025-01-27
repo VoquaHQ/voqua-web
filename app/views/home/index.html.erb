@@ -1,130 +1,100 @@
-<div class="min-h-screen bg-white" data-controller="landing">
-  <div class="relative isolate px-6 pt-14 lg:px-8">
-    <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-      <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+<div class="min-h-screen" data-controller="landing">
+  <div class="fixed inset-0 -z-10 bg-gradient-to-tr from-[#ff80b5]/10 to-[#9089fc]/10">
+    <div class="absolute inset-x-0 -top-40 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+      <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
     </div>
+    <div class="absolute inset-x-0 top-[calc(100%-13rem)] transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+      <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"></div>
+    </div>
+  </div>
 
-    <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-      <div class="text-center" data-landing-target="fadeIn" data-transition-enter="transition ease-out duration-500" data-transition-enter-start="opacity-0 translate-y-4" data-transition-enter-end="opacity-100 translate-y-0">
-        <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl font-display">
+  <div class="mx-auto max-w-4xl px-6 py-24">
+    <div class="space-y-24">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">
           Decision Clarity Now
         </h1>
-        <p class="mt-6 text-lg leading-8 text-gray-600">
+        <p class="text-lg text-gray-600">
           We created Voqua to help organizations make the best possible choices. From Fortune 500 corporations to small businesses, our Quadratic Voting platform brings together the right people to make thoughtful decisions that benefit the whole organization.
         </p>
-        <div class="mt-10 flex items-center justify-center">
-          <a href="/beta" class="rounded-md bg-indigo-600 px-8 py-3 text-base font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all duration-300 hover:scale-105">
-            Get Started
+        <div class="mt-8">
+          <a href="/beta" class="text-indigo-600 hover:text-indigo-500 font-semibold">
+            Get Started →
           </a>
         </div>
       </div>
-    </div>
 
-    <div class="mx-auto max-w-2xl">
-      <div class="text-center">
-        <h2 class="text-2xl font-bold text-gray-900 mb-12 font-display">Start Free, Scale As You Grow</h2>
-        <div class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3" data-landing-target="stagger">
-          <div class="group border border-gray-200 p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 bg-white" data-transition-enter="transition ease-out duration-500 delay-[300ms]" data-transition-enter-start="opacity-0 translate-y-4" data-transition-enter-end="opacity-100 translate-y-0">
-            <div class="h-12 w-12 mx-auto mb-4 bg-indigo-100 rounded-lg flex items-center justify-center">
-              <span class="text-2xl">⚡️</span>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">Instant Setup</h3>
-            <p class="mt-4 text-gray-600">
-              Start free today with our easy-to-use platform. No credit card needed.
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">How It Works</h2>
+        <div class="space-y-12">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Quick Setup, Instant Results</h3>
+              <p class="mt-2 text-lg text-gray-600">
+              Start free today with our easy-to-use platform. From choosing projects to allocating budgets, get clear answers from your team in minutes.
             </p>
           </div>
-          <div class="group border border-gray-200 p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 bg-white" data-transition-enter="transition ease-out duration-500 delay-[600ms]" data-transition-enter-start="opacity-0 translate-y-4" data-transition-enter-end="opacity-100 translate-y-0">
-            <div class="h-12 w-12 mx-auto mb-4 bg-indigo-100 rounded-lg flex items-center justify-center">
-              <span class="text-2xl">🎯</span>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">Full Control</h3>
-            <p class="mt-4 text-gray-600">
-              You decide who to include in each vote. Get clear feedback from the people who matter most.
-            </p>
-          </div>
-          <div class="group border border-gray-200 p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 bg-white" data-transition-enter="transition ease-out duration-500 delay-[900ms]" data-transition-enter-start="opacity-0 translate-y-4" data-transition-enter-end="opacity-100 translate-y-0">
-            <div class="h-12 w-12 mx-auto mb-4 bg-indigo-100 rounded-lg flex items-center justify-center">
-              <span class="text-2xl">🧠</span>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">Clear Priorities</h3>
-            <p class="mt-4 text-gray-600">
-              Turn team feedback into clear priorities without endless meetings and discussions.
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Smart Decision Making</h3>
+            <p class="mt-2 text-lg text-gray-600">
+              Our voting system helps resources flow to ideas with the strongest support. Turn team feedback into clear priorities without endless meetings.
             </p>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
-      <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"></div>
-    </div>
-  </div>
-</div>
-
-<section class="bg-gray-50 py-24 sm:py-32">
-  <div class="mx-auto max-w-7xl px-6 lg:px-8">
-    <div class="mx-auto max-w-2xl lg:text-center">
-        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-display mb-8">
-        How Teams Use It
-      </h2>
-      <p class="text-lg text-gray-600 mb-16 max-w-xl mx-auto">
-        From quick team decisions to company-wide systems, see how our platform grows with your needs
-      </p>
-    </div>
-    <div class="mx-auto max-w-2xl lg:max-w-4xl" data-landing-target="faq">
-      <div class="space-y-8">
-        <div class="border-b border-gray-200 pb-8" data-transition-enter="transition ease-out duration-500" data-transition-enter-start="opacity-0 translate-y-4" data-transition-enter-end="opacity-100 translate-y-0">
-          <h3 class="text-lg font-semibold text-gray-900 hover:text-indigo-600 transition-colors duration-300">
-            Quick Team Decisions
-          </h3>
-          <p class="mt-4 text-gray-600">
-            From choosing projects and picking winners to allocating budgets, get clear answers from your team in minutes, not weeks of back-and-forth.
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">About</h2>
+        <div class="space-y-8">
+          <p class="text-lg text-gray-600">
+            Voqua is an independent company pioneering inclusive governance systems to empower organizations globally. We envision workplaces where accountable and mission-driven collaboration transforms perspectives into success.
+          </p>
+          <p class="text-lg text-gray-600">
+            As a small, self-funded team, we prioritize collective decisions, organizational infrastructure, and plurality. We are led by two co-founders and have an exceptional set of advisors.
           </p>
         </div>
-        <div class="border-b border-gray-200 pb-8" data-transition-enter="transition ease-out duration-500 delay-[300ms]" data-transition-enter-start="opacity-0 translate-y-4" data-transition-enter-end="opacity-100 translate-y-0">
-          <h3 class="text-lg font-semibold text-gray-900 hover:text-indigo-600 transition-colors duration-300">
-            Smart Budget Planning
-          </h3>
-          <p class="mt-4 text-gray-600">
-            Let teams show which projects need funding most. Our voting system helps money flow to ideas with the strongest support across departments.
-          </p>
+
+        <h3 class="text-xl font-bold text-gray-900 mt-16 mb-8">Executives</h3>
+        <div class="space-y-8">
+          <div>
+            <h4 class="text-lg font-semibold text-gray-900">Leon Erichsen</h4>
+            <p class="mt-2 text-gray-600 italic">Previously: Product Manager & Researcher at Passport XYZ, Gitcoin, RadicalxChange Foundation</p>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold text-gray-900">Andrea Franz</h4>
+            <p class="mt-2 text-gray-600 italic">Previously: Developer with 20 years' experience including Gitcoin, Status, Science</p>
+          </div>
         </div>
-        <div class="border-b border-gray-200 pb-8" data-transition-enter="transition ease-out duration-500 delay-[600ms]" data-transition-enter-start="opacity-0 translate-y-4" data-transition-enter-end="opacity-100 translate-y-0">
-          <h3 class="text-lg font-semibold text-gray-900 hover:text-indigo-600 transition-colors duration-300">
-            Team Time Insights
-          </h3>
-          <p class="mt-4 text-gray-600">
-            Turn work hours into votes. See what your team truly values by tracking where they spend their time. Perfect for large teams and innovative work models.
-          </p>
+
+        <h3 class="text-xl font-bold text-gray-900 mt-16 mb-8">Advisors</h3>
+        <div class="space-y-8">
+          <div>
+            <h4 class="text-lg font-semibold text-gray-900">Puja Ohlhaver</h4>
+            <p class="mt-2 text-gray-600 italic">Harvard Allen Lab Research Affiliate; Former Skadden Arps Lawyer; Biotech Founder with Two FDA Approvals</p>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold text-gray-900">Matthew Prewitt</h4>
+            <p class="mt-2 text-gray-600 italic">President of RadicalxChange Foundation; Writer; Former Antitrust Litigator</p>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold text-gray-900">Michele Zanini</h4>
+            <p class="mt-2 text-gray-600 italic">Co-Author of Humanocracy; Co-Founder of Management Lab; Former McKinsey Senior Consultant</p>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<section class="bg-white py-24 sm:py-32">
-  <div class="mx-auto max-w-7xl px-6 lg:px-8">
-    <div class="mx-auto max-w-2xl lg:text-center" data-landing-target="cta">
-      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-display">
-        Ready to Make Better Decisions?
-      </h2>
-      <p class="mt-4 text-lg text-gray-600">
-        Start with quick team votes today, or <a href="mailto:hello@voqua.io" class="text-indigo-600 hover:text-indigo-500">talk to us</a> about custom solutions for your organization.
-      </p>
-      <div class="mt-10 space-y-6">
-        <div class="flex justify-center">
-          <a href="/beta" class="rounded-md bg-indigo-600 px-8 py-3 text-base font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all duration-300 hover:scale-105">
-            Get Started
-          </a>
-        </div>
-        <div class="flex items-center justify-center gap-4">
-          <a href="https://voqua.substack.com/" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-900 transition-colors">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">Contact</h2>
+        <p class="text-lg text-gray-600">
+          Start with quick team votes today, or <a href="mailto:hello@voqua.io" class="text-indigo-600 hover:text-indigo-500">talk to us</a> about custom solutions for your organization.
+        </p>
+        <div class="mt-8 flex gap-4">
+          <a href="https://voqua.substack.com/" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-900">
             <span class="sr-only">Blog</span>
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
             </svg>
           </a>
-          <a href="https://x.com/VoquaHQ" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-900 transition-colors">
+          <a href="https://x.com/VoquaHQ" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-900">
             <span class="sr-only">X (Twitter)</span>
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -134,4 +104,8 @@
       </div>
     </div>
   </div>
-</section>
+
+  <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+    <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"></div>
+  </div>
+</div>
