@@ -19,8 +19,14 @@ export default class extends Controller {
       threshold: 0.1
     })
 
-    // Observe staggered sections
-    ;[this.staggerTarget, this.faqTarget, this.ctaTarget].forEach(target => {
+    // Observe staggered sections if they exist
+    const targets = [
+      this.hasStaggerTarget ? this.staggerTarget : null,
+      this.hasFaqTarget ? this.faqTarget : null,
+      this.hasCtaTarget ? this.ctaTarget : null
+    ].filter(Boolean)
+    
+    targets.forEach(target => {
       observer.observe(target)
     })
   }
