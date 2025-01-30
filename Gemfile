@@ -72,3 +72,11 @@ end
 gem "devise", "~> 4.9"
 
 gem "letter_opener", "~> 1.10", :group => :development
+
+gem "devise-passwordless"
+
+gem 'omniauth-google-oauth2'
+gem "omniauth-rails_csrf_protection"
+
+gem 'omniauth-microsoft_graph', '~> 0.2.1'
+

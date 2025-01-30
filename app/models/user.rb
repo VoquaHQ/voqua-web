@@ -1,7 +1,13 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :confirmable, :lockable, :timeoutable, :trackable
+  devise :registerable,
+         # :database_authenticatable,
+         :recoverable,
+         :rememberable,
+         :validatable,
+         :confirmable,
+         :lockable, :timeoutable, :trackable,
+         :magic_link_authenticatable,
+         :omniauthable, omniauth_providers: [:google_oauth2, :microsoft_graph]
          #, :omniauthable
 
   has_many :user_profiles, dependent: :destroy
@@ -15,5 +21,23 @@ class User < ApplicationRecord
 
   def handle
     main_profile.handle
+  end
+
+  def self.from_google(u)
+    # create_with(uid: u[:uid], provider: 'google').find_or_create_by!(email: u[:email], main_profile_attributes: {})
+    u = find_or_initialize(email: u[:email])
+    u.uid = u[:uid]
+    u.provider = 'google'
+    user.main_profile ||= Profile.new
+    u.save!
+  end
+
+  def self.from_microsoft(u)
+    user = find_or_initialize_by(email: u[:email])
+    user.uid = u[:uid]
+    user.provider = 'microsoft_graph'
+    user.main_profile ||= Profile.new
+    user.save!
+    user
   end
 end
