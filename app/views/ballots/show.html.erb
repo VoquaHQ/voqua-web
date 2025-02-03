@@ -28,18 +28,18 @@
       </div>
     <% else %>
       <div id="voting" data-controller="voting">
-        <div class="flex gap-8">
-          <div class="w-56 sticky top-8 h-fit">
-            <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex gap-2 md:gap-8">
+          <div class="w-20 md:w-56 sticky top-8 h-fit">
+            <div class="bg-white rounded-lg shadow-sm p-2 md:p-6">
               <h2 class="font-medium text-gray-900 mb-2">Your Voting Power</h2>
-              <div class="flex items-baseline gap-2 mb-4">
+              <div class="items-baseline gap-2 mb-4">
                 <span class="text-3xl font-bold text-blue-600" data-credits="99">99</span>
-                <span class="text-sm text-gray-500">points left</span>
+                <span class="text-sm text-gray-500 block md:inline">points left</span>
               </div>
               <div data-all-credits="0">
                 <%= render partial: "remaining_credits_svg" %>
               </div>
-              <div class="mt-4 p-3 bg-yellow-50 rounded-md">
+              <div class="mt-4 p-3 rounded-md">
                 <p class="text-sm text-yellow-800">Use your points wisely! Each extra vote on the same option costs more points.</p>
               </div>
             </div>
@@ -50,17 +50,19 @@
               <div class="space-y-8">
                 <% @ballot.questions.each.with_index do |question, i| %>
                   <div class="bg-white rounded-lg shadow-sm" data-question-id="<%= question.id %>" data-state="">
-                    <div class="p-6 border-b border-gray-100">
+                    <div class="p-2 md:p-6 border-b border-gray-100">
                       <div class="text-sm font-medium text-blue-600 mb-2">Option <%= i + 1 %> of <%= @ballot.questions.size %></div>
                       <h3 class="text-xl font-medium text-gray-900 mb-2"><%= question.title %></h3>
                       <p class="text-gray-600"><%= question.description %></p>
                     </div>
 
-                    <div class="grid grid-cols-4 gap-4 p-6">
-                      <div class="col-span-1" data-credits-for>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 ">
+
+                      <div class="order-2 md:order-1 col-span-1" data-credits-for>
                         <%= render partial: "credits_svg", locals: { class_name: "for", flipped: false } %>
                       </div>
-                      <div class="col-span-2">
+
+                      <div class="order-1 md:order-2 col-span-2">
                         <div class="flex items-center justify-between pt-4">
                           <div data-vote-type="for" class="text-center">
                             <div class="mb-3">
@@ -90,7 +92,8 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-span-1" data-credits-against>
+
+                      <div class="order-3 col-span-1" data-credits-against>
                         <%= render partial: "credits_svg", locals: { class_name: "against", flipped: true } %>
                       </div>
                     </div>

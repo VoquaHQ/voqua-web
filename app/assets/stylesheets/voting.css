@@ -22,6 +22,10 @@ svg.credits.credits-for .credit.foreground {
   display: none;
 }
 
+#voting {
+  overflow-x: hidden;
+}
+
 #voting [data-question-id] .vote-button .more,
 #voting [data-question-id] .vote-button .fewer {
   display: none;
@@ -61,6 +65,7 @@ svg.credits.credits-for .credit.foreground {
 
 #voting [data-question-id][data-state="against"] .votes-count-label-against {
   display: inline;
+  color: red;
 }
 
 #voting [data-question-id][data-state="for"] .vote-button-for .vote {

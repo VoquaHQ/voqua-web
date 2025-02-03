@@ -25,19 +25,19 @@ class User < ApplicationRecord
 
   def self.from_google(u)
     # create_with(uid: u[:uid], provider: 'google').find_or_create_by!(email: u[:email], main_profile_attributes: {})
-    u = find_or_initialize(email: u[:email])
+    u = find_or_initialize_by(email: u[:email])
     u.uid = u[:uid]
     u.provider = 'google'
-    user.main_profile ||= Profile.new
+    u.main_profile ||= Profile.new
     u.save!
   end
 
   def self.from_microsoft(u)
-    user = find_or_initialize_by(email: u[:email])
-    user.uid = u[:uid]
-    user.provider = 'microsoft_graph'
-    user.main_profile ||= Profile.new
-    user.save!
-    user
+    u = find_or_initialize_by(email: u[:email])
+    u.uid = u[:uid]
+    u.provider = 'microsoft_graph'
+    u.main_profile ||= Profile.new
+    u.save!
+    u
   end
 end
