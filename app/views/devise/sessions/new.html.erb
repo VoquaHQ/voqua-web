@@ -44,6 +44,7 @@
           <% end %>
         </div>
 
+        <!--
         <%- if devise_mapping.omniauthable? %>
           <div class="mt-4 space-y-2">
             <div class="relative">
@@ -57,8 +58,10 @@
 
           </div>
         <% end %>
+        -->
       <% end %>
 
+      <!--
       <%- resource_class.omniauth_providers.each do |provider| %>
         <%= button_to omniauth_authorize_path(resource_name, provider),
           class: "w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500",
@@ -66,6 +69,7 @@
           <span>Sign in with <%= OmniAuth::Utils.camelize(provider) %></span>
         <% end %>
       <% end %>
+      -->
     </div>
   </div>
 </section>
