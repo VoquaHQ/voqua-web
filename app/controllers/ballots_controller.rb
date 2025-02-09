@@ -82,13 +82,16 @@ class BallotResults
 end
 
 class BallotsController < ApplicationController
-  before_action :authenticate_user!
   before_action :load_ballot
   before_action :check_ballot_permissions
   before_action :check_ballot_open, only: [:show, :submit_votes]
 
   def show
-    @votes = @ballot.votes.find_by(profile: current_user.main_profile)
+    if current_user
+      @votes = @ballot.votes.find_by(profile: current_user.main_profile)
+    else
+      @votes = nil
+    end
   end
 
   def results
@@ -97,18 +100,20 @@ class BallotsController < ApplicationController
   end
 
   def submit_votes
-    voting = Voting.new(@ballot, @ballot.questions, params[:votes])
+    @raw_votes = params[:votes]
+    voting = Voting.new(@ballot, @ballot.questions, @raw_votes)
     data = voting.process!
 
-    votes = @ballot.votes.find_or_initialize_by(profile: current_user.main_profile)
-    votes.data = data
-
-    if votes.save
-      flash[:success] = "Votes submitted successfully."
-      redirect_to my_root_path
+    if current_user
+      votes = @ballot.votes.find_or_initialize_by(profile: current_user.main_profile)
+      votes.data = data
+      save_votes votes
+    elsif params[:email].present?
+      @tmp_votes = TmpVote.new(ballot: @ballot, email: params[:email], data: data)
+      save_tmp_votes @tmp_votes
     else
-      flash[:error] = "There was a problem submitting your votes"
-      redirect_to ballot_path(@ballot)
+      @tmp_votes = TmpVote.new
+      render :new_tmp_vote
     end
   rescue Voting::VotingError
     flash[:error] = "Invalid votes"
@@ -116,6 +121,39 @@ class BallotsController < ApplicationController
   end
 
   private
+
+  def save_votes votes
+    if votes.save
+      flash[:success] = "Votes submitted successfully."
+      redirect_to my_root_path
+    else
+      flash[:error] = "There was a problem submitting your votes"
+      redirect_to ballot_path(@ballot)
+    end
+  end
+
+  def save_tmp_votes tmp_votes
+    user = User.find_by(email: params[:email])
+
+    if user.nil?
+      user = User.new email: params[:email], main_profile: Profile.new
+    end
+
+    user.tmp_vote_token = tmp_votes.token
+
+    if user.valid? && tmp_votes.save
+      if user.new_record?
+        user.save!
+      else
+        user.send_magic_link
+      end
+      flash[:success] = "Votes submitted successfully. Please check your email to confirm your votes."
+      redirect_to root_path
+    else
+      render :new_tmp_vote
+    end
+  end
+
 
   def load_ballot
     @ballot = Ballot.includes(:questions).find(params[:id])

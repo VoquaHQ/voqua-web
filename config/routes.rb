@@ -4,7 +4,6 @@ Rails.application.routes.draw do
     via: :all,
     constraints: { subdomain: "www" }
 
-
   devise_for :users, controllers: {
     # sessions: 'users/sessions'
     registrations: "users/registrations",
@@ -12,6 +11,13 @@ Rails.application.routes.draw do
     confirmations: "users/confirmations",
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
+
+  devise_scope :user do
+    namespace :users do
+      get "custom_magic_link", to: "custom_magic_link#show"
+    end
+  end
+
 
   # devise_for :users
 

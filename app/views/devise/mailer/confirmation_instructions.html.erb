@@ -1,7 +1,11 @@
 <h2>Welcome to Voqua</h2>
 
+<% if @resource.tmp_vote_token %>
+  !!!!!!!! Confirm your email address to submit your vote.
+<% end %>
+
 <p>Please confirm your email address to start using Voqua's quadratic voting platform.</p>
 
-<%= link_to 'Confirm Email', confirmation_url(@resource, confirmation_token: @token), class: 'button' %>
+<%= link_to 'Confirm Email', confirmation_url(@resource, confirmation_token: @token, tmp_vote_token: @resource.tmp_vote_token), class: 'button' %>
 
 <p style="color: #666; font-size: 14px;">This confirmation link will expire in 24 hours.</p>
