@@ -22,6 +22,37 @@
       </div>
     </div>
 
+    <div data-controller="onboarding" data-dismiss="quick-guide" id="quick-guide" class="mb-4">
+      <div class="bg-white rounded-lg shadow-sm p-6 relative">
+        <button data-action="dismiss" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+        <h2 class="font-medium text-gray-900 mb-4">Quick Guide</h2>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="mt-1 flex-shrink-0">
+              <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">1</div>
+            </div>
+            <p class="text-sm text-gray-600">You can vote multiple times on what matters most to you</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="mt-1 flex-shrink-0">
+              <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">2</div>
+            </div>
+            <p class="text-sm text-gray-600">Each extra vote costs more points - choose wisely!</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="mt-1 flex-shrink-0">
+              <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">3</div>
+            </div>
+            <p class="text-sm text-gray-600">Try to use all your points to make your voice count fully</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <% if @ballot.questions.empty? %>
       <div class="bg-white rounded-lg shadow-sm p-8 text-center">
         <p class="text-gray-600">No options have been added to this feedback collection yet.</p>
@@ -105,37 +136,6 @@
                 </div>
               </div>
             <% end %>
-          </div>
-
-          <div data-controller="onboarding" data-dismiss="quick-guide" id="quick-guide" class="w-56 sticky top-8 h-fit">
-            <div class="bg-white rounded-lg shadow-sm p-6 relative">
-              <button data-action="dismiss" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
-              <h2 class="font-medium text-gray-900 mb-4">Quick Guide</h2>
-              <div class="space-y-4">
-                <div class="flex items-start gap-3">
-                  <div class="mt-1 flex-shrink-0">
-                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">1</div>
-                  </div>
-                  <p class="text-sm text-gray-600">You can vote multiple times on what matters most to you</p>
-                </div>
-                <div class="flex items-start gap-3">
-                  <div class="mt-1 flex-shrink-0">
-                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">2</div>
-                  </div>
-                  <p class="text-sm text-gray-600">Each extra vote costs more points - choose wisely!</p>
-                </div>
-                <div class="flex items-start gap-3">
-                  <div class="mt-1 flex-shrink-0">
-                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">3</div>
-                  </div>
-                  <p class="text-sm text-gray-600">Try to use all your points to make your voice count fully</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
