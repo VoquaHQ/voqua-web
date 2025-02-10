@@ -1,11 +1,102 @@
-<h2>Welcome to Voqua</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <style type="text/css">
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #1F2937;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1F2937;
+      margin-bottom: 1rem;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: #4B5563;
+      margin-bottom: 2rem;
+    }
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #2563EB;
+      color: white !important;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      margin: 1rem 0;
+    }
+    .benefits {
+      background-color: #F3F4F6;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+    .benefits-title {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+    .footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #E5E7EB;
+      font-size: 14px;
+      color: #6B7280;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <% if @resource.tmp_vote_token %>
+        <h1 class="title">Thank You for Voting!</h1>
+        <p class="subtitle">One quick step to enhance your vote's impact</p>
+      <% else %>
+        <h1 class="title">Welcome to Voqua</h1>
+        <p class="subtitle">Your gateway to better group decision-making</p>
+      <% end %>
+    </div>
 
-<% if @resource.tmp_vote_token %>
-  !!!!!!!! Confirm your email address to submit your vote.
-<% end %>
+    <% if @resource.tmp_vote_token %>
+      <div class="benefits">
+        <p class="benefits-title">✓ Validate your contribution</p>
+        <p>Email verification helps ensure the quality and reliability of collective decision-making.</p>
+        
+        <p class="benefits-title">✓ Unlock Voqua's full potential</p>
+        <p>Create and run your own quadratic votes to harness collective intelligence for faster, better decisions.</p>
+      </div>
 
-<p>Please confirm your email address to start using Voqua's quadratic voting platform.</p>
+      <div style="text-align: center;">
+        <%= link_to 'Confirm My Vote', confirmation_url(@resource, confirmation_token: @token, tmp_vote_token: @resource.tmp_vote_token), class: 'button' %>
+      </div>
+    <% else %>
+      <p>Please confirm your email address to start using Voqua's quadratic voting platform.</p>
+      
+      <div style="text-align: center;">
+        <%= link_to 'Confirm Email', confirmation_url(@resource, confirmation_token: @token, tmp_vote_token: @resource.tmp_vote_token), class: 'button' %>
+      </div>
+    <% end %>
 
-<%= link_to 'Confirm Email', confirmation_url(@resource, confirmation_token: @token, tmp_vote_token: @resource.tmp_vote_token), class: 'button' %>
-
-<p style="color: #666; font-size: 14px;">This confirmation link will expire in 24 hours.</p>
+    <div class="footer">
+      <p>This confirmation link will expire in 24 hours.</p>
+      <p>Voqua - Collective intelligence at your fingertips</p>
+    </div>
+  </div>
+</body>
+</html>
