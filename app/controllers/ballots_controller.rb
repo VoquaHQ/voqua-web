@@ -98,6 +98,7 @@ class BallotsController < ApplicationController
     @votes = @ballot.votes
     # TODO: add index
     @tmp_votes = @ballot.tmp_votes.where(confirmed_at: nil)
+    @votes_count = @votes.size + @tmp_votes.size
     @results = BallotResults.new(@votes + @tmp_votes).process!
   end
 
