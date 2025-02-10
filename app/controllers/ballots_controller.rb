@@ -96,7 +96,8 @@ class BallotsController < ApplicationController
 
   def results
     @votes = @ballot.votes
-    @results = BallotResults.new(@votes).process!
+    @tmp_votes = @ballot.tmp_votes
+    @results = BallotResults.new(@votes + @tmp_votes).process!
   end
 
   def submit_votes

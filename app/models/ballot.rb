@@ -7,6 +7,7 @@ class Ballot < ApplicationRecord
 
   has_many :members, through: :invitations, source: :accepted_by
   has_many :votes, dependent: :destroy
+  has_many :tmp_votes, dependent: :destroy
 
   validates :name, presence: true
   validates :ends_at, presence: true
@@ -21,7 +22,7 @@ class Ballot < ApplicationRecord
 
   def ends_at_must_be_in_future
     return unless ends_at.present?
-    
+
     if ends_at.to_i <= Time.current.to_i
       errors.add(:ends_at, "must be in the future")
     end
@@ -29,7 +30,7 @@ class Ballot < ApplicationRecord
 
   def adjust_ends_at_time
     return unless ends_at.present?
-    
+
     # Ensure we have minutes precision
     self.ends_at = ends_at.change(sec: 0)
   end
