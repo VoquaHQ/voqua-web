@@ -160,9 +160,9 @@ class BallotsController < ApplicationController
   end
 
   def check_ballot_permissions
-    if @ballot.private? && !@ballot.member?(current_user)
+    if @ballot.private? && (current_user.nil? || !@ballot.member?(current_user))
       #FIXME: This should be a 404
-      redirect_to root_path, status: :not_found
+      redirect_to root_path
     end
   end
 

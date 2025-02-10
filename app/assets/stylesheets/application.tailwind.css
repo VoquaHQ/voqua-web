@@ -45,6 +45,10 @@
     @apply bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm;
   }
 
+  .button-danger {
+    @apply bg-red-600 text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm;
+  }
+
   /* Form styles */
   input[type="text"],
   input[type="datetime-local"],

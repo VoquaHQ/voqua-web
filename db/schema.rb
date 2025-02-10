@@ -108,8 +108,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_09_183449) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "main_profile_id", null: false
-    t.string "first_name"
-    t.string "last_name"
     t.string "remember_token", limit: 20
     t.string "provider"
     t.string "uid"

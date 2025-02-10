@@ -108,7 +108,46 @@
 </div>
 
 <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+  <h2 class="text-2xl font-bold mb-6">Votes</h2>
+
+  <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border mb-8">
+    <table class="w-full text-left table-auto min-w-max">
+      <thead>
+        <tr>
+          <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">Email</span></th>
+          <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">Voted at</span></th>
+          <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70"></span></th>
+          <th class="p-4 border-b border-blue-gray-100 bg-gray-50 text-right"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">-</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @ballot.votes.each do |vote| %>
+          <tr>
+            <td class="p-4 border-b border-blue-gray-50">
+              <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
+              <%= vote.profile.user.email %>
+              </p>
+            </td>
+            <td class="p-4 border-b border-blue-gray-50">
+              <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
+                <%= vote.updated_at %>
+              </p>
+            </td>
+            <td class="p-4 border-b border-blue-gray-50">
+              <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
+              </p>
+            </td>
+            <td class="p-4 border-b border-blue-gray-50 text-right text-sm text-red-500">
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
     <h2 class="text-2xl font-bold mb-6">Delete Ballot</h2>
 
-    <%= link_to "Delete", my_ballot_path(@ballot), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "button text-center button-danger block w-full" %>
+    <%= link_to "Delete", my_ballot_path(@ballot), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "button text-center button-r block w-full" %>
 </div>

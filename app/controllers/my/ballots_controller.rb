@@ -20,7 +20,7 @@ class My::BallotsController < My::BaseController
   end
 
   def show
-    @ballot = current_user.main_profile.owned_ballots.includes(invitations: { ballot_membership: :profile }).find(params[:id])
+    @ballot = current_user.main_profile.owned_ballots.includes(votes: :profile, invitations: { ballot_membership: :profile }).find(params[:id])
     @question = Question.new
   end
 
