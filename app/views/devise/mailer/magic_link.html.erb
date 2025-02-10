@@ -65,8 +65,8 @@
   <div class="container">
     <div class="header">
       <% if @resource.tmp_vote_token %>
-        <h1 class="title">Thank You for Voting!</h1>
-        <p class="subtitle">One quick step to enhance your vote's impact</p>
+        <h1 class="title">Welcome to Voqua!</h1>
+        <p class="subtitle">Get started with quadratic voting</p>
       <% else %>
         <h1 class="title">Welcome Back to Voqua</h1>
         <p class="subtitle">Access your quadratic voting dashboard</p>
@@ -75,15 +75,15 @@
 
     <% if @resource.tmp_vote_token %>
       <div class="benefits">
-        <p class="benefits-title">✓ Validate your contribution</p>
-        <p>Email verification helps ensure the quality and reliability of collective decision-making.</p>
+        <p class="benefits-title">✓ Create Your Own Votes</p>
+        <p>Design and run quadratic votes to gather insights from your team or community.</p>
         
-        <p class="benefits-title">✓ Unlock Voqua's full potential</p>
-        <p>Create and run your own quadratic votes to harness collective intelligence for faster, better decisions.</p>
+        <p class="benefits-title">✓ Harness Collective Intelligence</p>
+        <p>Make faster, better decisions by leveraging the wisdom of your group.</p>
       </div>
 
       <div style="text-align: center;">
-        <%= link_to "Confirm My Vote", users_custom_magic_link_url(@scope_name => {email: @resource.email, token: @token, remember_me: @remember_me, tmp_vote_token: @resource.tmp_vote_token}), class: 'button' %>
+        <%= link_to "Create My Account", users_custom_magic_link_url(@scope_name => {email: @resource.email, token: @token, remember_me: @remember_me, tmp_vote_token: @resource.tmp_vote_token}), class: 'button' %>
       </div>
     <% else %>
       <p style="text-align: center;">Click the button below to access your Voqua account:</p>
@@ -95,7 +95,7 @@
 
     <div class="footer">
       <p>This link will expire in <%= Devise.passwordless_login_within.inspect %>.</p>
-      <p>Voqua - Collective intelligence at your fingertips</p>
+      <p>Voqua - Better decisions through collective intelligence</p>
     </div>
   </div>
 </body>

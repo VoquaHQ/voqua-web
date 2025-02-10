@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_09_183449) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_10_121142) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,12 +69,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_09_183449) do
 
   create_table "tmp_votes", force: :cascade do |t|
     t.bigint "ballot_id", null: false
-    t.string "email", null: false
+    t.string "email"
     t.json "data", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "confirmed_at"
     t.string "token", null: false
+    t.string "browser_id"
+    t.index ["browser_id"], name: "index_tmp_votes_on_browser_id"
     t.index ["token"], name: "index_tmp_votes_on_token", unique: true
   end
 

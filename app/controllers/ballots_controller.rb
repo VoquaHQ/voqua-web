@@ -103,20 +103,36 @@ class BallotsController < ApplicationController
   end
 
   def submit_votes
-    @raw_votes = params[:votes]
-    voting = Voting.new(@ballot, @ballot.questions, @raw_votes)
-    data = voting.process!
+    if params[:votes].present?
+      # Initial vote submission
+      @raw_votes = params[:votes]
+      voting = Voting.new(@ballot, @ballot.questions, @raw_votes)
+      data = voting.process!
 
-    if current_user
-      votes = @ballot.votes.find_or_initialize_by(profile: current_user.main_profile)
-      votes.data = data
-      save_votes votes
-    elsif params[:email].present?
-      @tmp_votes = TmpVote.new(ballot: @ballot, email: params[:email], data: data)
-      save_tmp_votes @tmp_votes
+      if current_user
+        votes = @ballot.votes.find_or_initialize_by(profile: current_user.main_profile)
+        votes.data = data
+        save_votes votes
+      else
+        @tmp_votes = TmpVote.new(
+          ballot: @ballot,
+          data: data,
+          browser_id: params[:browser_id]
+        )
+        
+        if @tmp_votes.save
+          flash[:success] = "Your vote has been recorded!"
+          render :vote_success
+        else
+          flash[:error] = "There was a problem submitting your votes"
+          redirect_to ballot_path(@ballot)
+        end
+      end
     else
-      @tmp_votes = TmpVote.new
-      render :new_tmp_vote
+      # Adding email to existing vote
+      @tmp_votes = @ballot.tmp_votes.find_by!(browser_id: params[:browser_id])
+      @tmp_votes.email = params[:email]
+      save_tmp_votes @tmp_votes
     end
   rescue Voting::VotingError
     flash[:error] = "Invalid votes"
@@ -135,7 +151,7 @@ class BallotsController < ApplicationController
     end
   end
 
-  def save_tmp_votes tmp_votes
+  def save_tmp_votes(tmp_votes)
     user = User.find_by(email: params[:email])
 
     if user.nil?
@@ -150,10 +166,10 @@ class BallotsController < ApplicationController
       else
         user.send_magic_link
       end
-      flash[:success] = "Votes submitted successfully. Please check your email to confirm your votes."
+      flash[:success] = "Thanks for submitting your email! Please check your inbox for a confirmation link."
       redirect_to root_path
     else
-      render :new_tmp_vote
+      render :vote_success
     end
   end
 

@@ -1,10 +1,11 @@
 class TmpVote < ApplicationRecord
   belongs_to :ballot
   validates :ballot, presence: true
-  validates :email, presence: true, format: { 
+  validates :email, format: { 
     with: /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/,
     message: "must be a valid email address"
-  }
+  }, if: -> { email.present? }
+  validates :browser_id, presence: true
   validates :data, presence: true
   validates :token, presence: true
 
