@@ -94,7 +94,7 @@
                       </div>
 
                       <div class="order-1 md:order-2 col-span-2">
-                        <div class="flex items-center justify-between pt-4">
+                        <div class="flex items-stretch justify-between pt-4">
                           <div data-vote-type="for" class="text-center">
                             <div class="mb-3">
                               <span class="vote-type-label-for text-sm font-medium text-gray-900">Support This</span>
@@ -104,7 +104,7 @@
                               <span class="more">More</span>
                               <span class="fewer">Fewer</span>
                             </button>
-                            <div class="mt-3 min-h-[1.5rem]">
+                            <div class="mt-3">
                               <%= votes_count_fields_for(@ballot, question.id, :for, @votes) %>
                             </div>
                           </div>
@@ -117,7 +117,7 @@
                               <span class="more">More</span>
                               <span class="fewer">Fewer</span>
                             </button>
-                            <div class="mt-3 min-h-[1.5rem]">
+                            <div class="mt-3">
                               <%= votes_count_fields_for(@ballot, question.id, :against, @votes) %>
                             </div>
                           </div>
