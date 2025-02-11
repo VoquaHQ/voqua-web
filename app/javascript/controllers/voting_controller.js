@@ -215,6 +215,7 @@ class CreditsLabelAnimator {
 export default class extends Controller {
   connect() {
     this.onVote = this.onVote.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.buttons = this.element.querySelectorAll("[data-vote-button]");
     this.buttons.forEach((button) => {
       button.addEventListener("click", this.onVote);
@@ -242,6 +243,12 @@ export default class extends Controller {
       this.questionsElements,
     );
 
+    // Add form submit handler
+    const form = this.element.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', this.handleFormSubmit);
+    }
+
     this.updateCreditsCounter(this.element.querySelector("[data-credits]"));
     this.questionsElements.forEach((questionElement) => {
       const id = questionElement.dataset.questionId;
@@ -261,6 +268,41 @@ export default class extends Controller {
     this.buttons.forEach((button) => {
       button.removeEventListener("click", this.onVote);
     });
+    
+    const form = this.element.querySelector('form');
+    if (form) {
+      form.removeEventListener('submit', this.handleFormSubmit);
+    }
+  }
+
+  calculateUsedCreditsPercentage() {
+    const totalCredits = 99; // Initial credits
+    const usedCredits = Object.values(this.ballot.questionsVotes).reduce((sum, q) => {
+      return sum + Math.pow(q.votes, 2);
+    }, 0);
+    return (usedCredits / totalCredits) * 100;
+  }
+
+  handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const percentageUsed = this.calculateUsedCreditsPercentage();
+    
+    if (percentageUsed < 80) {
+      const remainingCredits = this.ballot.availableCredits;
+      const shouldProceed = window.confirm(
+        `Hey! You still have ${remainingCredits} voting points left!\n\n` +
+        `Cool tip: You can vote multiple times on the things you really care about. ` +
+        `More votes = stronger opinion!\n\n` +
+        `Want to use more points or continue with your current votes?`
+      );
+      
+      if (!shouldProceed) {
+        return;
+      }
+    }
+    
+    event.target.submit();
   }
 
   showErrorToast(message) {
