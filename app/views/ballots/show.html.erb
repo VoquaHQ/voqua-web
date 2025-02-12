@@ -5,52 +5,15 @@
       <p class="text-lg text-gray-600 leading-relaxed"><%= @ballot.description %></p>
     </div>
 
-    <!-- Welcome Banner -->
-    <div data-controller="onboarding" data-dismiss="welcome-banner" id="welcome-banner" class="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-8 relative">
+    <!-- Quick Guide -->
+    <div data-controller="onboarding" data-dismiss="quick-guide" id="quick-guide" class="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-8 relative">
       <button data-action="dismiss" class="absolute top-4 right-4 text-blue-400 hover:text-blue-600">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
-      <h2 class="text-xl font-medium text-blue-900 mb-2">Welcome to Your Voice!</h2>
-      <p class="text-blue-800 mb-4">You have <span class="font-bold">99 voting points</span> to use on the options below. The more points you spend on an option, the stronger your support or opposition. Feel free to vote multiple times on the things you care about most!</p>
-      <div class="flex items-center gap-2 text-blue-700">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <p>Pro tip: Use all your points to make your voice heard!</p>
-      </div>
-    </div>
-
-    <div data-controller="onboarding" data-dismiss="quick-guide" id="quick-guide" class="mb-4">
-      <div class="bg-white rounded-lg shadow-sm p-6 relative">
-        <button data-action="dismiss" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-        <h2 class="font-medium text-gray-900 mb-4">Quick Guide</h2>
-        <div class="space-y-4">
-          <div class="flex items-start gap-3">
-            <div class="mt-1 flex-shrink-0">
-              <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">1</div>
-            </div>
-            <p class="text-sm text-gray-600">You can vote multiple times on what matters most to you</p>
-          </div>
-          <div class="flex items-start gap-3">
-            <div class="mt-1 flex-shrink-0">
-              <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">2</div>
-            </div>
-            <p class="text-sm text-gray-600">Each extra vote costs more points - choose wisely!</p>
-          </div>
-          <div class="flex items-start gap-3">
-            <div class="mt-1 flex-shrink-0">
-              <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">3</div>
-            </div>
-            <p class="text-sm text-gray-600">Try to use all your points to make your voice count fully</p>
-          </div>
-        </div>
-      </div>
+      <h2 class="text-xl font-medium text-blue-900 mb-4">Quick Guide</h2>
+      <p class="text-blue-800 mb-2">You have <span class="font-bold">99 points</span> to vote with. For each option, you can vote multiple times in favor or against. Each extra vote costs more points!</p>
     </div>
 
     <% if @ballot.questions.empty? %>
@@ -132,7 +95,7 @@
                 <% end %>
 
                 <div class="text-center">
-                  <%= submit_tag "Submit My Votes", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 text-lg rounded-md transition-colors cursor-pointer" %>
+                  <%= submit_tag "Submit Votes", class: "button button-primary text-lg" %>
                 </div>
               </div>
             <% end %>
