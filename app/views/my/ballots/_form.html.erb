@@ -1,88 +1,58 @@
 <% if @ballot.errors.any? %>
-  <div class="form-errors">
-    <div class="flex items-center gap-2 mb-2">
-      <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
-      <h3 class="font-medium text-red-800">Please fix the following errors:</h3>
-    </div>
-    < ul class="list-disc pl-5">
+  <div class="mb-6 p-3 bg-red-50 rounded-lg border border-red-100">
+    <div class="text-sm text-red-800">
       <% @ballot.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <div><%= message %></div>
       <% end %>
-    </ul>
+    </div>
   </div>
 <% end %>
 
-<div class="space-y-8">
+<div class="space-y-6">
   <div>
-    <%= f.label :name, class: "block text-sm font-medium text-gray-900" do %>
-      Title <span class="text-red-500">*</span>
-    <% end %>
-    <div class="mt-1">
+    <%= f.label :name, "Title", class: "block text-sm font-medium text-gray-700" %>
+    <div class="mt-1.5">
       <%= f.text_field :name, 
-          placeholder: "e.g., Q4 Product Roadmap Priorities",
-          class: "w-full",
+          placeholder: "What are you voting on?",
+          class: "w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200",
           required: true %>
     </div>
-    <p class="mt-1 text-sm text-gray-500">
-      Give your vote a clear, descriptive title that helps participants understand its purpose
-    </p>
   </div>
 
   <div>
-    <%= f.label :description, "Description (Optional)", class: "block text-sm font-medium text-gray-900" %>
-    <div class="mt-1">
+    <%= f.label :description, "Description", class: "block text-sm font-medium text-gray-700" %>
+    <div class="mt-1.5">
       <%= f.text_area :description, 
-          rows: 4,
-          placeholder: "Add context about what you're collecting feedback on...",
-          class: "w-full" %>
+          rows: 3,
+          placeholder: "Add some context...",
+          class: "w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200" %>
     </div>
-    <p class="mt-1 text-sm text-gray-500">
-      Optional: Add context or guidelines to help participants provide better feedback
-    </p>
   </div>
 
   <div>
-    <%= f.label :ends_at, class: "block text-sm font-medium text-gray-900" do %>
-      End Date & Time <span class="text-red-500">*</span>
-    <% end %>
-    <div class="mt-1">
-      <div class="datetime-field">
-        <%= f.datetime_local_field :ends_at, 
-            value: @ballot.ends_at&.strftime('%Y-%m-%dT%H:%M'),
-            required: true,
-            min: Time.current.strftime('%Y-%m-%dT%H:%M'),
-            class: "rounded-lg" %>
-      </div>
+    <%= f.label :ends_at, "End Date", class: "block text-sm font-medium text-gray-700" %>
+    <div class="mt-1.5">
+      <%= f.datetime_local_field :ends_at, 
+          value: @ballot.ends_at&.strftime('%Y-%m-%dT%H:%M'),
+          required: true,
+          min: Time.current.strftime('%Y-%m-%dT%H:%M'),
+          class: "w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200" %>
     </div>
-    <p class="mt-1 text-sm text-gray-500">
-      Choose when voting will close. Participants can vote until this time
-    </p>
   </div>
 
   <div>
-    <span class="block text-sm font-medium text-gray-900 mb-3">Access Control</span>
-    <div class="bg-white rounded-lg border border-gray-200 divide-y">
-      <div class="p-4">
-        <label class="flex items-start gap-3 cursor-pointer">
-          <%= f.radio_button :private, "1", checked: "checked", class: "mt-1" %>
-          <div>
-            <div class="font-medium text-gray-900">Private - Invite Only</div>
-            <div class="text-sm text-gray-500">Only invited team members can participate. Best for sensitive decisions or specific team feedback.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="p-4">
-        <label class="flex items-start gap-3 cursor-pointer">
-          <%= f.radio_button :private, "0", class: "mt-1" %>
-          <div>
-            <div class="font-medium text-gray-900">Public - Anyone with Link</div>
-            <div class="text-sm text-gray-500">Anyone with the link can participate. You can still invite specific people. Best for broader feedback collection.</div>
-          </div>
-        </label>
-      </div>
+    <div class="flex items-center justify-between mb-1.5">
+      <span class="text-sm font-medium text-gray-700">Access</span>
+    </div>
+    <div class="bg-white rounded-lg border border-gray-300 divide-y divide-gray-200">
+      <label class="flex items-center p-3 cursor-pointer hover:bg-gray-50 transition duration-200">
+        <%= f.radio_button :private, "1", checked: "checked", class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" %>
+        <span class="ml-3 text-sm text-gray-900">Invite only</span>
+      </label>
+      <label class="flex items-center p-3 cursor-pointer hover:bg-gray-50 transition duration-200">
+        <%= f.radio_button :private, "0", class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" %>
+        <span class="ml-3 text-sm text-gray-900">Anyone with link</span>
+      </label>
     </div>
   </div>
 </div>
