@@ -84,38 +84,16 @@
   }
 }
 
-/* Animation Classes */
+/* Subtle fade in animation for main header */
 [data-show="true"] [data-transition-enter] {
-  animation: fadeInUp 0.5s ease-out forwards;
+  animation: fadeIn 0.8s ease-out forwards;
 }
 
-@keyframes fadeInUp {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(1rem);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
-}
-
-/* Hover Effects */
-.hover\:scale-105 {
-  transition: transform 0.3s ease-in-out;
-}
-
-.hover\:shadow-md {
-  transition: box-shadow 0.3s ease-in-out;
-}
-
-/* FAQ Animations */
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-}
-
-.faq-answer[data-show="true"] {
-  max-height: 500px;
 }
