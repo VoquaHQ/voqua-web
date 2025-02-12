@@ -1,23 +1,24 @@
-<a href="<%= ballots_list_item_path(current_user, ballot) %>" class="block hover:bg-gray-50 transition-colors duration-150">
-  <div class="p-6 flex items-center justify-between">
+<a href="<%= ballots_list_item_path(current_user, ballot) %>" class="block transition-all duration-200 hover:bg-gray-50">
+  <div class="px-4 py-3.5 flex items-center">
     <div class="min-w-0 flex-1">
-      <h3 class="text-lg font-medium text-gray-900 truncate"><%= ballot.name %></h3>
-      <div class="mt-1 flex items-center">
-        <div class="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-green-400 mr-2"></div>
-        <p class="text-sm text-gray-600">
-          <%= format_end_date(ballot.ends_at) %>
-          - created by
-          <% if ballot.profile_id == current_user.id %>
-            you
-          <% else %>
-            <%= ballot.profile.user.try(:email) %>
-          <% end %>
-        </p>
+      <div class="flex items-center gap-2">
+        <% if ballot.ends_at > Time.current && !ballot.voted?(current_user) %>
+          <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+        <% end %>
+        <h3 class="text-sm font-medium text-gray-900 truncate"><%= ballot.name %></h3>
+      </div>
+      <div class="mt-0.5 text-xs text-gray-500">
+        <span class="truncate"><%= format_end_date(ballot.ends_at) %></span>
+        <% if ballot.profile_id != current_user.id %>
+          <span class="mx-1.5 text-gray-300">·</span>
+          <span class="truncate"><%= ballot.profile.user.try(:email) %></span>
+        <% end %>
       </div>
     </div>
-    <div class="ml-6">
-      <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+    
+    <div class="ml-4 text-gray-300">
+      <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/>
       </svg>
     </div>
   </div>

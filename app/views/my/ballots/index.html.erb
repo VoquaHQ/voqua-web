@@ -1,118 +1,72 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="max-w-4xl mx-auto">
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-2xl mx-auto px-4 py-12">
     <% if @ballots.empty? %>
       <div class="text-center">
-        <h1 class="text-3xl font-bold text-gray-900 mb-3">Welcome to Voqua</h1>
-        <p class="text-gray-600 max-w-xl mx-auto mb-12">Make better team decisions with quadratic voting. Create your first vote to start gathering meaningful insights from your team.</p>
-        
-        <div class="max-w-lg mx-auto bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="p-8">
-            <div class="h-12 w-12 mx-auto mb-6 bg-indigo-100 rounded-xl flex items-center justify-center">
-              <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-              </svg>
-            </div>
-            <h2 class="text-xl font-semibold text-gray-900 mb-2">Create Your First Vote</h2>
-            <p class="text-gray-600 mb-6">Start by creating a vote to gather feedback on decisions, prioritize features, or align on team initiatives.</p>
-            <%= link_to new_my_ballot_path, class: "button button-primary" do %>
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
-              Create New Vote
-            <% end %>
-          </div>
-          <div class="bg-gray-50 px-8 py-4">
-            <h3 class="text-sm font-medium text-gray-900 mb-2">What you can do:</h3>
-            <ul class="space-y-2 text-sm text-gray-600">
-              <li class="flex items-center">
-                <svg class="w-4 h-4 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Collect weighted feedback from your team
-              </li>
-              <li class="flex items-center">
-                <svg class="w-4 h-4 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Make data-driven decisions
-              </li>
-              <li class="flex items-center">
-                <svg class="w-4 h-4 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Build team consensus
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    <% else %>
-      <div class="flex justify-between items-start mb-12">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-900">Your Votes</h1>
-          <p class="text-gray-600 mt-2">Manage and track your team's feedback</p>
-        </div>
-        <%= link_to new_my_ballot_path, class: "button button-primary" do %>
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <h1 class="text-2xl font-medium text-gray-900 mb-8">Create your first vote</h1>
+        <%= link_to new_my_ballot_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200" do %>
+          <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
-          Create New Vote
+          New Vote
+        <% end %>
+      </div>
+    <% else %>
+      <div class="mb-10 flex items-center justify-between">
+        <h1 class="text-2xl font-medium text-gray-900">Votes</h1>
+        <%= link_to new_my_ballot_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200" do %>
+          <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          New Vote
         <% end %>
       </div>
 
-      <div class="space-y-8">
-        <%# Active Votes Section %>
-        <div>
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Active</h2>
-          <div class="bg-white shadow-sm rounded-lg divide-y border border-gray-100">
-            <% active_ballots = @ballots.select { |b| b.ends_at > Time.current }
-                                      .sort_by(&:ends_at)
-                                      .first(10) %>
-            
-            <% if active_ballots.any? %>
+      <% active_ballots = @ballots.select { |b| b.ends_at > Time.current }
+                                .sort_by { |b| [b.voted?(current_user) ? 1 : 0, b.ends_at] }
+                                .first(10) %>
+      <% completed_ballots = @ballots.select { |b| b.ends_at <= Time.current }
+                                  .sort_by(&:ends_at)
+                                  .reverse
+                                  .first(10) %>
+
+      <div class="space-y-10">
+        <% if active_ballots.any? %>
+          <section>
+            <h2 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-3">Active</h2>
+            <div class="bg-white rounded-xl divide-y border border-gray-200/75 shadow-sm">
               <% active_ballots.each do |ballot| %>
                 <%= render "ballot_list_item", ballot: ballot %>
               <% end %>
-            <% else %>
-              <div class="p-6 text-center text-gray-500">
-                No active votes at the moment
-              </div>
-            <% end %>
 
-            <% if @ballots.select { |b| b.ends_at > Time.current }.count > 10 %>
-              <div class="p-4 bg-gray-50 text-center rounded-b-lg">
-                <%= link_to "View More", "#", class: "text-indigo-600 hover:text-indigo-800" %>
-              </div>
-            <% end %>
-          </div>
-        </div>
+              <% if @ballots.select { |b| b.ends_at > Time.current }.count > 10 %>
+                <div class="px-4 py-3 bg-gray-50 text-center border-t border-gray-200/75">
+                  <%= link_to "#", class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
+                    Show All
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </section>
+        <% end %>
 
-        <%# Completed Votes Section %>
-        <div>
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Completed</h2>
-          <div class="bg-white shadow-sm rounded-lg divide-y border border-gray-100">
-            <% completed_ballots = @ballots.select { |b| b.ends_at <= Time.current }
-                                        .sort_by(&:ends_at)
-                                        .reverse
-                                        .first(10) %>
-            
-            <% if completed_ballots.any? %>
+        <% if completed_ballots.any? %>
+          <section>
+            <h2 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-3">Completed</h2>
+            <div class="bg-white rounded-xl divide-y border border-gray-200/75 shadow-sm">
               <% completed_ballots.each do |ballot| %>
                 <%= render "ballot_list_item", ballot: ballot %>
               <% end %>
-            <% else %>
-              <div class="p-6 text-center text-gray-500">
-                No completed votes yet
-              </div>
-            <% end %>
 
-            <% if @ballots.select { |b| b.ends_at <= Time.current }.count > 10 %>
-              <div class="p-4 bg-gray-50 text-center rounded-b-lg">
-                <%= link_to "View More", "#", class: "text-indigo-600 hover:text-indigo-800" %>
-              </div>
-            <% end %>
-          </div>
-        </div>
+              <% if @ballots.select { |b| b.ends_at <= Time.current }.count > 10 %>
+                <div class="px-4 py-3 bg-gray-50 text-center border-t border-gray-200/75">
+                  <%= link_to "#", class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
+                    Show All
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </section>
+        <% end %>
       </div>
     <% end %>
   </div>

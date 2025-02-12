@@ -18,6 +18,10 @@ class Ballot < ApplicationRecord
     memberships.exists?(profile_id: user.main_profile.id)
   end
 
+  def voted?(user)
+    votes.exists?(profile_id: user.main_profile.id)
+  end
+
   private
 
   def ends_at_must_be_in_future
