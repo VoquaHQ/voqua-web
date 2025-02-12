@@ -46,7 +46,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_16_153802) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "private", default: false
+    t.string "slug", null: false
     t.index ["profile_id"], name: "index_ballots_on_profile_id"
+    t.index ["slug"], name: "index_ballots_on_slug", unique: true
   end
 
   create_table "profiles", force: :cascade do |t|

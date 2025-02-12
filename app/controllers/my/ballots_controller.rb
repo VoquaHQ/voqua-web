@@ -20,16 +20,16 @@ class My::BallotsController < My::BaseController
   end
 
   def show
-    @ballot = current_user.main_profile.owned_ballots.includes(votes: :profile, invitations: { ballot_membership: :profile }).find(params[:id])
+    @ballot = current_user.main_profile.owned_ballots.includes(votes: :profile, invitations: { ballot_membership: :profile }).find_by!(slug: params[:id])
     @question = Question.new
   end
 
   def edit
-    @ballot = current_user.main_profile.owned_ballots.find(params[:id])
+    @ballot = current_user.main_profile.owned_ballots.find_by!(slug: params[:id])
   end
 
   def update
-    @ballot = current_user.main_profile.owned_ballots.find(params[:id])
+    @ballot = current_user.main_profile.owned_ballots.find_by!(slug: params[:id])
     if @ballot.update(ballot_params)
       redirect_to my_ballot_path(@ballot)
     else
@@ -38,7 +38,7 @@ class My::BallotsController < My::BaseController
   end
 
   def destroy
-    @ballot = current_user.main_profile.owned_ballots.find(params[:id])
+    @ballot = current_user.main_profile.owned_ballots.find_by!(slug: params[:id])
     @ballot.destroy
     flash[:success] = "Ballot deleted."
     redirect_to my_ballots_path

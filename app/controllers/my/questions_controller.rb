@@ -44,7 +44,7 @@ class My::QuestionsController < My::BaseController
   private
 
   def set_ballot
-    @ballot = current_user.main_profile.owned_ballots.find(params[:ballot_id])
+    @ballot = current_user.main_profile.owned_ballots.find_by!(slug: params[:ballot_id])
   end
 
   def question_params
