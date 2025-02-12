@@ -25,16 +25,13 @@
         <div class="flex gap-2 md:gap-8">
           <div class="w-20 md:w-56 sticky top-8 h-fit">
             <div class="bg-white rounded-lg shadow-sm p-2 md:p-6">
-              <h2 class="font-medium text-gray-900 mb-2">Your Voting Power</h2>
+              <h2 class="font-medium text-gray-900 mb-2">Your Voting Points</h2>
               <div class="items-baseline gap-2 mb-4">
                 <span class="text-3xl font-bold text-blue-600" data-credits="99">99</span>
                 <span class="text-sm text-gray-500 block md:inline">points left</span>
               </div>
               <div data-all-credits="0">
                 <%= render partial: "remaining_credits_svg" %>
-              </div>
-              <div class="mt-4 p-3 rounded-md">
-                <p class="text-sm text-yellow-800">Use your points wisely! Each extra vote on the same option costs more points.</p>
               </div>
             </div>
           </div>
