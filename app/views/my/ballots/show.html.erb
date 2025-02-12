@@ -1,153 +1,154 @@
-<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <h2 class="text-2xl font-bold mb-2"><%= @ballot.name %></h1>
-  <p class="py-4"><%= @ballot.description %></p>
-  <%= link_to 'Edit', edit_my_ballot_path(@ballot), class: "button button-primary" %>
-
-  <a href="<%= results_ballot_path %>" target="_blank" class="button button-primary inline-flex items-center">
-    Results
-    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-    </svg>
-  </a>
-
-  <% if @ballot.ends_at > Time.now %>
-    <a href="<%= ballot_path %>" target="_blank" class="button inline-flex items-center">
-      Voting Page
-      <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-      </svg>
-    </a>
-  <% end %>
-</div>
-
-<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <h2 class="text-2xl font-bold mb-6">Options</h2>
-  <% if @ballot.questions.empty? %>
-    <p class="my-6 text-center text-gray-500">There are no options for this ballot.</p>
-  <% else %>
-    <ul>
-      <% @ballot.questions.each do |question| %>
-        <li class="mb-2">
-          <span class="text-lg font-bold block">
-            <%= question.title %>
-          </span>
-          <span class="text-sm block text-gray-500">
-            <%= question.description %>
-          </span>
-            <span class="text-sm block text-red-500">
-              [<%= link_to 'Delete', my_ballot_question_path(@ballot, question), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>]
-            </span>
-        </li>
-      <% end %>
-    </ul>
-  <% end %>
-</div>
-
-<div id="questions" class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <h2 class="font-bold my-2">Add an option</h2>
-  <%= form_with model: @question, url: my_ballot_questions_path(@ballot), local: true, data: { turbo: false }, class: "form" do |f| %>
-    <%= render "my/questions/form", question: @question, f: f %>
-  <% end %>
-</div>
-
-<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <% if @ballot.private? %>
-    <h2 class="text-2xl font-bold mb-6">Members</h2>
-
-    <% if @ballot.invitations.empty? %>
-      <p class="my-6 text-center text-gray-500">There are no members for this ballot.</p>
-    <% else %>
-      <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border mb-8">
-        <table class="w-full text-left table-auto min-w-max">
-          <thead>
-            <tr>
-              <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">Email</span></th>
-              <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">Accepted By</span></th>
-              <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">Accepted At</span></th>
-              <th class="p-4 border-b border-blue-gray-100 bg-gray-50 text-right"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">-</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @ballot.invitations.each do |invitation| %>
-              <tr>
-                <td class="p-4 border-b border-blue-gray-50">
-                  <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
-                    <%= invitation.email %>
-                  </p>
-                </td>
-                <td class="p-4 border-b border-blue-gray-50">
-                  <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
-                    <% if membership = invitation.ballot_membership %>
-                      @<%= membership.profile.handle %>
-                    <% end %>
-                  </p>
-                </td>
-                <td class="p-4 border-b border-blue-gray-50">
-                  <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
-                    <%= invitation.accepted_at %>
-                  </p>
-                </td>
-                <td class="p-4 border-b border-blue-gray-50 text-right text-sm text-red-500">
-                  <%= link_to 'remove', my_ballot_ballot_invitation_path(@ballot, invitation), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-
-    <%= form_tag bulk_create_my_ballot_ballot_invitations_path(@ballot), data: { turbo: false }, class: "form" do %>
-      <label for="emails">Invite Members</label>
-      <%= text_area_tag :emails, nil, placeholder: 'Emails (comma separated or new lines)', rows: 5, class: "w-full" %>
-      <div class="text-right">
-        <%= submit_tag "Invite", class: "button button-primary" %>
-      </div>
-    <% end %>
-  <% end %>
-</div>
-
-<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <h2 class="text-2xl font-bold mb-6">Votes</h2>
-
-  <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border mb-8">
-    <table class="w-full text-left table-auto min-w-max">
-      <thead>
-        <tr>
-          <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">Email</span></th>
-          <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">Voted at</span></th>
-          <th class="p-4 border-b border-blue-gray-100 bg-gray-50"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70"></span></th>
-          <th class="p-4 border-b border-blue-gray-100 bg-gray-50 text-right"><span class="block font-sans text-sm font-normal leading-none text-blue-gray-900 antialiased opacity-70">-</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @ballot.votes.each do |vote| %>
-          <tr>
-            <td class="p-4 border-b border-blue-gray-50">
-              <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
-              <%= vote.profile.user.email %>
-              </p>
-            </td>
-            <td class="p-4 border-b border-blue-gray-50">
-              <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
-                <%= vote.updated_at %>
-              </p>
-            </td>
-            <td class="p-4 border-b border-blue-gray-50">
-              <p class="block font-sans text-sm font-normal leading-normal text-blue-gray-900 antialiased">
-              </p>
-            </td>
-            <td class="p-4 border-b border-blue-gray-50 text-right text-sm text-red-500">
-            </td>
-          </tr>
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <%# Header Section %>
+    <div class="mb-8">
+      <div class="flex items-start justify-between">
+        <div>
+          <h1 class="text-2xl font-medium text-gray-900"><%= @ballot.name %></h1>
+          <% if @ballot.description.present? %>
+            <p class="mt-2 text-gray-600"><%= @ballot.description %></p>
+          <% end %>
+        </div>
+        <%= link_to edit_my_ballot_path(@ballot), class: "text-sm text-gray-600 hover:text-gray-900" do %>
+          Edit
         <% end %>
-      </tbody>
-    </table>
+      </div>
+    </div>
+
+    <%# Voting Link Section %>
+    <% if @ballot.ends_at > Time.now %>
+      <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
+        <div class="px-6 py-5 flex items-center justify-between">
+          <div>
+            <h2 class="text-sm font-medium text-gray-900">Voting Link</h2>
+            <p class="mt-1 text-sm text-gray-500">Share this link with voters</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="<%= ballot_path %>" target="_blank" class="px-4 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+              Open Vote
+            </a>
+            <a href="<%= results_ballot_path %>" target="_blank" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200">
+              Results
+            </a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Options Section %>
+    <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-200/75">
+        <h2 class="text-sm font-medium text-gray-900">Options</h2>
+      </div>
+
+      <div class="divide-y divide-gray-200/75">
+        <% if @ballot.questions.any? %>
+          <% @ballot.questions.each do |question| %>
+            <div class="px-6 py-4 flex items-start justify-between group">
+              <div>
+                <h3 class="text-sm font-medium text-gray-900"><%= question.title %></h3>
+                <% if question.description.present? %>
+                  <p class="mt-1 text-sm text-gray-500"><%= question.description %></p>
+                <% end %>
+              </div>
+              <%= link_to 'Remove', 
+                  my_ballot_question_path(@ballot, question), 
+                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+                  class: "opacity-0 group-hover:opacity-100 text-xs text-gray-500 hover:text-red-600 transition-all duration-200" %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <%# Add Option Form %>
+        <div class="px-6 py-5 bg-gray-50/50">
+          <%= form_with model: @question, 
+              url: my_ballot_questions_path(@ballot), 
+              local: true, 
+              data: { turbo: false } do |f| %>
+            <%= render "my/questions/form", question: @question, f: f %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%# Members Section (if private) %>
+    <% if @ballot.private? %>
+      <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-200/75">
+          <h2 class="text-sm font-medium text-gray-900">Members</h2>
+        </div>
+
+        <%# Member List %>
+        <div class="divide-y divide-gray-200/75">
+          <% @ballot.invitations.each do |invitation| %>
+            <div class="px-6 py-3 flex items-center justify-between group">
+              <div class="min-w-0">
+                <p class="text-sm text-gray-900 truncate"><%= invitation.email %></p>
+                <% if membership = invitation.ballot_membership %>
+                  <p class="text-xs text-gray-500">@<%= membership.profile.handle %></p>
+                <% end %>
+              </div>
+              <%= link_to 'Remove', 
+                  my_ballot_ballot_invitation_path(@ballot, invitation), 
+                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+                  class: "opacity-0 group-hover:opacity-100 text-xs text-gray-500 hover:text-red-600 transition-all duration-200" %>
+            </div>
+          <% end %>
+
+          <%# Invite Form %>
+          <div class="px-6 py-5 bg-gray-50/50">
+            <%= form_tag bulk_create_my_ballot_ballot_invitations_path(@ballot), data: { turbo: false } do %>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Invite Members</label>
+                  <div class="mt-1.5">
+                    <%= text_area_tag :emails, nil,
+                        placeholder: 'Enter email addresses (comma separated or new lines)',
+                        rows: 3,
+                        class: "w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200" %>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <%= submit_tag "Send Invites",
+                      class: "px-4 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Votes Section %>
+    <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-200/75">
+        <h2 class="text-sm font-medium text-gray-900">Votes</h2>
+      </div>
+
+      <div class="divide-y divide-gray-200/75">
+        <% @ballot.votes.each do |vote| %>
+          <div class="px-6 py-3 flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-sm text-gray-900 truncate"><%= vote.profile.user.email %></p>
+              <p class="text-xs text-gray-500"><%= vote.updated_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @ballot.votes.empty? %>
+          <div class="px-6 py-8 text-center text-sm text-gray-500">
+            No votes yet
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Delete Section %>
+    <div class="text-center">
+      <%= link_to "Delete Ballot", 
+          my_ballot_path(@ballot), 
+          data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete this ballot?' }, 
+          class: "text-sm text-gray-500 hover:text-red-600 transition-colors duration-200" %>
+    </div>
   </div>
-</div>
-
-<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-    <h2 class="text-2xl font-bold mb-6">Delete Ballot</h2>
-
-    <%= link_to "Delete", my_ballot_path(@ballot), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "button text-center button-r block w-full" %>
 </div>
