@@ -19,7 +19,7 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :main_profile
 
-  attr_accessor :tmp_vote_token
+  attr_accessor :pending_vote_token
 
   def handle
     main_profile.handle

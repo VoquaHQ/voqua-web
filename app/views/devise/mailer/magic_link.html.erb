@@ -1,4 +1,4 @@
-<% if @resource.tmp_vote_token %>
+<% if @resource.pending_vote_token %>
   <h1 class="title">Thank You for Voting!</h1>
   <p class="subtitle">One quick step to enhance your vote's impact</p>
 <% else %>
@@ -6,7 +6,7 @@
   <p class="subtitle">Access your quadratic voting dashboard</p>
 <% end %>
 
-<% if @resource.tmp_vote_token %>
+<% if @resource.pending_vote_token %>
   <div class="benefits">
     <p class="benefits-title">✓ Validate your contribution</p>
     <p>Email verification helps ensure the quality and reliability of collective decision-making.</p>
@@ -16,12 +16,12 @@
   </div>
 
   <div style="text-align: center;">
-    <%= link_to "Confirm My Vote", users_custom_magic_link_url(@scope_name => {email: @resource.email, token: @token, remember_me: @remember_me, tmp_vote_token: @resource.tmp_vote_token}), class: 'button' %>
+    <%= link_to "Confirm My Vote", users_custom_magic_link_url(@scope_name => {email: @resource.email, token: @token, remember_me: @remember_me, pending_vote_token: @resource.pending_vote_token}), class: 'button' %>
   </div>
 <% else %>
   <p style="text-align: center;">Click the button below to access your Voqua account:</p>
 
   <div style="text-align: center;">
-    <%= link_to "Log In to Voqua", users_custom_magic_link_url(@scope_name => {email: @resource.email, token: @token, remember_me: @remember_me, tmp_vote_token: @resource.tmp_vote_token}), class: 'button' %>
+    <%= link_to "Log In to Voqua", users_custom_magic_link_url(@scope_name => {email: @resource.email, token: @token, remember_me: @remember_me, pending_vote_token: @resource.pending_vote_token}), class: 'button' %>
   </div>
 <% end %>

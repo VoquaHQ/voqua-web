@@ -96,10 +96,8 @@ class BallotsController < ApplicationController
 
   def results
     @votes = @ballot.votes
-    # TODO: add index
-    @tmp_votes = @ballot.tmp_votes.where(confirmed_at: nil)
-    @votes_count = @votes.size + @tmp_votes.size
-    @results = BallotResults.new(@votes + @tmp_votes).process!
+    @votes_count = @votes.size
+    @results = BallotResults.new(@votes).process!
   end
 
   def submit_votes
@@ -112,10 +110,10 @@ class BallotsController < ApplicationController
       votes.data = data
       save_votes votes
     elsif params[:email].present?
-      @tmp_votes = TmpVote.new(ballot: @ballot, email: params[:email], data: data)
+      @tmp_votes = Vote.new(ballot: @ballot, pending: true, pending_email: params[:email], data: data)
       save_tmp_votes @tmp_votes
     else
-      @tmp_votes = TmpVote.new
+      @tmp_votes = Vote.new
       render :new_tmp_vote
     end
   rescue Voting::VotingError
@@ -142,7 +140,7 @@ class BallotsController < ApplicationController
       user = User.new email: params[:email], main_profile: Profile.new
     end
 
-    user.tmp_vote_token = tmp_votes.token
+    user.pending_vote_token = tmp_votes.pending_token
 
     if user.valid? && tmp_votes.save
       if user.new_record?

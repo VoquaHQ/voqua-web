@@ -20,12 +20,10 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # GET /resource/confirmation?confirmation_token=abcdef
   def show
     super do |resource|
-      if token = params[:tmp_vote_token].presence
-        tmp_vote = TmpVote.find_by(token: token)
-        if !tmp_vote.nil? && tmp_vote.confirmed_at.nil?
-          tmp_vote.update!(confirmed_at: Time.current)
-          Vote.create!(ballot: tmp_vote.ballot, profile: resource.main_profile, data: tmp_vote.data)
-          BallotMembership.create!(ballot: tmp_vote.ballot, profile: resource.main_profile)
+      if token = params[:pending_vote_token].presence
+        tmp_vote = Vote.find_by(pending_token: token)
+        if !tmp_vote.nil?
+          tmp_vote.confirm!(resource.main_profile)
         end
       end
 
