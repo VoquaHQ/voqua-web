@@ -5,11 +5,13 @@ class Ballot < ApplicationRecord
   has_many :invitations, class_name: "BallotInvitation", dependent: :destroy
   has_many :memberships, class_name: "BallotMembership", dependent: :destroy
 
+  before_validation :generate_slug, on: :create
   has_many :members, through: :invitations, source: :accepted_by
   has_many :votes, dependent: :destroy
   has_many :tmp_votes, dependent: :destroy
 
   validates :name, presence: true
+  validates :slug, presence: true, uniqueness: true
   validates :ends_at, presence: true
   validate :ends_at_must_be_in_future
   before_validation :adjust_ends_at_time
@@ -22,7 +24,19 @@ class Ballot < ApplicationRecord
     votes.exists?(profile_id: user.main_profile.id)
   end
 
+  def to_param
+    slug
+  end
+
   private
+
+  def generate_slug
+    return if slug.present?
+    self.slug = loop do
+      random_slug = SecureRandom.urlsafe_base64(12)
+      break random_slug unless self.class.exists?(slug: random_slug)
+    end
+  end
 
   def ends_at_must_be_in_future
     return unless ends_at.present?
