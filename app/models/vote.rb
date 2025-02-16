@@ -26,6 +26,10 @@ class Vote < ApplicationRecord
     BallotMembership.create!(ballot: ballot, profile: main_profile)
   end
 
+  def profile_user_email
+    profile&.user&.email
+  end
+
   private
 
   def generate_pending_token
