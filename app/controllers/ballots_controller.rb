@@ -157,7 +157,10 @@ class BallotsController < ApplicationController
 
 
   def load_ballot
-    @ballot = Ballot.includes(:questions).find_by!(slug: params[:id])
+    @ballot = Ballot.includes(:questions).find_by(slug: params[:id])
+    if @ballot.nil?
+      @ballot = Ballot.includes(:questions).find(params[:id])
+    end
   end
 
   def check_ballot_permissions

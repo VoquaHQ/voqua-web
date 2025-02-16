@@ -32,10 +32,7 @@ class Ballot < ApplicationRecord
 
   def generate_slug
     return if slug.present?
-    self.slug = loop do
-      random_slug = SecureRandom.urlsafe_base64(12)
-      break random_slug unless self.class.exists?(slug: random_slug)
-    end
+    self.slug = SecureRandom.urlsafe_base64(12)
   end
 
   def ends_at_must_be_in_future
