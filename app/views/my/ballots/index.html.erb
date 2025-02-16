@@ -21,6 +21,7 @@
         <% end %>
       </div>
 
+      <% ### FIXME: this is a N+1 problem. remove the voted? method. %>
       <% active_ballots = @ballots.select { |b| b.ends_at > Time.current }
                                 .sort_by { |b| [b.voted?(current_user) ? 1 : 0, b.ends_at] }
                                 .first(10) %>
