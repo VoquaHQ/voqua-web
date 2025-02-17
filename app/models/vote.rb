@@ -13,9 +13,8 @@ class Vote < ApplicationRecord
 
   validates :data, presence: true
   validates :pending_email,
-    presence: true,
     format: { with: URI::MailTo::EMAIL_REGEXP },
-    if: -> { pending? }
+    if: -> { pending_email.present? }
 
   validates :pending_token, presence: true, uniqueness: true, if: -> { pending? }
 

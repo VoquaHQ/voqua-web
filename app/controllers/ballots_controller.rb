@@ -109,11 +109,15 @@ class BallotsController < ApplicationController
       votes = @ballot.votes.find_or_initialize_by(profile: current_user.main_profile)
       votes.data = data
       save_votes votes
-    elsif params[:email].present?
-      @tmp_votes = Vote.new(ballot: @ballot, pending: true, pending_email: params[:email], data: data)
+    elsif params[:email].present? && params[:pending_token].present?
+      @tmp_votes = Vote.find_by!(pending_token: params[:pending_token])
+      raise "token already used" if @tmp_votes.pending_token.nil?
+      raise "email already set" if @tmp_votes.pending_email.present?
+
+      @tmp_votes.pending_email = params[:email]
       save_tmp_votes @tmp_votes
     else
-      @tmp_votes = Vote.new
+      @tmp_votes = Vote.create(ballot: @ballot, pending: true, data: data)
       render :new_tmp_vote
     end
   rescue Voting::VotingError

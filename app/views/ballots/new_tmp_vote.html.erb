@@ -29,12 +29,13 @@
     </div>
 
     <%= form_tag submit_votes_ballot_path(@ballot), data: { turbo: false }, class: "mt-8 space-y-6" do %>
+      <%= hidden_field_tag :pending_token, @tmp_votes.pending_token %>
       <% @raw_votes.each do |id, votes|%>
         <% votes.each do |k, v| %>
           <%= hidden_field_tag "votes[#{id}][#{k}]",v %>
         <% end %>
       <% end %>
-      
+
       <div>
         <label for="user_email" class="block text-sm font-medium text-gray-700">Email address</label>
         <div class="mt-1 relative rounded-md shadow-sm">
