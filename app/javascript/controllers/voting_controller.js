@@ -215,7 +215,11 @@ class CreditsLabelAnimator {
 export default class extends Controller {
   connect() {
     this.onVote = this.onVote.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.buttons = this.element.querySelectorAll("[data-vote-button]");
+    this.form = this.element.querySelector("form");
+    this.form.addEventListener("submit", this.handleFormSubmit);
+
     this.buttons.forEach((button) => {
       button.addEventListener("click", this.onVote);
     });
@@ -261,6 +265,36 @@ export default class extends Controller {
     this.buttons.forEach((button) => {
       button.removeEventListener("click", this.onVote);
     });
+
+    this.form.removeEventListener("submit", this.handleFormSubmit);
+  }
+
+  calculateUsedCreditsPercentage() {
+    const totalCredits = 99;
+    const usedCredits = totalCredits - this.ballot.availableCredits;
+    return (usedCredits / totalCredits) * 100;
+  }
+
+  handleFormSubmit(event) {
+    event.preventDefault();
+
+    const percentageUsed = this.calculateUsedCreditsPercentage();
+
+    if (percentageUsed < 80) {
+      const remainingCredits = this.ballot.availableCredits;
+      const shouldProceed = window.confirm(
+        `Hey! You still have ${remainingCredits} voting points left!\n\n` +
+          `Cool tip: You can vote multiple times on the things you really care about. ` +
+          `More votes = stronger opinion!\n\n` +
+          `Want to use more points or continue with your current votes?`,
+      );
+
+      if (!shouldProceed) {
+        return;
+      }
+    }
+
+    event.target.submit();
   }
 
   showErrorToast(message) {
