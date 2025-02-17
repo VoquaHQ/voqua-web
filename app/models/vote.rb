@@ -19,10 +19,10 @@ class Vote < ApplicationRecord
   validates :pending_token, presence: true, uniqueness: true, if: -> { pending? }
 
   after_initialize :generate_pending_token, if: -> { pending? }
+  before_save :create_ballor_memebership
 
   def confirm! main_profile
     update!(profile: main_profile, pending: false, pending_token: nil)
-    BallotMembership.create!(ballot: ballot, profile: main_profile)
   end
 
   def profile_user_email
@@ -34,5 +34,11 @@ class Vote < ApplicationRecord
   def generate_pending_token
     return if pending_token.present?
     self.pending_token = SecureRandom.urlsafe_base64
+  end
+
+  def create_ballor_memebership
+    return unless profile
+    return if BallotMembership.exists?(ballot: ballot, profile: profile)
+    BallotMembership.create!(ballot: ballot, profile: profile)
   end
 end
