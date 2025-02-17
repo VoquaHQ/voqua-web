@@ -2,7 +2,7 @@
   <div class="px-4 py-3.5 flex items-center">
     <div class="min-w-0 flex-1">
       <div class="flex items-center gap-2">
-        <% if ballot.ends_at > Time.current && !ballot.voted?(current_user) %>
+        <% if ballot.ends_at > Time.current && !voted %>
           <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
         <% end %>
         <h3 class="text-sm font-medium text-gray-900 truncate"><%= ballot.name %></h3>
