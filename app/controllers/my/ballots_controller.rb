@@ -1,6 +1,22 @@
 class My::BallotsController < My::BaseController
   def index
-    @ballots = current_user.main_profile.ballots.includes(profile: :user)
+    @ballots = current_user.main_profile.ballots
+                          .includes(profile: :user)
+                          .includes(:votes)
+    
+    # Create a hash of ballot_id -> voted status
+    @voted_status = @ballots.each_with_object({}) do |ballot, hash|
+      hash[ballot.id] = ballot.votes.any? { |v| v.profile_id == current_user.main_profile.id }
+    end
+    
+    if params[:status] == 'active'
+      @ballots = @ballots.select { |b| b.ends_at > Time.current }
+                        .sort_by { |b| [@voted_status[b.id] ? 1 : 0, b.ends_at] }
+    elsif params[:status] == 'completed'
+      @ballots = @ballots.select { |b| b.ends_at <= Time.current }
+                        .sort_by(&:ends_at)
+                        .reverse
+    end
   end
 
   def new

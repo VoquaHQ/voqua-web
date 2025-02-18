@@ -21,9 +21,8 @@
         <% end %>
       </div>
 
-      <% ### FIXME: this is a N+1 problem. remove the voted? method. %>
       <% active_ballots = @ballots.select { |b| b.ends_at > Time.current }
-                                .sort_by { |b| [b.voted?(current_user) ? 1 : 0, b.ends_at] }
+                                .sort_by { |b| [@voted_status[b.id] ? 1 : 0, b.ends_at] }
                                 .first(10) %>
       <% completed_ballots = @ballots.select { |b| b.ends_at <= Time.current }
                                   .sort_by(&:ends_at)
@@ -36,12 +35,12 @@
             <h2 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-3">Active</h2>
             <div class="bg-white rounded-xl divide-y border border-gray-200/75 shadow-sm">
               <% active_ballots.each do |ballot| %>
-                <%= render "ballot_list_item", ballot: ballot %>
+                <%= render "ballot_list_item", ballot: ballot, voted: @voted_status[ballot.id] %>
               <% end %>
 
               <% if @ballots.select { |b| b.ends_at > Time.current }.count > 10 %>
                 <div class="px-4 py-3 bg-gray-50 text-center border-t border-gray-200/75">
-                  <%= link_to "#", class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
+                  <%= link_to my_ballots_path(status: 'active'), class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
                     Show All
                   <% end %>
                 </div>
@@ -55,12 +54,12 @@
             <h2 class="text-xs font-medium uppercase tracking-wider text-gray-500 mb-3">Completed</h2>
             <div class="bg-white rounded-xl divide-y border border-gray-200/75 shadow-sm">
               <% completed_ballots.each do |ballot| %>
-                <%= render "ballot_list_item", ballot: ballot %>
+                <%= render "ballot_list_item", ballot: ballot, voted: @voted_status[ballot.id] %>
               <% end %>
 
               <% if @ballots.select { |b| b.ends_at <= Time.current }.count > 10 %>
                 <div class="px-4 py-3 bg-gray-50 text-center border-t border-gray-200/75">
-                  <%= link_to "#", class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
+                  <%= link_to my_ballots_path(status: 'completed'), class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
                     Show All
                   <% end %>
                 </div>

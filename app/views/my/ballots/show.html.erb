@@ -15,25 +15,34 @@
       </div>
     </div>
 
-    <%# Voting Link Section %>
-    <% if @ballot.ends_at > Time.now %>
-      <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
-        <div class="px-6 py-5 flex items-center justify-between">
-          <div>
+    <%# Actions Section %>
+    <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
+      <div class="px-6 py-5 flex items-center justify-between">
+        <div>
+          <% if @ballot.ends_at > Time.now %>
             <h2 class="text-sm font-medium text-gray-900">Voting Link</h2>
             <p class="mt-1 text-sm text-gray-500">Share this link with voters</p>
-          </div>
-          <div class="flex items-center gap-3">
+          <% else %>
+            <h2 class="text-sm font-medium text-gray-900">Results</h2>
+            <p class="mt-1 text-sm text-gray-500">View the final voting results</p>
+          <% end %>
+        </div>
+        <div class="flex items-center gap-3">
+          <% if @ballot.ends_at > Time.now %>
             <a href="<%= ballot_path %>" target="_blank" class="px-4 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
               Open Vote
             </a>
             <a href="<%= results_ballot_path %>" target="_blank" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200">
               Results
             </a>
-          </div>
+          <% else %>
+            <a href="<%= results_ballot_path %>" target="_blank" class="px-4 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+              View Results
+            </a>
+          <% end %>
         </div>
       </div>
-    <% end %>
+    </div>
 
     <%# Options Section %>
     <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
