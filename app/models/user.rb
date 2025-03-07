@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   devise :registerable,
          # :database_authenticatable,
-         :recoverable,
+         # :recoverable, # Removed as we use magic links instead
          :rememberable,
          :validatable,
          :confirmable,
