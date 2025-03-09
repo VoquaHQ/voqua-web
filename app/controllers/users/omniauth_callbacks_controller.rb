@@ -41,6 +41,21 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
+  def entra_id
+    user = User.from_microsoft(from_google_params)
+
+    if user.present?
+      sign_out_all_scopes
+      flash[:notice] = t 'devise.omniauth_callbacks.success', kind: 'Microsoft'
+      sign_in_and_redirect user, event: :authentication
+    else
+      flash[:alert] = t 'devise.omniauth_callbacks.failure', kind: 'Microsoft'
+      redirect_to new_user_session_path
+    end
+  end
+
+  private
+
   def from_google_params
     @from_google_params ||= {
       uid: auth.uid,

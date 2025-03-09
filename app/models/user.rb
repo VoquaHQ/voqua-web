@@ -7,8 +7,11 @@ class User < ApplicationRecord
          :confirmable,
          :lockable, :timeoutable, :trackable,
          :magic_link_authenticatable,
-         :omniauthable, omniauth_providers: [:google_oauth2, :microsoft_graph]
-         #, :omniauthable
+         :omniauthable,
+         omniauth_providers: [
+           :google_oauth2,
+           :entra_id
+         ]
 
   has_many :user_profiles, dependent: :destroy
   has_many :profiles, through: :user_profiles
@@ -26,19 +29,21 @@ class User < ApplicationRecord
   end
 
   def self.from_google(u)
-    # create_with(uid: u[:uid], provider: 'google').find_or_create_by!(email: u[:email], main_profile_attributes: {})
     u = find_or_initialize_by(email: u[:email])
     u.uid = u[:uid]
     u.provider = 'google'
     u.main_profile ||= Profile.new
+    u.confirm
     u.save!
+    u
   end
 
   def self.from_microsoft(u)
     u = find_or_initialize_by(email: u[:email])
     u.uid = u[:uid]
-    u.provider = 'microsoft_graph'
+    u.provider = 'microsoft'
     u.main_profile ||= Profile.new
+    u.confirm
     u.save!
     u
   end

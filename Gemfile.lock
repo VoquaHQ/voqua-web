@@ -190,13 +190,13 @@ GEM
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
       rack-protection
+    omniauth-entra-id (3.0.1)
+      omniauth-oauth2 (~> 1.8)
     omniauth-google-oauth2 (1.2.1)
       jwt (>= 2.9.2)
       oauth2 (~> 2.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
-    omniauth-microsoft_graph (0.2.1)
-      omniauth-oauth2
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
@@ -341,8 +341,8 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   letter_opener (~> 1.10)
+  omniauth-entra-id
   omniauth-google-oauth2
-  omniauth-microsoft_graph (~> 0.2.1)
   omniauth-rails_csrf_protection
   pg (~> 1.1)
   puma (>= 5.0)

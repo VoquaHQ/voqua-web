@@ -63,6 +63,7 @@ Devise.setup do |config|
   # config.passwordless_expire_old_tokens_on_sign_in = false
   #
   config.omniauth :google_oauth2, ENV['VOQUA_GOOGLE_OAUTH_CLIENT_ID'], ENV['VOQUA_GOOGLE_OAUTH_CLIENT_SECRET']
-  config.omniauth :microsoft_graph, ENV['VOQUA_MICROSOFT_CLIENT_ID'], ENV['VOQUA_MICROSOFT_CLIENT_SECRET'], scope: 'openid email profile'
+  config.omniauth :entra_id, client_id: ENV['VOQUA_MICROSOFT_CLIENT_ID'], client_secret: ENV['VOQUA_MICROSOFT_CLIENT_SECRET'],
+    scope: 'openid email profile'
 
 end
