@@ -1,14 +1,14 @@
 <h1 class="title">Welcome to Voqua</h1>
 <% if @resource.pending_vote_token %>
-  <p class="subtitle">Get started with quadratic voting</p>
+  <p class="subtitle">Make better decisions, faster</p>
 <% else %>
   <p class="subtitle">Your gateway to better group decision-making</p>
 <% end %>
 
 <% if @resource.pending_vote_token %>
   <div class="benefits">
-    <p class="benefits-title">✓ Create Your Own Votes</p>
-    <p>Design and run quadratic votes to gather insights from your team or community.</p>
+    <p class="benefits-title">✓ Create Your Own Decisions</p>
+    <p>Design and run prioritization processes to gather insights from your team or community.</p>
 
     <p class="benefits-title">✓ Harness Collective Intelligence</p>
     <p>Make faster, better decisions by leveraging the wisdom of your group.</p>
@@ -18,10 +18,9 @@
     <%= link_to 'Create My Account', confirmation_url(@resource, confirmation_token: @token, pending_vote_token: @resource.pending_vote_token), class: 'button' %>
   </div>
 <% else %>
-  <p>Please confirm your email address to start using Voqua's quadratic voting platform.</p>
+  <p>Please confirm your email address to start using Voqua's intelligent prioritization platform.</p>
 
   <div style="text-align: center;">
     <%= link_to 'Confirm Email', confirmation_url(@resource, confirmation_token: @token, pending_vote_token: @resource.pending_vote_token), class: 'button' %>
   </div>
 <% end %>
-
