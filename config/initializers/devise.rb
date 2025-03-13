@@ -28,6 +28,16 @@ Devise.setup do |config|
   config.expire_all_remember_me_on_sign_out = true
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
+  
+  # Remember me configuration
+  # The time the user will be remembered without asking for credentials again.
+  config.remember_for = 3.months
+  
+  # Timeout configuration
+  # The time you want to timeout the user session without activity.
+  # After this time the user will be asked for credentials again.
+  # Default is 30 minutes, but we'll set it to a longer period to match remember_me
+  config.timeout_in = 1.day
 
   # Sign out configuration
   config.sign_out_via = :delete

@@ -34,7 +34,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if user.present?
       sign_out_all_scopes
       flash[:notice] = t 'devise.omniauth_callbacks.success', kind: 'Google'
-      sign_in_and_redirect user, event: :authentication
+      # Set remember_me to true to make the session last longer
+      sign_in_and_redirect user, event: :authentication, remember_me: true
     else
       flash[:alert] = t 'devise.omniauth_callbacks.failure', kind: 'Google', reason: "#{auth.info.email} is not authorized."
       redirect_to new_user_session_path
@@ -47,7 +48,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if user.present?
       sign_out_all_scopes
       flash[:notice] = t 'devise.omniauth_callbacks.success', kind: 'Microsoft'
-      sign_in_and_redirect user, event: :authentication
+      # Set remember_me to true to make the session last longer
+      sign_in_and_redirect user, event: :authentication, remember_me: true
     else
       flash[:alert] = t 'devise.omniauth_callbacks.failure', kind: 'Microsoft'
       redirect_to new_user_session_path
