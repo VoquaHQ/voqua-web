@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   namespace :my do
     root "ballots#index"
     resources :ballots do
-      resources :questions
+      resources :options
       resources :ballot_invitations do
         collection do
           post :bulk_create

@@ -3,12 +3,12 @@ class My::BallotsController < My::BaseController
     @ballots = current_user.main_profile.ballots
                           .includes(profile: :user)
                           .includes(:votes)
-    
+
     # Create a hash of ballot_id -> voted status
     @voted_status = @ballots.each_with_object({}) do |ballot, hash|
       hash[ballot.id] = ballot.votes.any? { |v| v.profile_id == current_user.main_profile.id }
     end
-    
+
     if params[:status] == 'active'
       @ballots = @ballots.select { |b| b.ends_at > Time.current }
                         .sort_by { |b| [@voted_status[b.id] ? 1 : 0, b.ends_at] }
@@ -37,7 +37,7 @@ class My::BallotsController < My::BaseController
 
   def show
     @ballot = current_user.main_profile.owned_ballots.includes(votes: :profile, invitations: { ballot_membership: :profile }).find_by!(slug: params[:id])
-    @question = Question.new
+    @option = BallotOption.new
   end
 
   def edit

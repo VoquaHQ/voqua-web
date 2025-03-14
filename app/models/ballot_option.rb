@@ -1,4 +1,4 @@
-class Question < ApplicationRecord
+class BallotOption < ApplicationRecord
   belongs_to :ballot
 
   validates :ballot, presence: true

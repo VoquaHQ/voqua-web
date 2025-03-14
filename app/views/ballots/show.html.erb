@@ -16,7 +16,7 @@
       <p class="text-blue-800 mb-2">You have <span class="font-bold">99 points</span> to vote with. For each option, you can vote multiple times in favor or against. Each extra vote costs more points!</p>
     </div>
 
-    <% if @ballot.questions.empty? %>
+    <% if @ballot.options.empty? %>
       <div class="bg-white rounded-lg shadow-sm p-8 text-center">
         <p class="text-gray-600">No options have been added to this feedback collection yet.</p>
       </div>
@@ -39,12 +39,12 @@
           <div class="flex-1">
             <%= form_tag submit_votes_ballot_path(@ballot), data: { turbo: false } do %>
               <div class="space-y-8">
-                <% @ballot.questions.each.with_index do |question, i| %>
-                  <div class="bg-white rounded-lg shadow-sm" data-question-id="<%= question.id %>" data-state="">
+                <% @ballot.options.each.with_index do |option, i| %>
+                  <div class="bg-white rounded-lg shadow-sm" data-option-id="<%= option.id %>" data-state="">
                     <div class="p-2 md:p-6 border-b border-gray-100">
-                      <div class="text-sm font-medium text-blue-600 mb-2">Option <%= i + 1 %> of <%= @ballot.questions.size %></div>
-                      <h3 class="text-xl font-medium text-gray-900 mb-2"><%= question.title %></h3>
-                      <p class="text-gray-600"><%= question.description %></p>
+                      <div class="text-sm font-medium text-blue-600 mb-2">Option <%= i + 1 %> of <%= @ballot.options.size %></div>
+                      <h3 class="text-xl font-medium text-gray-900 mb-2"><%= option.title %></h3>
+                      <p class="text-gray-600"><%= option.description %></p>
                     </div>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 ">
@@ -65,7 +65,7 @@
                               <span class="fewer">Fewer</span>
                             </button>
                             <div class="mt-3">
-                              <%= votes_count_fields_for(@ballot, question.id, :for, @votes) %>
+                              <%= votes_count_fields_for(@ballot, option.id, :for, @votes) %>
                             </div>
                           </div>
                           <div data-vote-type="against" class="text-center">
@@ -78,7 +78,7 @@
                               <span class="fewer">Fewer</span>
                             </button>
                             <div class="mt-3">
-                              <%= votes_count_fields_for(@ballot, question.id, :against, @votes) %>
+                              <%= votes_count_fields_for(@ballot, option.id, :against, @votes) %>
                             </div>
                           </div>
                         </div>
