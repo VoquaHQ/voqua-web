@@ -20,18 +20,18 @@
       </div>
     </div>
 
-    <% if @ballot.questions.empty? %>
+    <% if @ballot.options.empty? %>
       <div class="bg-white rounded-lg shadow-sm p-8 text-center">
         <p class="text-gray-600">No options have been added to this feedback collection yet.</p>
       </div>
     <% else %>
       <!-- Results Summary -->
       <div class="space-y-4">
-        <% for_each_ballot_result @results, @ballot.questions do |result, question, i| %>
+        <% for_each_ballot_result @results, @ballot.options do |result, option, i| %>
           <div class="bg-white rounded-lg shadow-sm p-6">
             <div>
-              <h3 class="text-lg font-medium text-gray-900 mb-2"><%= question.title %></h3>
-              <p class="text-gray-600 mb-3"><%= question.description %></p>
+              <h3 class="text-lg font-medium text-gray-900 mb-2"><%= option.title %></h3>
+              <p class="text-gray-600 mb-3"><%= option.description %></p>
 
               <div class="flex items-center gap-2">
                 <% if result[:value] > 0 %>

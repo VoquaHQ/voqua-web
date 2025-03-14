@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_17_225133) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_14_182742) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_225133) do
     t.index ["profile_id"], name: "index_ballot_memberships_on_profile_id"
   end
 
+  create_table "ballot_options", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.bigint "ballot_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ballot_id"], name: "index_ballot_options_on_ballot_id"
+  end
+
   create_table "ballots", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -58,15 +67,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_225133) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["handle"], name: "index_profiles_on_handle", unique: true, where: "(handle IS NOT NULL)"
-  end
-
-  create_table "questions", force: :cascade do |t|
-    t.string "title"
-    t.string "description"
-    t.bigint "ballot_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ballot_id"], name: "index_questions_on_ballot_id"
   end
 
   create_table "tmp_votes", force: :cascade do |t|
@@ -138,8 +138,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_225133) do
   add_foreign_key "ballot_invitations", "ballots"
   add_foreign_key "ballot_memberships", "ballots"
   add_foreign_key "ballot_memberships", "profiles"
+  add_foreign_key "ballot_options", "ballots"
   add_foreign_key "ballots", "profiles"
-  add_foreign_key "questions", "ballots"
   add_foreign_key "user_profiles", "profiles"
   add_foreign_key "user_profiles", "users"
   add_foreign_key "users", "profiles", column: "main_profile_id"

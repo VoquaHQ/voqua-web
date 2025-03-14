@@ -1,10 +1,10 @@
 module BallotsHelper
-  def votes_count_fields_for(ballot, question_id, type, votes)
+  def votes_count_fields_for(ballot, option_id, type, votes)
     votes_count = 0
-    if votes && question_votes = votes.data[question_id.to_s]
-      votes_count = question_votes[type.to_s].to_i
+    if votes && option_votes = votes.data[option_id.to_s]
+      votes_count = option_votes[type.to_s].to_i
     end
-    render "votes_count_fields", question_id: question_id, type: type, votes_count: votes_count
+    render "votes_count_fields", option_id: option_id, type: type, votes_count: votes_count
   end
 
   def format_end_date(end_date)
@@ -22,10 +22,10 @@ module BallotsHelper
     end
   end
 
-  def for_each_ballot_result(results, questions)
+  def for_each_ballot_result(results, options)
     results.each.with_index do |result, i|
-      question = questions.find { |q| q.id == result[:question_id] }
-      yield result, question, i
+      option = options.find { |q| q.id == result[:option_id] }
+      yield result, option, i
     end
   end
 
@@ -34,9 +34,9 @@ module BallotsHelper
     summary << "Here are the results of the Voqua on \"#{ballot.name}\":"
     summary << ""
     results.each_with_index do |result, i|
-      question = ballot.questions.find { |q| q.id == result[:question_id] }
+      option = ballot.options.find { |q| q.id == result[:option_id] }
       votes = result[:value]
-      summary << "#{i + 1}. #{question.title} (#{votes >= 0 ? '+' : ''}#{votes} votes)"
+      summary << "#{i + 1}. #{option.title} (#{votes >= 0 ? '+' : ''}#{votes} votes)"
     end
     summary << ""
     summary << "Link to Voqua ballot: #{ballot_url(ballot)}"

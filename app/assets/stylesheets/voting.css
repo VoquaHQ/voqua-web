@@ -22,77 +22,77 @@ svg.credits.credits-for .credit.foreground {
   display: none;
 }
 
-#voting [data-question-id] .vote-button .more,
-#voting [data-question-id] .vote-button .fewer {
+#voting [data-option-id] .vote-button .more,
+#voting [data-option-id] .vote-button .fewer {
   display: none;
 }
 
-#voting [data-question-id] .vote-type-label-against,
-#voting [data-question-id] .vote-type-label-for {
+#voting [data-option-id] .vote-type-label-against,
+#voting [data-option-id] .vote-type-label-for {
   opacity: 1;
   transition: opacity 0.2s ease-in;
 }
 
-#voting [data-question-id][data-state="for"] .vote-type-label-against,
-#voting [data-question-id][data-state="against"] .vote-type-label-for {
+#voting [data-option-id][data-state="for"] .vote-type-label-against,
+#voting [data-option-id][data-state="against"] .vote-type-label-for {
   opacity: 0;
   transition: opacity 0.2s ease-out;
 }
 
-#voting [data-question-id] .votes-count-label {
+#voting [data-option-id] .votes-count-label {
   display: none;
 }
 
-#voting [data-question-id] .votes-count-label .votes-suffix.plural {
+#voting [data-option-id] .votes-count-label .votes-suffix.plural {
   display: none;
 }
 
-#voting [data-question-id].votes-plural .votes-count-label .votes-suffix.singular {
+#voting [data-option-id].votes-plural .votes-count-label .votes-suffix.singular {
   display: none;
 }
 
-#voting [data-question-id].votes-plural .votes-count-label .votes-suffix.plural {
+#voting [data-option-id].votes-plural .votes-count-label .votes-suffix.plural {
   display: inline;
 }
 
-#voting [data-question-id][data-state="for"] .votes-count-label-for {
+#voting [data-option-id][data-state="for"] .votes-count-label-for {
   display: inline;
 }
 
-#voting [data-question-id][data-state="against"] .votes-count-label-against {
+#voting [data-option-id][data-state="against"] .votes-count-label-against {
   display: inline;
   color: red;
 }
 
-#voting [data-question-id][data-state="for"] .vote-button-for .vote {
+#voting [data-option-id][data-state="for"] .vote-button-for .vote {
   display: none;
 }
 
-#voting [data-question-id][data-state="for"] .vote-button-for .more {
+#voting [data-option-id][data-state="for"] .vote-button-for .more {
   display: inline;
 }
 
-#voting [data-question-id][data-state="for"] .vote-button-against .vote {
+#voting [data-option-id][data-state="for"] .vote-button-against .vote {
   display: none;
 }
 
-#voting [data-question-id][data-state="for"] .vote-button-against .fewer {
+#voting [data-option-id][data-state="for"] .vote-button-against .fewer {
   display: inline;
 }
 
-#voting [data-question-id][data-state="against"] .vote-button-against .vote {
+#voting [data-option-id][data-state="against"] .vote-button-against .vote {
   display: none;
 }
 
-#voting [data-question-id][data-state="against"] .vote-button-against .more {
+#voting [data-option-id][data-state="against"] .vote-button-against .more {
   display: inline;
 }
 
-#voting [data-question-id][data-state="against"] .vote-button-for .vote {
+#voting [data-option-id][data-state="against"] .vote-button-for .vote {
   display: none;
 }
 
-#voting [data-question-id][data-state="against"] .vote-button-for .fewer {
+#voting [data-option-id][data-state="against"] .vote-button-for .fewer {
   display: inline;
 }
 

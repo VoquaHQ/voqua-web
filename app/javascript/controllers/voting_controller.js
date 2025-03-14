@@ -10,62 +10,62 @@ class NotEnoughCreditsError extends Error {
 class UserBallot {
   voteTypes = ["for", "against"];
 
-  constructor(questions, credits) {
+  constructor(options, credits) {
     this.availableCredits = credits;
-    this.questionsVotes = {};
-    questions.forEach((question) => {
-      this.questionsVotes[question.id] = {
-        questionId: question.id,
+    this.optionsVotes = {};
+    options.forEach((option) => {
+      this.optionsVotes[option.id] = {
+        optionId: option.id,
         votes: 0,
         state: "for",
       };
     });
   }
 
-  votesForQuestion(questionId) {
-    return this.questionsVotes[questionId].votes;
+  votesForOption(optionId) {
+    return this.optionsVotes[optionId].votes;
   }
 
-  stateForQuestion(questionId) {
-    return this.questionsVotes[questionId].state;
+  stateForOption(optionId) {
+    return this.optionsVotes[optionId].state;
   }
 
-  castVotes(voteType, questionId, votes) {
-    const question = this.questionsVotes[questionId];
+  castVotes(voteType, optionId, votes) {
+    const option = this.optionsVotes[optionId];
     // If the vote type is different from the current state
-    if (voteType !== question.state) {
-      const spentCredits = Math.pow(question.votes, 2);
-      const votesToRemove = votes <= question.votes ? votes : question.votes;
-      question.votes -= votesToRemove;
-      const newSpentCredits = Math.pow(question.votes, 2);
+    if (voteType !== option.state) {
+      const spentCredits = Math.pow(option.votes, 2);
+      const votesToRemove = votes <= option.votes ? votes : option.votes;
+      option.votes -= votesToRemove;
+      const newSpentCredits = Math.pow(option.votes, 2);
       this.availableCredits += spentCredits - newSpentCredits;
       // decrease the actual votes we will add after
       votes -= votesToRemove;
       if (votes === 0) {
         return;
       }
-      question.state = voteType;
+      option.state = voteType;
     }
-    const spentCredits = Math.pow(question.votes, 2);
-    const totalCredits = Math.pow(question.votes + votes, 2);
+    const spentCredits = Math.pow(option.votes, 2);
+    const totalCredits = Math.pow(option.votes + votes, 2);
     const creditsNeeded = totalCredits - spentCredits;
     if (creditsNeeded > this.availableCredits) {
       throw new NotEnoughCreditsError();
     }
     this.availableCredits -= creditsNeeded;
-    question.votes += votes;
+    option.votes += votes;
   }
 
   dump() {
     console.log({
-      questionsVotes: this.questionsVotes,
+      optionsVotes: this.optionsVotes,
       availableCredits: this.availableCredits,
     });
   }
 }
 // end compiled
 
-class QuestionBlock {
+class OptionBlock {
   constructor(element) {
     this.element = element;
     this.circles = {
@@ -90,7 +90,7 @@ class QuestionBlock {
     });
   }
 
-  animate(voteType, votesForQuestion) {
+  animate(voteType, votesForOption) {
     const levels = this.circles[voteType];
 
     for (const levelIndex in levels) {
@@ -100,7 +100,7 @@ class QuestionBlock {
       }
     }
 
-    for (let i = 1; i <= votesForQuestion; i++) {
+    for (let i = 1; i <= votesForOption; i++) {
       const levelCircles = levels[i.toString()];
       for (const circle of levelCircles) {
         circle.element.classList.remove("hidden");
@@ -110,19 +110,19 @@ class QuestionBlock {
 }
 
 class CreditsAnimator {
-  constructor(availableCredits, allCreditsContainer, questionsElements) {
+  constructor(availableCredits, allCreditsContainer, optionsElements) {
     this.availableCredits = availableCredits;
     this.usedCredits = 0;
     this.allCreditsContainer = allCreditsContainer;
-    this.blocks = this.setupBlocks(questionsElements);
+    this.blocks = this.setupBlocks(optionsElements);
     this.circles = this.setupCircles();
   }
 
-  setupBlocks(questionsElements) {
+  setupBlocks(optionsElements) {
     const blocks = {};
-    questionsElements.forEach((questionElement) => {
-      const questionId = questionElement.dataset.questionId;
-      blocks[questionId] = new QuestionBlock(questionElement);
+    optionsElements.forEach((optionElement) => {
+      const optionId = optionElement.dataset.optionId;
+      blocks[optionId] = new OptionBlock(optionElement);
     });
 
     return blocks;
@@ -147,7 +147,7 @@ class CreditsAnimator {
     return circles;
   }
 
-  animate(questionId, voteType, votesForQuestion, newAvailableCredits) {
+  animate(optionId, voteType, votesForOption, newAvailableCredits) {
     let start = this.usedCredits;
     let end = this.availableCredits - newAvailableCredits;
     this.usedCredits = end;
@@ -162,7 +162,7 @@ class CreditsAnimator {
       element.classList[func].call(element.classList, "used");
     }
 
-    this.blocks[questionId].animate(voteType, votesForQuestion);
+    this.blocks[optionId].animate(voteType, votesForOption);
   }
 }
 
@@ -224,17 +224,16 @@ export default class extends Controller {
       button.addEventListener("click", this.onVote);
     });
 
-    this.questionsElements =
-      this.element.querySelectorAll("[data-question-id]");
-    this.questions = Array.from(this.questionsElements).map((question) => {
+    this.optionsElements = this.element.querySelectorAll("[data-option-id]");
+    this.options = Array.from(this.optionsElements).map((option) => {
       return {
-        id: question.dataset.questionId,
+        id: option.dataset.optionId,
       };
     });
 
     this.creditsElement = this.element.querySelector("[data-credits]");
 
-    this.ballot = new UserBallot(this.questions, 99);
+    this.ballot = new UserBallot(this.options, 99);
 
     this.creditsLabelAnimator = new CreditsLabelAnimator(
       this.creditsElement,
@@ -243,13 +242,13 @@ export default class extends Controller {
     this.creditsAnimator = new CreditsAnimator(
       this.ballot.availableCredits,
       this.element.querySelector("[data-all-credits]"),
-      this.questionsElements,
+      this.optionsElements,
     );
 
     this.updateCreditsCounter(this.element.querySelector("[data-credits]"));
-    this.questionsElements.forEach((questionElement) => {
-      const id = questionElement.dataset.questionId;
-      questionElement
+    this.optionsElements.forEach((optionElement) => {
+      const id = optionElement.dataset.optionId;
+      optionElement
         .querySelectorAll("[data-votes-total-input]")
         .forEach((votesInputElement) => {
           const votesCount = parseInt(votesInputElement.value);
@@ -340,17 +339,17 @@ export default class extends Controller {
   onVote(event) {
     event.preventDefault();
     const eButton = event.currentTarget;
-    const eQuestion = eButton.closest("[data-question-id]");
+    const eOption = eButton.closest("[data-option-id]");
     const eVoteType = eButton.closest("[data-vote-type]");
 
-    const questionId = eQuestion.dataset.questionId;
+    const optionId = eOption.dataset.optionId;
     let voteType = eVoteType.dataset.voteType;
 
     try {
-      this.vote(questionId, voteType, 1);
+      this.vote(optionId, voteType, 1);
     } catch (error) {
       if (error instanceof NotEnoughCreditsError) {
-        const currentVotes = this.ballot.votesForQuestion(questionId);
+        const currentVotes = this.ballot.votesForOption(optionId);
         const nextCost =
           Math.pow(currentVotes + 1, 2) - Math.pow(currentVotes, 2);
         const remainingCredits = this.ballot.availableCredits;
@@ -361,21 +360,21 @@ export default class extends Controller {
     }
   }
 
-  vote(questionId, voteType, votesCount) {
-    this.ballot.castVotes(voteType, questionId, votesCount);
+  vote(optionId, voteType, votesCount) {
+    this.ballot.castVotes(voteType, optionId, votesCount);
 
     this.updateCreditsCounter();
-    this.updateVoteCounters(questionId);
-    this.updateQuestionState(questionId);
+    this.updateVoteCounters(optionId);
+    this.updateOptionState(optionId);
 
     this.creditsAnimator.animate(
-      questionId,
-      this.ballot.stateForQuestion(questionId),
-      this.ballot.votesForQuestion(questionId),
+      optionId,
+      this.ballot.stateForOption(optionId),
+      this.ballot.votesForOption(optionId),
       this.ballot.availableCredits,
     );
 
-    console.log(questionId, voteType);
+    console.log(optionId, voteType);
     console.log(JSON.stringify(this.ballot));
   }
 
@@ -384,43 +383,43 @@ export default class extends Controller {
     this.creditsLabelAnimator.animate(this.ballot.availableCredits);
   }
 
-  updateQuestionState(questionId) {
-    const state = this.ballot.stateForQuestion(questionId);
-    const votes = this.ballot.votesForQuestion(questionId);
+  updateOptionState(optionId) {
+    const state = this.ballot.stateForOption(optionId);
+    const votes = this.ballot.votesForOption(optionId);
     let stateValue = "";
 
     if (votes > 0) {
       stateValue = state;
     }
 
-    const questionElement = this.element.querySelector(
-      `[data-question-id="${questionId}"]`,
+    const optionElement = this.element.querySelector(
+      `[data-option-id="${optionId}"]`,
     );
 
-    questionElement.dataset.state = stateValue;
+    optionElement.dataset.state = stateValue;
     if (votes > 1) {
-      questionElement.classList.add("votes-plural");
+      optionElement.classList.add("votes-plural");
     } else {
-      questionElement.classList.remove("votes-plural");
+      optionElement.classList.remove("votes-plural");
     }
   }
 
-  updateVoteCounters(questionId) {
-    const question = this.ballot.questionsVotes[questionId];
-    const questionElement = this.element.querySelector(
-      `[data-question-id="${questionId}"]`,
+  updateVoteCounters(optionId) {
+    const option = this.ballot.optionsVotes[optionId];
+    const optionElement = this.element.querySelector(
+      `[data-option-id="${optionId}"]`,
     );
-    const votesLabelElement = questionElement.querySelector(
-      `[data-votes-total-label="${question.state}"]`,
+    const votesLabelElement = optionElement.querySelector(
+      `[data-votes-total-label="${option.state}"]`,
     );
 
-    const votesInputElement = questionElement.querySelector(
-      `[data-votes-total-input="${question.state}"]`,
+    const votesInputElement = optionElement.querySelector(
+      `[data-votes-total-input="${option.state}"]`,
     );
 
     const votesLabelNumber = votesLabelElement.querySelector(".votes-number");
-    votesLabelNumber.textContent = question.votes;
+    votesLabelNumber.textContent = option.votes;
 
-    votesInputElement.value = question.votes;
+    votesInputElement.value = option.votes;
   }
 }

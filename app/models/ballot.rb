@@ -1,7 +1,7 @@
 class Ballot < ApplicationRecord
   belongs_to :profile
 
-  has_many :questions, dependent: :destroy
+  has_many :options, class_name: "BallotOption", dependent: :destroy
   has_many :invitations, class_name: "BallotInvitation", dependent: :destroy
   has_many :memberships, class_name: "BallotMembership", dependent: :destroy
 
