@@ -40,6 +40,9 @@
               View Results
             </a>
           <% end %>
+          <%= render_beta do %>
+            <%= button_to "Suggest options", generate_my_ballot_option_path(@ballot), data: { turbo: false }, method: :post, class: "button button-secondary" %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -56,9 +59,7 @@
             <div class="px-6 py-4 flex items-start justify-between group">
               <div>
                 <h3 class="text-sm font-medium text-gray-900"><%= option.title %></h3>
-                <% if option.description.present? %>
-                  <p class="mt-1 text-sm text-gray-500"><%= option.description %></p>
-                <% end %>
+                <p class="mt-1 text-sm text-gray-500"><%= option.description.presence || "-" %></p>
               </div>
               <%= link_to 'Remove',
                   my_ballot_option_path(@ballot, option),

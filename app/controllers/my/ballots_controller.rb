@@ -35,6 +35,23 @@ class My::BallotsController < My::BaseController
     end
   end
 
+  def generate
+    b = AI::BallotBuilder.new
+    resp = b.generate_options(params[:text])
+
+    Ballot.option.transaction do
+      Ballot.create!(name: resp[:name], description: resp[:description], ends_at: 3.days.from_now, private: false)
+      BallotOption.transaction do
+        resp[:options].each do |option|
+          option.ballot = @ballot
+          option.save!
+        end
+      end
+    end
+
+    redirect_to my_ballot_path(@ballot), notice: "Options generated successfully."
+  end
+
   def show
     @ballot = current_user.main_profile.owned_ballots.includes(votes: :profile, invitations: { ballot_membership: :profile }).find_by!(slug: params[:id])
     @option = BallotOption.new

@@ -9,4 +9,10 @@ module ApplicationHelper
       OmniAuth::Utils.camelize(provider.to_s)
     end
   end
+
+  def render_beta &block
+    if Rails.env.development? || current_user&.beta?
+      yield
+    end
+  end
 end

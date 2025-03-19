@@ -78,3 +78,4 @@ gem "devise-passwordless"
 gem 'omniauth-google-oauth2'
 gem 'omniauth-entra-id'
 gem "omniauth-rails_csrf_protection"
+gem "ruby-openai"

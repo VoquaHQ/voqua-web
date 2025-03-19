@@ -20,6 +20,19 @@ class My::OptionsController < My::BaseController
     end
   end
 
+  def generate
+    b = AI::BallotBuilder.new
+    resp = b.generate_options("#{@ballot.name}: #{@ballot.description}")
+    BallotOption.transaction do
+      resp[:options].each do |option|
+        option.ballot = @ballot
+        option.save!
+      end
+    end
+
+    redirect_to my_ballot_path(@ballot), notice: "Options generated successfully."
+  end
+
   # def edit
   #   @option = @ballot.options.find(params[:id])
   # end
