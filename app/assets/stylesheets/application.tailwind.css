@@ -37,6 +37,14 @@
     @apply inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150 cursor-pointer;
   }
 
+  .button-icon {
+    @apply pl-2;
+  }
+
+  .button-icon svg {
+    @apply me-2 size-5;
+  }
+
   .button-primary {
     @apply bg-[#4F46E5] text-white hover:bg-[#4338CA] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4F46E5] shadow-sm;
   }
