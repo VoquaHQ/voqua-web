@@ -1,42 +1,42 @@
 <header>
-  <nav data-controller="menu" class="fixed top-0 overflow-hidden z-20 w-full bg-white/80 border-b border-gray-200 backdrop-blur">
+  <nav data-controller="menu" class="fixed top-0 overflow-hidden z-20 w-full bg-white/80 border-b border-black backdrop-blur">
     <div class="px-6 m-auto max-w-5xl 2xl:px-0">
       <div class="flex flex-wrap items-center justify-between py-2">
         <div class="w-full items-center flex justify-between lg:w-auto">
           <%= render partial: "shared/logo", locals: { size: 48 } %>
           <div class="flex lg:hidden">
-            <button data-menu-target="button" data-action="menu#toggle" aria-label="Menu" class="relative border border-gray-200 size-10 rounded-lg transition duration-300 hover:bg-gray-100 active:scale-95">
-              <div data-menu-target="line1" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-gray-600 transition-all duration-300"></div>
-              <div data-menu-target="line2" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-gray-600 transition-all duration-300"></div>
+            <button data-menu-target="button" data-action="menu#toggle" aria-label="Menu" class="relative border border-black size-10 rounded-none transition duration-300 hover:bg-black hover:text-white active:scale-95">
+              <div data-menu-target="line1" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-current transition-all duration-300"></div>
+              <div data-menu-target="line2" class="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-current transition-all duration-300"></div>
             </button>
           </div>
         </div>
 
         <div data-menu-target="menu" class="w-full h-0 lg:h-fit overflow-hidden transition-all duration-300 lg:w-fit flex-wrap justify-end items-center space-y-8 lg:space-y-0 lg:flex lg:overflow-visible md:flex-nowrap">
-          <div class="mt-6 text-gray-600 md:-ml-4 lg:pr-4 lg:mt-0">
+          <div class="mt-6 text-black md:-ml-4 lg:pr-4 lg:mt-0">
             <ul class="space-y-4 tracking-wide text-base lg:text-sm lg:flex lg:space-y-0 lg:items-center">
               <li class="px-4 lg:px-0">
-                <a href="mailto:hello@voqua.io" class="flex items-center md:px-4 transition hover:text-primary-600 group">
-                  <svg class="w-4 h-4 mr-1.5 transition-transform group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="currentColor">
+                <a href="mailto:hello@voqua.io" class="flex items-center md:px-4 transition hover:underline font-bold">
+                  <svg class="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/>
                     <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/>
                   </svg>
-                  <span>Contact Sales</span>
+                  <span>CONTACT SALES</span>
                 </a>
               </li>
             </ul>
           </div>
 
-          <div class="w-full space-y-2 gap-2 pt-4 pb-6 lg:pb-0 border-t lg:border-t-0 border-gray-200 items-center flex flex-col lg:flex-row lg:space-y-0 lg:w-fit lg:border-l lg:pt-0 lg:pl-6">
+          <div class="w-full space-y-2 gap-2 pt-4 pb-6 lg:pb-0 border-t lg:border-t-0 border-black items-center flex flex-col lg:flex-row lg:space-y-0 lg:w-fit lg:border-l lg:pt-0 lg:pl-6">
             <% if current_user.nil? %>
-              <a href="<%= new_user_session_path %>" class="button button-secondary">
-                Login
+              <a href="<%= new_user_session_path %>" class="px-6 py-2 text-black border-2 border-black font-bold hover:bg-black hover:text-white transition-colors duration-300 rounded-none">
+                LOGIN
               </a>
-              <a href="<%= new_user_registration_path %>" class="button button-primary">
-                Sign up free
+              <a href="<%= new_user_registration_path %>" class="px-6 py-2 text-white bg-black border-2 border-black font-bold hover:bg-gray-900 transition-colors duration-300 rounded-none">
+                SIGN UP FREE
               </a>
             <% else %>
-              <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-sm text-gray-500 hover:text-gray-700 transition-colors" %>
+              <%= link_to "LOG OUT", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-sm text-black hover:underline font-bold" %>
             <% end %>
           </div>
         </div>
