@@ -92,19 +92,19 @@
   body {
     font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   }
-  
+
   h1, h2, h3, h4, h5, h6, .font-black {
     font-family: 'Archivo Black', sans-serif;
   }
-  
+
   .font-display {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
-  
+
   .font-grotesk {
     font-family: 'Space Grotesk', sans-serif;
   }
-  
+
   .uppercase {
     letter-spacing: 0.05em;
   }
@@ -195,11 +195,6 @@
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
 .marquee {
   position: relative;
   width: 100%;
@@ -263,9 +258,4 @@
 
 .underline-animation:hover::after {
   transform: scaleX(1);
-}
-
-.parallax-scroll {
-  transform: translateY(var(--scroll-offset, 0));
-  transition: transform 0.1s ease-out;
 }
