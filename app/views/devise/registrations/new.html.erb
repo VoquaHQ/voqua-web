@@ -5,7 +5,7 @@
     </h1>
     
     <p class="text-sm text-gray-600 text-center mb-6">
-      We recommend using your <strong>work email</strong> — it keeps work and life separate.
+      Sign up with your email to get started with quadratic voting.
     </p>
 
     <%= render "devise/shared/error_messages", resource: resource %>
@@ -19,8 +19,8 @@
         <% end %>
         
         <div>
-          <label for="user_email" class="block mb-2 text-sm font-medium text-gray-900">Work email</label>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "name@company.com", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" %>
+          <label for="user_email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "name@example.com", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" %>
         </div>
 
         <button type="submit" class="button button-primary w-full">
