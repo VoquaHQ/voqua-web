@@ -11,26 +11,23 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "ballot_invitations", force: :cascade do |t|
-    t.bigint "ballot_id", null: false
+    t.integer "ballot_id", null: false
     t.string "email"
     t.string "token", null: false
     t.datetime "accepted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "ballot_membership_id"
+    t.integer "ballot_membership_id"
     t.index ["ballot_id"], name: "index_ballot_invitations_on_ballot_id"
     t.index ["ballot_membership_id"], name: "index_ballot_invitations_on_ballot_membership_id"
-    t.index ["email", "accepted_at"], name: "index_ballot_invitations_on_email_and_accepted_at", where: "(accepted_at IS NULL)"
+    t.index ["email", "accepted_at"], name: "index_ballot_invitations_on_email_and_accepted_at", where: "accepted_at IS NULL"
     t.index ["token"], name: "index_ballot_invitations_on_token", unique: true
   end
 
   create_table "ballot_memberships", force: :cascade do |t|
-    t.bigint "ballot_id", null: false
-    t.bigint "profile_id", null: false
+    t.integer "ballot_id", null: false
+    t.integer "profile_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ballot_id", "profile_id"], name: "index_ballot_memberships_on_ballot_id_and_profile_id", unique: true
@@ -41,7 +38,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
   create_table "ballot_options", force: :cascade do |t|
     t.string "title"
     t.string "description"
-    t.bigint "ballot_id", null: false
+    t.integer "ballot_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ballot_id"], name: "index_ballot_options_on_ballot_id"
@@ -51,7 +48,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
     t.string "name"
     t.string "description"
     t.datetime "ends_at"
-    t.bigint "profile_id", null: false
+    t.integer "profile_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "private", default: false
@@ -66,7 +63,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["handle"], name: "index_profiles_on_handle", unique: true, where: "(handle IS NOT NULL)"
+    t.index ["handle"], name: "index_profiles_on_handle", unique: true, where: "handle IS NOT NULL"
   end
 
   create_table "tmp_votes", force: :cascade do |t|
@@ -81,8 +78,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
   end
 
   create_table "user_profiles", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "profile_id", null: false
+    t.integer "user_id", null: false
+    t.integer "profile_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["profile_id"], name: "index_user_profiles_on_profile_id"
@@ -122,8 +119,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
   end
 
   create_table "votes", force: :cascade do |t|
-    t.bigint "ballot_id", null: false
-    t.bigint "profile_id"
+    t.integer "ballot_id", null: false
+    t.integer "profile_id"
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

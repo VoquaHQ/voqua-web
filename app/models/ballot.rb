@@ -6,7 +6,6 @@ class Ballot < ApplicationRecord
   has_many :memberships, class_name: "BallotMembership", dependent: :destroy
 
   before_validation :generate_slug, on: :create
-  has_many :members, through: :invitations, source: :accepted_by
   has_many :votes, dependent: :destroy
   has_many :tmp_votes, dependent: :destroy
 
