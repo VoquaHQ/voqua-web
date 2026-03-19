@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.3.1"
+ruby "4.0.2"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.1"
@@ -80,3 +80,13 @@ gem "omniauth-rails_csrf_protection"
 gem "ruby-openai"
 
 gem "sqlite3", "~> 2.7"
+
+gem "pg", "~> 1.6"
+
+gem "tsort", "~> 0.2.0"
+
+gem "benchmark", "~> 0.5.0"
+
+gem "cgi", "~> 0.5.1"
+
+gem "ostruct", "~> 0.6.3"
