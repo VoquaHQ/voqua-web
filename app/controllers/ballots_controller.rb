@@ -84,7 +84,7 @@ end
 class BallotsController < ApplicationController
   before_action :load_ballot
   before_action :check_ballot_permissions
-  before_action :check_ballot_open, only: [:show, :submit_votes]
+  before_action :check_ballot_open, only: [:show, :submit_votes, :phone_verification, :request_otp, :otp_verification, :verify_otp]
 
   def show
     if current_user
@@ -109,11 +109,14 @@ class BallotsController < ApplicationController
       votes = @ballot.votes.find_or_initialize_by(profile: current_user.main_profile)
       votes.data = data
       save_votes votes
+    elsif @ballot.phone_restricted?
+      vote = Vote.create!(ballot: @ballot, pending: true, data: data)
+      session[:phone_verification_pending_token] = vote.pending_token
+      redirect_to phone_verification_ballot_path(@ballot)
     elsif params[:email].present? && params[:pending_token].present?
       @tmp_votes = Vote.find_by!(pending_token: params[:pending_token])
       raise "token already used" if @tmp_votes.pending_token.nil?
       raise "email already set" if @tmp_votes.pending_email.present?
-
       @tmp_votes.pending_email = params[:email]
       save_tmp_votes @tmp_votes
     else
@@ -123,6 +126,51 @@ class BallotsController < ApplicationController
   rescue Voting::VotingError
     flash[:error] = "Invalid votes"
     redirect_to ballot_path(@ballot)
+  end
+
+  def phone_verification
+    @pending_token = session[:phone_verification_pending_token]
+    redirect_to ballot_path(@ballot) if @pending_token.blank?
+  end
+
+  def request_otp
+    pending_token = session[:phone_verification_pending_token]
+    if pending_token.blank?
+      redirect_to ballot_path(@ballot) and return
+    end
+
+    service = PhoneVerificationService.new(@ballot)
+    service.request_otp(pending_token: pending_token, phone_number: params[:phone_number])
+    redirect_to otp_verification_ballot_path(@ballot)
+  rescue PhoneVerificationService::Error => e
+    flash[:alert] = e.message
+    redirect_to phone_verification_ballot_path(@ballot)
+  end
+
+  def otp_verification
+    redirect_to ballot_path(@ballot) if session[:phone_verification_pending_token].blank?
+  end
+
+  def verify_otp
+    pending_token = session[:phone_verification_pending_token]
+    if pending_token.blank?
+      redirect_to ballot_path(@ballot) and return
+    end
+
+    service = PhoneVerificationService.new(@ballot)
+    service.verify_otp(pending_token: pending_token, code: params[:otp_code])
+    session.delete(:phone_verification_pending_token)
+    redirect_to vote_confirmed_ballot_path(@ballot)
+  rescue PhoneVerificationService::AlreadyVotedError => e
+    session.delete(:phone_verification_pending_token)
+    flash[:alert] = e.message
+    redirect_to ballot_path(@ballot)
+  rescue PhoneVerificationService::Error => e
+    flash[:alert] = e.message
+    redirect_to otp_verification_ballot_path(@ballot)
+  end
+
+  def vote_confirmed
   end
 
   private

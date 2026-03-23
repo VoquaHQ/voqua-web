@@ -5,11 +5,11 @@ class Vote < ApplicationRecord
   validates :ballot, presence: true
   validates :profile,
     presence: true,
-    if: -> { !pending? }
+    if: -> { !pending? && !phone_verified? }
 
   validates :profile,
     uniqueness: { scope: :ballot_id },
-    if: -> { !pending? }
+    if: -> { !pending? && !phone_verified? }
 
   validates :data, presence: true
   validates :pending_email,

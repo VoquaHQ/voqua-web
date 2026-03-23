@@ -166,9 +166,7 @@ GEM
     matrix (0.4.3)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (6.0.2)
-      drb (~> 2.0)
-      prism (~> 1.5)
+    minitest (5.27.0)
     msgpack (1.8.0)
     multi_xml (0.8.1)
       bigdecimal (>= 3.1, < 5)
@@ -232,6 +230,7 @@ GEM
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-darwin)
     pg (1.6.3-x86_64-linux)
+    phonelib (0.10.17)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -384,11 +383,13 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   letter_opener (~> 1.10)
+  minitest (< 6.0)
   omniauth-entra-id
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   ostruct (~> 0.6.3)
   pg (~> 1.6)
+  phonelib
   puma (>= 5.0)
   rails (~> 7.2.1)
   ruby-openai

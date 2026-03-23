@@ -51,6 +51,11 @@ Rails.application.routes.draw do
     member do
       get :results
       post :submit_votes
+      get  :phone_verification
+      post :request_otp
+      get  :otp_verification
+      post :verify_otp
+      get  :vote_confirmed
     end
 
     get "/invite/:token", to: "ballot_invitations#accept", as: :accept_invitation

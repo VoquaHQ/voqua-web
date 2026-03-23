@@ -80,6 +80,6 @@ class My::BallotsController < My::BaseController
   private
 
   def ballot_params
-    params.require(:ballot).permit(:name, :description, :ends_at, :private)
+    params.require(:ballot).permit(:name, :description, :ends_at, :private, :phone_verification, :allowed_country_code)
   end
 end

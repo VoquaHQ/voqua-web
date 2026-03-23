@@ -12,7 +12,15 @@ class Ballot < ApplicationRecord
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true
   validates :ends_at, presence: true
+  validates :allowed_country_code, presence: true, if: :phone_verification?
   validate :ends_at_must_be_in_future
+  validate :phone_verification_and_private_are_exclusive
+
+  def phone_verification_and_private_are_exclusive
+    if phone_verification? && private?
+      errors.add(:phone_verification, "cannot be enabled on private ballots")
+    end
+  end
   before_validation :adjust_ends_at_time
 
   def member?(user)
@@ -21,6 +29,10 @@ class Ballot < ApplicationRecord
 
   def voted?(user)
     votes.exists?(profile_id: user.main_profile.id)
+  end
+
+  def phone_restricted?
+    phone_verification?
   end
 
   def to_param

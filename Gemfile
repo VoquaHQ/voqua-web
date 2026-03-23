@@ -2,6 +2,8 @@ source "https://rubygems.org"
 
 ruby "4.0.2"
 
+gem "minitest", "< 6.0"
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.1"
 
@@ -78,6 +80,7 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-entra-id'
 gem "omniauth-rails_csrf_protection"
 gem "ruby-openai"
+gem "phonelib"
 
 gem "sqlite3", "~> 2.7"
 

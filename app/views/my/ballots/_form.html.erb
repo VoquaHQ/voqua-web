@@ -12,7 +12,7 @@
   <div>
     <%= f.label :name, "Title", class: "block text-sm font-medium text-gray-700" %>
     <div class="mt-1.5">
-      <%= f.text_field :name, 
+      <%= f.text_field :name,
           placeholder: "What are you voting on?",
           class: "w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200",
           required: true %>
@@ -22,7 +22,7 @@
   <div>
     <%= f.label :description, "Description", class: "block text-sm font-medium text-gray-700" %>
     <div class="mt-1.5">
-      <%= f.text_area :description, 
+      <%= f.text_area :description,
           rows: 3,
           placeholder: "Add some context...",
           class: "w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200" %>
@@ -32,7 +32,7 @@
   <div>
     <%= f.label :ends_at, "End Date", class: "block text-sm font-medium text-gray-700" %>
     <div class="mt-1.5">
-      <%= f.datetime_local_field :ends_at, 
+      <%= f.datetime_local_field :ends_at,
           value: @ballot.ends_at&.strftime('%Y-%m-%dT%H:%M'),
           required: true,
           min: Time.current.strftime('%Y-%m-%dT%H:%M'),
@@ -55,4 +55,37 @@
       </label>
     </div>
   </div>
+
+  <div>
+    <div class="flex items-center justify-between mb-1.5">
+      <span class="text-sm font-medium text-gray-700">Phone Verification</span>
+    </div>
+    <div class="bg-white rounded-lg border border-gray-300 p-3 space-y-3">
+      <label class="flex items-center gap-2 cursor-pointer">
+        <%= f.check_box :phone_verification, class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded", data: { action: "change->phone-verification#toggle" } %>
+        <span class="text-sm text-gray-900">Require phone verification to vote</span>
+      </label>
+      <div id="country-code-field" class="<%= 'hidden' unless @ballot.phone_verification? %>">
+        <%= f.label :allowed_country_code, "Allowed country (ISO code, e.g. DE, IT, FR)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :allowed_country_code,
+            placeholder: "DE",
+            maxlength: 2,
+            class: "w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm uppercase" %>
+        <p class="text-xs text-gray-500 mt-1">Use ISO 3166-1 alpha-2 country codes</p>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var checkbox = document.getElementById('ballot_phone_verification');
+    var field = document.getElementById('country-code-field');
+    if (checkbox && field) {
+      checkbox.addEventListener('change', function() {
+        console.log("click")
+        field.classList.toggle('hidden', !this.checked);
+      });
+    }
+  });
+</script>

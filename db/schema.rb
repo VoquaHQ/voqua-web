@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_20_000005) do
   create_table "ballot_invitations", force: :cascade do |t|
     t.integer "ballot_id", null: false
     t.string "email"
@@ -53,8 +53,24 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
     t.datetime "updated_at", null: false
     t.boolean "private", default: false
     t.string "slug", null: false
+    t.boolean "phone_verification", default: false, null: false
+    t.string "allowed_country_code"
     t.index ["profile_id"], name: "index_ballots_on_profile_id"
     t.index ["slug"], name: "index_ballots_on_slug", unique: true
+  end
+
+  create_table "phone_otps", force: :cascade do |t|
+    t.integer "ballot_id", null: false
+    t.string "pending_token", null: false
+    t.string "phone_hash", null: false
+    t.string "code_digest", null: false
+    t.datetime "expires_at", null: false
+    t.integer "attempts", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ballot_id", "phone_hash"], name: "index_phone_otps_on_ballot_id_and_phone_hash"
+    t.index ["ballot_id"], name: "index_phone_otps_on_ballot_id"
+    t.index ["pending_token"], name: "index_phone_otps_on_pending_token"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -118,6 +134,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "vote_eligibilities", force: :cascade do |t|
+    t.integer "ballot_id", null: false
+    t.string "phone_hash", null: false
+    t.datetime "created_at", null: false
+    t.index ["ballot_id", "phone_hash"], name: "index_vote_eligibilities_on_ballot_id_and_phone_hash", unique: true
+  end
+
   create_table "votes", force: :cascade do |t|
     t.integer "ballot_id", null: false
     t.integer "profile_id"
@@ -127,6 +150,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_141414) do
     t.boolean "pending", default: false
     t.string "pending_email"
     t.string "pending_token"
+    t.boolean "phone_verified", default: false, null: false
     t.index ["ballot_id"], name: "index_votes_on_ballot_id"
     t.index ["pending_token"], name: "index_votes_on_pending_token", unique: true
     t.index ["profile_id"], name: "index_votes_on_profile_id"
