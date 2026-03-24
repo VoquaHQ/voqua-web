@@ -1,13 +1,13 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  name: MyString
-  description: MyString
-  ends_at: 2024-10-01 18:01:53
+  name: Test Ballot One
+  description: Description one
+  ends_at: <%= 1.year.from_now %>
   profile: one
+  slug: test-ballot-one
 
 two:
-  name: MyString
-  description: MyString
-  ends_at: 2024-10-01 18:01:53
+  name: Test Ballot Two
+  description: Description two
+  ends_at: <%= 1.year.from_now %>
   profile: two
+  slug: test-ballot-two
