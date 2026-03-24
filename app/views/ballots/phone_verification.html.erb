@@ -21,6 +21,7 @@
     <% end %>
 
     <%= form_tag request_otp_ballot_path(@ballot), method: :post, data: { turbo: false }, class: "mt-4 space-y-6" do %>
+      <%= hidden_field_tag :vote_data, @vote_data %>
       <div>
         <label for="phone_number" class="block text-sm font-medium text-gray-700">Mobile number</label>
         <div class="mt-1">

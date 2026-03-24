@@ -51,7 +51,7 @@ Rails.application.routes.draw do
     member do
       get :results
       post :submit_votes
-      get  :phone_verification
+      post :phone_verification
       post :request_otp
       get  :otp_verification
       post :verify_otp

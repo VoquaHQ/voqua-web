@@ -2,7 +2,6 @@ class CreatePhoneOtps < ActiveRecord::Migration[7.2]
   def change
     create_table :phone_otps do |t|
       t.integer  :ballot_id,           null: false
-      t.string   :pending_token,       null: false
       t.string   :phone_hash,          null: false
       t.string   :code_digest,         null: false
       t.datetime :expires_at,          null: false
@@ -11,6 +10,5 @@ class CreatePhoneOtps < ActiveRecord::Migration[7.2]
     end
     add_index :phone_otps, :ballot_id
     add_index :phone_otps, [:ballot_id, :phone_hash]
-    add_index :phone_otps, :pending_token
   end
 end

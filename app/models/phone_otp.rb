@@ -4,15 +4,14 @@ class PhoneOtp < ApplicationRecord
   MAX_ATTEMPTS = 3
   EXPIRY_DURATION = 5.minutes
 
-  validates :pending_token, presence: true
   validates :phone_hash, presence: true
   validates :code_digest, presence: true
   validates :expires_at, presence: true
 
   before_validation :set_expiry, on: :create
 
-  def self.find_active(ballot_id, pending_token)
-    where(ballot_id: ballot_id, pending_token: pending_token)
+  def self.find_active(ballot_id, phone_hash)
+    where(ballot_id: ballot_id, phone_hash: phone_hash)
       .where("expires_at > ?", Time.current)
       .where("attempts < ?", MAX_ATTEMPTS)
       .first
@@ -38,7 +37,7 @@ class PhoneOtp < ApplicationRecord
 
   def verify_code!(code)
     return false unless active?
-    if secure_compare(code_digest, self.class.digest_code(code.to_s.strip, pending_token))
+    if secure_compare(code_digest, self.class.digest_code(code.to_s.strip, phone_hash))
       true
     else
       increment!(:attempts)
@@ -46,13 +45,12 @@ class PhoneOtp < ApplicationRecord
     end
   end
 
-  def self.build_for(ballot:, pending_token:, phone_e164:, plain_code:)
+  def self.build_for(ballot:, phone_e164:, plain_code:)
     phone_hash = PhoneHashService.call(phone_e164, ballot.id)
     new(
       ballot: ballot,
-      pending_token: pending_token,
       phone_hash: phone_hash,
-      code_digest: digest_code(plain_code, pending_token)
+      code_digest: digest_code(plain_code, phone_hash)
     )
   end
 

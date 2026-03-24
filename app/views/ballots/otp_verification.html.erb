@@ -16,6 +16,7 @@
     <% end %>
 
     <%= form_tag verify_otp_ballot_path(@ballot), method: :post, data: { turbo: false }, class: "mt-4 space-y-6" do %>
+      <%= hidden_field_tag :vote_data, @vote_data %>
       <div>
         <label for="otp_code" class="block text-sm font-medium text-gray-700">Verification code</label>
         <div class="mt-1">
@@ -38,9 +39,12 @@
       </button>
     <% end %>
 
-    <p class="text-center text-sm text-gray-500">
-      Wrong number?
-      <%= link_to "Go back", phone_verification_ballot_path(@ballot), class: "text-blue-600 hover:underline" %>
-    </p>
+    <%= form_tag phone_verification_ballot_path(@ballot), method: :post, class: "text-center" do %>
+      <%= hidden_field_tag :vote_data, @vote_data %>
+      <p class="text-sm text-gray-500">
+        Wrong number?
+        <button type="submit" class="text-blue-600 hover:underline">Go back</button>
+      </p>
+    <% end %>
   </div>
 </section>

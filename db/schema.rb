@@ -61,7 +61,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_20_000005) do
 
   create_table "phone_otps", force: :cascade do |t|
     t.integer "ballot_id", null: false
-    t.string "pending_token", null: false
     t.string "phone_hash", null: false
     t.string "code_digest", null: false
     t.datetime "expires_at", null: false
@@ -70,7 +69,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_20_000005) do
     t.datetime "updated_at", null: false
     t.index ["ballot_id", "phone_hash"], name: "index_phone_otps_on_ballot_id_and_phone_hash"
     t.index ["ballot_id"], name: "index_phone_otps_on_ballot_id"
-    t.index ["pending_token"], name: "index_phone_otps_on_pending_token"
   end
 
   create_table "profiles", force: :cascade do |t|

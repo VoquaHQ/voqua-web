@@ -6,13 +6,12 @@ class PhoneVerificationService
   class InvalidCodeError < Error; end
   class ExpiredCodeError < Error; end
   class AlreadyVotedError < Error; end
-  class VoteNotFoundError < Error; end
 
   def initialize(ballot)
     @ballot = ballot
   end
 
-  def request_otp(pending_token:, phone_number:)
+  def request_otp(phone_number:)
     phone = Phonelib.parse(phone_number)
 
     raise InvalidPhoneError, "Phone number is not valid" unless phone.valid?
@@ -24,21 +23,20 @@ class PhoneVerificationService
     phone_e164 = phone.e164
     phone_hash = PhoneHashService.call(phone_e164, @ballot.id)
 
-    # Silently succeed if already voted — don't reveal whether a phone has been used
-    return true if VoteEligibility.already_voted?(@ballot.id, phone_hash)
+    if VoteEligibility.already_voted?(@ballot.id, phone_hash)
+      raise AlreadyVotedError, "This phone number has already voted on this ballot"
+    end
 
     if PhoneOtp.recent_for_phone(@ballot.id, phone_hash)
       raise RateLimitedError, "Please wait a moment before requesting another code"
     end
 
-    # Delete any stale OTPs for this pending vote
-    PhoneOtp.where(ballot: @ballot, pending_token: pending_token).delete_all
+    PhoneOtp.where(ballot: @ballot, phone_hash: phone_hash).delete_all
 
     plain_code = generate_code
 
     otp = PhoneOtp.build_for(
       ballot: @ballot,
-      pending_token: pending_token,
       phone_e164: phone_e164,
       plain_code: plain_code
     )
@@ -46,17 +44,14 @@ class PhoneVerificationService
 
     SmsService.send_otp(phone_e164, plain_code)
 
-    true
+    phone_hash
   end
 
-  def verify_otp(pending_token:, code:)
-    vote = Vote.find_by(pending_token: pending_token, ballot: @ballot)
-    raise VoteNotFoundError, "Vote session not found" unless vote
-
-    otp = PhoneOtp.find_active(@ballot.id, pending_token)
+  def verify_otp(phone_hash:, code:)
+    otp = PhoneOtp.find_active(@ballot.id, phone_hash)
 
     if otp.nil?
-      stale = PhoneOtp.find_by(ballot: @ballot, pending_token: pending_token)
+      stale = PhoneOtp.find_by(ballot: @ballot, phone_hash: phone_hash)
       raise ExpiredCodeError, "Code has expired or too many attempts" if stale
       raise InvalidCodeError, "Invalid or expired code"
     end
@@ -65,16 +60,12 @@ class PhoneVerificationService
       raise InvalidCodeError, "Incorrect code"
     end
 
-    phone_hash = otp.phone_hash
-
     if VoteEligibility.already_voted?(@ballot.id, phone_hash)
       otp.destroy
-      vote.destroy
       raise AlreadyVotedError, "This phone number cannot be used for this ballot"
     end
 
     ActiveRecord::Base.transaction do
-      vote.update!(pending: false, pending_token: nil, phone_verified: true)
       VoteEligibility.create!(ballot_id: @ballot.id, phone_hash: phone_hash)
       otp.destroy
     end
