@@ -24,9 +24,8 @@ class PhoneVerificationService
     phone_e164 = phone.e164
     phone_hash = PhoneHashService.call(phone_e164, @ballot.id)
 
-    if VoteEligibility.already_voted?(@ballot.id, phone_hash)
-      raise AlreadyVotedError, "This phone number has already voted on this ballot"
-    end
+    # Silently succeed if already voted — don't reveal whether a phone has been used
+    return true if VoteEligibility.already_voted?(@ballot.id, phone_hash)
 
     if PhoneOtp.recent_for_phone(@ballot.id, phone_hash)
       raise RateLimitedError, "Please wait a moment before requesting another code"
@@ -71,7 +70,7 @@ class PhoneVerificationService
     if VoteEligibility.already_voted?(@ballot.id, phone_hash)
       otp.destroy
       vote.destroy
-      raise AlreadyVotedError, "This phone number has already voted on this ballot"
+      raise AlreadyVotedError, "This phone number cannot be used for this ballot"
     end
 
     ActiveRecord::Base.transaction do
