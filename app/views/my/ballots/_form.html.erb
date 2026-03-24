@@ -46,11 +46,11 @@
     </div>
     <div class="bg-white rounded-lg border border-gray-300 divide-y divide-gray-200">
       <label class="flex items-center p-3 cursor-pointer hover:bg-gray-50 transition duration-200">
-        <%= f.radio_button :private, "1", checked: "checked", class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" %>
+        <%= f.radio_button :private, "1", checked: @ballot.private?, class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" %>
         <span class="ml-3 text-sm text-gray-900">Invite only</span>
       </label>
       <label class="flex items-center p-3 cursor-pointer hover:bg-gray-50 transition duration-200">
-        <%= f.radio_button :private, "0", class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" %>
+        <%= f.radio_button :private, "0", checked: !@ballot.private?, class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" %>
         <span class="ml-3 text-sm text-gray-900">Anyone with link</span>
       </label>
     </div>
@@ -83,7 +83,6 @@
     var field = document.getElementById('country-code-field');
     if (checkbox && field) {
       checkbox.addEventListener('change', function() {
-        console.log("click")
         field.classList.toggle('hidden', !this.checked);
       });
     }

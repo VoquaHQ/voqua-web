@@ -11,13 +11,14 @@ class SmsService
   end
 
   def send_otp(phone_e164, code)
-    # unless Rails.env.production?
+    if !Rails.env.production?
       Rails.logger.info "[SmsService] OTP: #{code}"
       return true
-    # end
+    end
 
-    api_key = Rails.application.credentials.seven_io_api_key ||
-              ENV["SEVEN_IO_API_KEY"]
+    api_key = ENV["SEVEN_IO_API_KEY"] || Rails.application.credentials.seven_io_api_key
+
+
 
     raise DeliveryError, "seven.io API key not configured" if api_key.blank?
 
