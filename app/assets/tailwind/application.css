@@ -67,6 +67,11 @@
     @apply h-4 w-4 border-2 border-black text-black focus:ring-black;
   }
 
+  button,
+  input[type="submit"] {
+    @apply cursor-pointer;
+  }
+
   .form-errors {
     @apply mb-6 p-4 bg-red-50 border-2 border-black rounded-none;
   }

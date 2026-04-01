@@ -1,0 +1,10 @@
+<%= turbo_stream.replace "try-result" do %>
+  <div id="try-result" class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+    <% if @error.present? %>
+      <p class="text-sm text-red-600"><%= @error %></p>
+    <% else %>
+      <p class="text-xs font-medium text-gray-500 mb-1">AI Follow-up Question:</p>
+      <p class="text-sm text-gray-900"><%= @follow_up %></p>
+    <% end %>
+  </div>
+<% end %>

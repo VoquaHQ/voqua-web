@@ -1,0 +1,69 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="mb-8">
+      <div class="flex items-start justify-between">
+        <div>
+          <h1 class="text-2xl font-medium text-gray-900"><%= truncate(@question.body, length: 100) %></h1>
+        </div>
+        <%= link_to edit_my_question_path(@question), class: "text-sm text-gray-600 hover:text-gray-900" do %>
+          Edit
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
+      <div class="px-6 py-5 flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-medium text-gray-900">Public Link</h2>
+          <p class="mt-1 text-sm text-gray-500">Share this link with respondents</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <code class="text-xs bg-gray-100 px-3 py-1.5 rounded-lg text-gray-700"><%= question_url(@question) %></code>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-200/75">
+        <h2 class="text-sm font-medium text-gray-900">Question</h2>
+      </div>
+      <div class="px-6 py-4">
+        <p class="text-sm text-gray-900"><%= @question.body %></p>
+      </div>
+    </div>
+
+    <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200/75 overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-200/75">
+        <h2 class="text-sm font-medium text-gray-900">Interviews (<%= @question.interviews.count %>)</h2>
+      </div>
+
+      <div class="divide-y divide-gray-200/75">
+        <% @question.interviews.order(created_at: :desc).each do |interview| %>
+          <div class="px-6 py-4">
+            <p class="text-sm text-gray-900"><strong>Answer:</strong> <%= truncate(interview.first_answer, length: 120) %></p>
+            <% if interview.follow_up_question.present? %>
+              <p class="text-sm text-gray-600 mt-1"><strong>Follow-up:</strong> <%= truncate(interview.follow_up_question, length: 120) %></p>
+            <% end %>
+            <% if interview.follow_up_answer.present? %>
+              <p class="text-sm text-gray-600 mt-1"><strong>Follow-up answer:</strong> <%= truncate(interview.follow_up_answer, length: 120) %></p>
+            <% end %>
+            <p class="text-xs text-gray-500 mt-2"><%= interview.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+          </div>
+        <% end %>
+
+        <% if @question.interviews.empty? %>
+          <div class="px-6 py-8 text-center text-sm text-gray-500">
+            No interviews yet
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <%= link_to "Delete Question",
+          my_question_path(@question),
+          data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete this question?' },
+          class: "button button-danger w-full" %>
+    </div>
+  </div>
+</div>

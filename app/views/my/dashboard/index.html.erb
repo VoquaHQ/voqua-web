@@ -1,0 +1,81 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="mb-10">
+      <h1 class="text-2xl font-medium text-gray-900">Dashboard</h1>
+    </div>
+
+    <div class="space-y-10">
+      <%# Ballots Section %>
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-medium uppercase tracking-wider text-gray-500">Votes</h2>
+          <div class="flex items-center gap-3">
+            <%= link_to my_ballots_path, class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
+              View all
+            <% end %>
+            <%= link_to new_my_ballot_path, class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
+              New
+            <% end %>
+          </div>
+        </div>
+
+        <% if @ballots.any? %>
+          <div class="bg-white rounded-xl divide-y border border-gray-200/75 shadow-sm">
+            <% @ballots.each do |ballot| %>
+              <%= render "my/ballots/ballot_list_item", ballot: ballot, voted: @voted_status[ballot.id] %>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="bg-white rounded-xl border border-gray-200/75 shadow-sm px-6 py-8 text-center">
+            <p class="text-sm text-gray-500">No votes yet.</p>
+            <%= link_to "Create your first vote", new_my_ballot_path, class: "text-sm font-medium text-blue-600 hover:text-blue-700 mt-2 inline-block" %>
+          </div>
+        <% end %>
+      </section>
+
+      <%# Questions Section %>
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-medium uppercase tracking-wider text-gray-500">Questions</h2>
+          <div class="flex items-center gap-3">
+            <%= link_to my_questions_path, class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
+              View all
+            <% end %>
+            <%= link_to new_my_question_path, class: "text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200" do %>
+              New
+            <% end %>
+          </div>
+        </div>
+
+        <% if @questions.any? %>
+          <div class="bg-white rounded-xl divide-y border border-gray-200/75 shadow-sm">
+            <% @questions.each do |question| %>
+              <a href="<%= my_question_path(question) %>" class="block transition-all duration-200 hover:bg-gray-50">
+                <div class="px-4 py-3.5 flex items-center">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="font-medium text-gray-900 truncate"><%= truncate(question.body, length: 80) %></h3>
+                    <div class="mt-0.5 text-sm text-gray-500">
+                      <span><%= question.interviews.count %> interviews</span>
+                      <span class="mx-1.5 text-gray-300">&middot;</span>
+                      <span><%= question.created_at.strftime("%B %-d, %Y") %></span>
+                    </div>
+                  </div>
+                  <div class="ml-4 text-gray-300">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="bg-white rounded-xl border border-gray-200/75 shadow-sm px-6 py-8 text-center">
+            <p class="text-sm text-gray-500">No questions yet.</p>
+            <%= link_to "Create your first question", new_my_question_path, class: "text-sm font-medium text-blue-600 hover:text-blue-700 mt-2 inline-block" %>
+          </div>
+        <% end %>
+      </section>
+    </div>
+  </div>
+</div>

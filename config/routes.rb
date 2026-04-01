@@ -31,7 +31,12 @@ Rails.application.routes.draw do
   root "home#index"
 
   namespace :my do
-    root "ballots#index"
+    root "dashboard#index"
+    resources :questions do
+      member do
+        post :try_answer
+      end
+    end
     resources :ballots do
       resources :options do
         member do
@@ -44,6 +49,15 @@ Rails.application.routes.draw do
           post :bulk_create
         end
       end
+    end
+  end
+
+  resources :questions, only: [:show] do
+    member do
+      post :answer
+      post :follow_up_answer
+      post :request_otp
+      post :verify_otp
     end
   end
 

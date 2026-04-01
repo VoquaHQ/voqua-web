@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_20_000005) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_31_000003) do
   create_table "ballot_invitations", force: :cascade do |t|
     t.integer "ballot_id", null: false
     t.string "email"
@@ -59,6 +59,23 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_20_000005) do
     t.index ["slug"], name: "index_ballots_on_slug", unique: true
   end
 
+  create_table "contacts", force: :cascade do |t|
+    t.string "phone", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phone"], name: "index_contacts_on_phone", unique: true
+  end
+
+  create_table "interviews", force: :cascade do |t|
+    t.integer "question_id", null: false
+    t.text "first_answer"
+    t.text "follow_up_question"
+    t.text "follow_up_answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_interviews_on_question_id"
+  end
+
   create_table "phone_otps", force: :cascade do |t|
     t.integer "ballot_id", null: false
     t.string "phone_hash", null: false
@@ -78,6 +95,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_20_000005) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["handle"], name: "index_profiles_on_handle", unique: true, where: "handle IS NOT NULL"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.integer "profile_id", null: false
+    t.string "uuid", null: false
+    t.text "body", null: false
+    t.text "prompt", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["profile_id"], name: "index_questions_on_profile_id"
+    t.index ["uuid"], name: "index_questions_on_uuid", unique: true
   end
 
   create_table "tmp_votes", force: :cascade do |t|
@@ -160,6 +188,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_20_000005) do
   add_foreign_key "ballot_memberships", "profiles"
   add_foreign_key "ballot_options", "ballots"
   add_foreign_key "ballots", "profiles"
+  add_foreign_key "interviews", "questions"
+  add_foreign_key "questions", "profiles"
   add_foreign_key "user_profiles", "profiles"
   add_foreign_key "user_profiles", "users"
   add_foreign_key "users", "profiles", column: "main_profile_id"
