@@ -28,7 +28,7 @@ class My::QuestionsController < My::BaseController
 
   def update
     if @question.update(question_params)
-      redirect_to my_question_path(@question), notice: "Question updated."
+      redirect_to edit_my_question_path(@question), notice: "Question updated."
     else
       render :edit
     end
