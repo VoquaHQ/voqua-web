@@ -95,3 +95,4 @@ gem "cgi", "~> 0.5.1"
 gem "ostruct", "~> 0.6.3"
 
 gem "rack-session", ">= 2.1.2"
+gem "rack", ">= 3.2.6"
