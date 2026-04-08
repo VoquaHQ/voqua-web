@@ -96,3 +96,4 @@ gem "ostruct", "~> 0.6.3"
 
 gem "rack-session", ">= 2.1.2"
 gem "rack", ">= 3.2.6"
+gem "activestorage", ">= 7.2.3.1"
